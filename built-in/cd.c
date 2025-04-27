@@ -19,7 +19,7 @@ void free_args(char **args)
 	}
 	free(args);
 }
-void	cd_cmd(char **args, char **envp)
+void	cd_cmd(char **args)
 {
 	if (args[1])
 		run_cd(args[1]);

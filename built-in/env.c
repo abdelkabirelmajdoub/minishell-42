@@ -20,7 +20,7 @@ char	*ft_strndup(const char *s, int size)
 	return (str);
 }
 
-t_env	*new_env_node(const char *key, const char *value)
+t_env	*new_env_node(char *key, char *value)
 {
 	t_env	*node;
 
@@ -99,13 +99,8 @@ t_env	*creat_env(char **env)
 	}
 	return (head);
 }
-void	env(char **envp)
+void	env(t_env *tmp)
 {
-	t_env	*tmp;
-
-	tmp = creat_env(envp);
-	if (!tmp)
-		return ;
 	while(tmp)
 	{
 		printf("%s=%s\n", tmp->key, tmp->value);

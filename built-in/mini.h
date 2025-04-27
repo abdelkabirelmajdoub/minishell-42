@@ -15,7 +15,10 @@ typedef struct s_env
 }		t_env;
 
 
-void	env(char **envp);
+void	env(t_env *tmp);
+void	cd_cmd(char **args);
+int		ft_unset(char *var, t_env **my_env);
+void	minishell_exit(char **args);
+t_env	*creat_env(char **env);
 void 	free_args(char **args);
-void	cd_cmd(char **s, char **envp);
 #endif

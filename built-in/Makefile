@@ -1,6 +1,6 @@
 CC = cc 
-CFLAGS = #-Wall -Wextra -Werror
-SRC = env.c  main.c cd.c
+CFLAGS = -Wall -Wextra -Werror
+SRC = env.c  main.c cd.c unset.c exit.c
 OBJ = $(SRC:.c=.o)
 NAME = minishell
 LIBFT =  ../libft/libft.a
@@ -13,5 +13,5 @@ $(NAME): $(OBJ)
 clean:
 	@rm -rf $(OBJ)
 fclean: clean
-	@rm -rf $(OBJ)
+	@rm -rf $(NAME)
 re : fclean all
