@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:20:26 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/26 11:20:27 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/27 10:17:14 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,10 @@ typedef struct s_token
 	token_type		type;
 	struct s_token	*next;
 }	token;
+
+char		*ft_strdup(const char *s1);
+token_type	tokenize_type(char *input, int *i);
+token		*token_creation(char *value, token_type type);
+void		token_add_back(token **head, token *new_token);
+token		*tokenize(char *input);
 #endif
