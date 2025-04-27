@@ -21,4 +21,6 @@ int		ft_unset(char *var, t_env **my_env);
 void	minishell_exit(char **args);
 t_env	*creat_env(char **env);
 void 	free_args(char **args);
+t_env	*new_env_node(char *key, char *value);
+void	ft_export(char **s, t_env **my_env);
 #endif

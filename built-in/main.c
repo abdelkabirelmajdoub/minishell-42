@@ -46,6 +46,8 @@ int check_cmd(char **s, t_env	**my_env)
 		cd_cmd(s);
 	else if (!ft_strncmp(s[0], "exit", 4) && ft_strlen(s[0]) == 4)
 		minishell_exit(s);
+	else if (!ft_strncmp(s[0], "export", 6) && ft_strlen(s[0]) == 6)
+		ft_export(s, my_env);//////////////// BA9i masalitha
 	else
 		procces_cmd(s);
 	return (0);
