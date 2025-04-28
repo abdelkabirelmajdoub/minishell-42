@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:20:26 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/27 10:17:14 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/28 10:57:51 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>
-
+#include "../libft/libft.h"
 typedef enum s_token_type
 {
 	WORD,

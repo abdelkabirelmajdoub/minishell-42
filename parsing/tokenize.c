@@ -12,6 +12,25 @@
 
 #include "parsing.h"
 
+// addd new function
+char	*ft_strndup(const char *s, int size)
+{
+	int		i;
+	char	*str;
+
+	if (!s)
+		return (NULL);
+	str = malloc(sizeof(char) * size + 1);
+	if (!str)
+		return (NULL);
+	i = -1;
+	while(s[++i] && i < size)
+		str[i] = s[i];
+	str[i] = '\0';
+	return (str);
+}
+////////////
+
 char	*ft_strdup(const char *s1)
 {
 	char	*str;
@@ -44,6 +63,7 @@ token_type	tokenize_type(char *input, int *i)
 		return (REDIR_IN);
 	else if (input[*i] == '>')
 		return (REDIR_OUT);
+	return (WORD);// my change ae-majd
 }
 
 token	*token_creation(char *value, token_type type)
@@ -56,6 +76,7 @@ token	*token_creation(char *value, token_type type)
 	new_token->value = value;
 	new_token->type = type;
 	new_token->next = NULL;
+	return (new_token);// my change ae-majd
 }
 
 void	token_add_back(token **head, token *new_token)
@@ -104,8 +125,34 @@ token	*tokenize(char *input)
 				|| input[i] == '|' || input[i] == '<' || input[i] == '>'))
 				i++;
 			token_value = ft_strndup(&input[start], i - start);
-			current = create_token(token_value, WORD);
-			add_token_back(&head, current);
+			current = token_creation(token_value, WORD);
+			token_add_back(&head, current);
 		}
 	}
+	return (head);
 }
+
+int main()
+{
+	token *cmd = tokenize("< infile ls -l | wc -l > out");
+	while(cmd)
+	{
+		printf("args:[%s]	TYPE:[%u]\n", cmd->value, cmd->type);
+		cmd = cmd->next;
+	}
+}
+
+/*
+	The output of this function:
+
+	args:[<]        TYPE:[2]
+	args:[infile]   TYPE:[0]
+	args:[ls]       TYPE:[0]
+	args:[-l]       TYPE:[0]
+	args:[|]        TYPE:[1]
+	args:[wc]       TYPE:[0]
+	args:[-l]       TYPE:[0]
+	args:[>]        TYPE:[3]
+	args:[out]      TYPE:[0]
+
+*/
