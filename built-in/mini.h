@@ -23,5 +23,5 @@ void	minishell_exit(char **args);
 t_env	*creat_env(char **env);
 void 	free_args(char **args);
 t_env	*new_env_node(char *key, char *value);
-void	handle_echo(char **args);
+void	handle_echo(char **args, t_env **env) ;
 #endif

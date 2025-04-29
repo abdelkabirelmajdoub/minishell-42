@@ -49,7 +49,7 @@ int check_cmd(char **s, t_env	**my_env)
 	else if (!ft_strncmp(s[0], "exit", 4) && ft_strlen(s[0]) == 4)
 		minishell_exit(s);
 	else if (!ft_strncmp(s[0], "echo", 4) && ft_strlen(s[0]) == 4)
-		handle_echo(s);
+		handle_echo(s, my_env);
 	else
 		procces_cmd(s);
 	return (0);
