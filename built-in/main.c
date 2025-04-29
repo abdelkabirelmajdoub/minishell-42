@@ -34,6 +34,8 @@ void procces_cmd(char **s)
 	else
 		waitpid(pid, NULL, 0);
 }
+
+
 int check_cmd(char **s, t_env	**my_env)
 {
 	if (!ft_strncmp(s[0], "env", 3) && ft_strlen(s[0]) == 3)
@@ -46,8 +48,8 @@ int check_cmd(char **s, t_env	**my_env)
 		cd_cmd(s);
 	else if (!ft_strncmp(s[0], "exit", 4) && ft_strlen(s[0]) == 4)
 		minishell_exit(s);
-	else if (!ft_strncmp(s[0], "export", 6) && ft_strlen(s[0]) == 6)
-		ft_export(s, my_env);//////////////// BA9i masalitha
+	else if (!ft_strncmp(s[0], "echo", 4) && ft_strlen(s[0]) == 4)
+		handle_echo(s);
 	else
 		procces_cmd(s);
 	return (0);
@@ -82,5 +84,4 @@ int main(int ac, char **av, char **envp)
 	}
 	(void)ac;
 	(void)av;
-	
 }
