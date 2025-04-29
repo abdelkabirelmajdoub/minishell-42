@@ -100,13 +100,8 @@ t_env	*creat_env(char **env)
 	}
 	return (head);
 }
-void	env(char **envp)
+void	env(t_env *tmp)
 {
-	t_env	*tmp;
-
-	tmp = creat_env(envp);
-	if (!tmp)
-		return ;
 	while(tmp)
 	{
 		printf("%s=%s\n", tmp->key, tmp->value);

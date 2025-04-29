@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:20:26 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/29 11:37:33 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/29 12:04:57 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include <stdlib.h>
-#include "../libft/libft.h"
 
 typedef enum s_token_type
 {

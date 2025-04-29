@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/29 11:45:42 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/29 12:08:23 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -200,5 +200,6 @@ int	main(void)
 	token *tokens = tokenize(input);
 	t_cmd *cmds = pars_token(tokens);
 	print_parsed_cmds(cmds);
+    printf("a");
 	return (0);
 }
