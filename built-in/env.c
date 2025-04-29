@@ -20,7 +20,7 @@ char	*ft_strndup(const char *s, int size)
 	return (str);
 }
 
-t_env	*new_env_node(const char *key, const char *value)
+t_env	*new_env_node(char *key, char *value)
 {
 	t_env	*node;
 
@@ -57,6 +57,7 @@ t_env	*empty_env(void)
 	current->next = new;
 	return (head);
 }
+
 t_env	*creat_env(char **env)
 {
 	t_env	*head;
