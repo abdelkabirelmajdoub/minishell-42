@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/29 12:08:23 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:31:07 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,10 @@ token	*tokenize(char *input)
 	while (input[i] != '\0')
 	{
 		if (input[i] == 32 || (input[i] >= 9 && input[i] <= 13))
+		{
 			i++;
+			continue;
+		}
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			type = tokenize_type(input, &i);
@@ -97,7 +100,8 @@ token	*tokenize(char *input)
 			token_value[2] = '\0';
 			current = token_creation(token_value, type);
 			token_add_back(&head, current);
-		i++;
+			i++;
+			continue;
 		}
 		if (input[i] == '\'' || input[i] == '"')
 		{
@@ -138,16 +142,33 @@ t_cmd	*pars_token(token	*tok)
 		cmd = malloc (sizeof(t_cmd));
 		if (!cmd)
 			return (NULL);
+        cmd->args = NULL;
+		cmd->infile = NULL;
+		cmd->out_file = NULL;
+		cmd->append = NULL;
+		cmd->next = NULL;
 		args = malloc (sizeof(char *) * 100);
 		argc = 0;
-		while (tok && tok->type != PIPE )
+		while (tok && tok->type != PIPE)
 		{
 			if (tok->type == REDIR_IN && tok->next)
+			{
 				cmd->infile = tok->next->value;
+				tok = tok->next->next;
+				continue;
+			}
 			else if (tok->type == REDIR_OUT && tok->next)
+			{
 				cmd->out_file = tok->next->value;
+				tok = tok->next->next;
+				continue;
+			}
 			else if (tok->type == REDIR_APPEND && tok->next)
+			{
 				cmd->append = tok->next->value;
+				tok = tok->next->next;
+				continue;
+			}
 			else if (tok->type == WORD)
 				args[argc++] = tok->value;
 			tok = tok->next;
@@ -196,10 +217,9 @@ void	print_parsed_cmds(t_cmd *cmd_list)
 
 int	main(void)
 {
-	char *input = readline(">");
+	char *input = readline("$ ");
 	token *tokens = tokenize(input);
 	t_cmd *cmds = pars_token(tokens);
 	print_parsed_cmds(cmds);
-    printf("a");
 	return (0);
 }
