@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/26 13:39:34 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/29 13:50:27 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-// addd new function
 char	*ft_strndup(const char *s, int size)
 {
 	int		i;
@@ -29,27 +28,7 @@ char	*ft_strndup(const char *s, int size)
 	str[i] = '\0';
 	return (str);
 }
-////////////
 
-char	*ft_strdup(const char *s1)
-{
-	char	*str;
-	int		i;
-
-	if (!s1)
-		return (NULL);
-	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + 1));
-	if (str == NULL)
-		return (NULL);
-	i = 0;
-	while (s1[i] != '\0')
-	{
-		str[i] = s1[i];
-		i++;
-	}
-	str[i] = '\0';
-	return (str);
-}
 token_type	tokenize_type(char *input, int *i)
 {
 	if (input[*i] == '>' && input[*i + 1] == '>')
@@ -92,6 +71,7 @@ void	token_add_back(token **head, token *new_token)
 		tmp->next = new_token;
 	}
 }
+
 token	*tokenize(char *input)
 {
 	int			i;
@@ -100,25 +80,42 @@ token	*tokenize(char *input)
 	char		*token_value;
 	token_type	type;
 	int			start;
+	
 	i = 0;
 	head = NULL;
 	while (input[i] != '\0')
 	{
 		if (input[i] == 32 || (input[i] >= 9 && input[i] <= 13))
+		{
 			i++;
+			continue;
+		}
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
 			type = tokenize_type(input, &i);
 			token_value = malloc (3);
 			token_value[0] = input [i];
 			if (type == REDIR_APPEND)
-				token_value[1] = input[i + 1];
+				token_value[1] = '>';
 			token_value[2] = '\0';
 			current = token_creation(token_value, type);
 			token_add_back(&head, current);
-		i++;
+			i++;
+			continue;
 		}
-		else
+		if (input[i] == '\'' || input[i] == '"')
+		{
+			char quote = input[i++];
+			start = i;
+			while (input[i] && input[i] != quote)
+				i++;
+			token_value = ft_strndup(&input[start], i - start);
+			current = token_creation(token_value, WORD);
+			token_add_back(&head, current);
+			if (input[i] == quote)
+			i++; // skip the closing quote
+		}
+		else 
 		{
 			start = i;
 			while (input[i] && !(input[i] == ' ' || input[i] == '\t' || input[i] == '\n'
@@ -132,10 +129,9 @@ token	*tokenize(char *input)
 	return (head);
 }
 
-int main()
+t_cmd	*pars_token(token	*tok)
 {
-	char *inpute = readline("promte> ");
-	token *cmd = tokenize(inpute);
+	token *cmd = tokenize("< infile ls -l | wc -l > out");
 	while(cmd)
 	{
 		printf("args:[%s]	TYPE:[%u]\n", cmd->value, cmd->type);

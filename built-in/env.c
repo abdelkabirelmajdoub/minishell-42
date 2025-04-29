@@ -57,6 +57,7 @@ t_env	*empty_env(void)
 	current->next = new;
 	return (head);
 }
+
 t_env	*creat_env(char **env)
 {
 	t_env	*head;
