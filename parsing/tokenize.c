@@ -134,7 +134,8 @@ token	*tokenize(char *input)
 
 int main()
 {
-	token *cmd = tokenize("< infile ls -l | wc -l > out");
+	char *inpute = readline("promte> ");
+	token *cmd = tokenize(inpute);
 	while(cmd)
 	{
 		printf("args:[%s]	TYPE:[%u]\n", cmd->value, cmd->type);
