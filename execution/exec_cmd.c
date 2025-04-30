@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/04/30 13:13:19 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:19:06 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,6 +96,8 @@ void	execute_pipe(t_cmd *cmd, char **env)
 				dup2(pipefd[1], STDOUT_FILENO);
 			else if (cmd->out_file)
 				redirect_out(cmd->out_file, cmd->append);
+			close(pipefd[0]);
+			close(pipefd[1]);
 			execve(get_path(cmd->args[0], env), cmd->args, env);
 			printf("command not found: %s\n", cmd->args[0]);
 			exit(1);
