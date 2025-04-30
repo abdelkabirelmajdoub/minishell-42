@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:13:00 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 09:15:40 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/30 12:38:20 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,28 +23,29 @@ char	*ft_strndup(const char *s, int size)
 	if (!str)
 		return (NULL);
 	i = -1;
-	while(s[++i] && i < size)
+	while (s[++i] && i < size)
 		str[i] = s[i];
 	str[i] = '\0';
 	return (str);
 }
 
-token	*token_creation(char *value, token_type type)
+t_token	*token_creation(char *value, t_token_type type)
 {
-	token	*new_token;
-	
-	new_token = malloc (sizeof(token));
+	t_token	*new_token;
+
+	new_token = malloc (sizeof(t_token));
 	if (!new_token)
 		return (NULL);
 	new_token->value = value;
 	new_token->type = type;
 	new_token->next = NULL;
-	return (new_token);// my change ae-majd
+	return (new_token);
 }
 
-void	token_add_back(token **head, token *new_token)
+void	token_add_back(t_token **head, t_token *new_token)
 {
-	token	*tmp;
+	t_token	*tmp;
+
 	if (!*head)
 		*head = new_token;
 	else
@@ -56,7 +57,7 @@ void	token_add_back(token **head, token *new_token)
 	}
 }
 
-token_type	tokenize_type(char *input, int *i)
+t_token_type	tokenize_type(char *input, int *i)
 {
 	if (input[*i] == '>' && input[*i + 1] == '>')
 	{
@@ -69,5 +70,5 @@ token_type	tokenize_type(char *input, int *i)
 		return (REDIR_IN);
 	else if (input[*i] == '>')
 		return (REDIR_OUT);
-	return (WORD);// my change ae-majd
+	return (WORD);
 }
