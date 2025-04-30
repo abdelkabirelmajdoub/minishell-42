@@ -6,81 +6,69 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 10:03:56 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/04/30 13:14:26 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-char	*ft_strndup(const char *s, int size)
+void	handle_operator(char *input, int *i, t_token **head)
 {
-	int		i;
-	char	*str;
+	char			*token_value;
+	t_token_type	type;
+	t_token			*current;
 
-	if (!s)
-		return (NULL);
-	str = malloc(sizeof(char) * size + 1);
-	if (!str)
-		return (NULL);
-	i = -1;
-	while(s[++i] && i < size)
-		str[i] = s[i];
-	str[i] = '\0';
-	return (str);
+	type = tokenize_type(input, i);
+	token_value = malloc (3);
+	token_value[0] = input [*i];
+	if (type == REDIR_APPEND)
+		token_value[1] = '>';
+	token_value[2] = '\0';
+	current = token_creation(token_value, type);
+	token_add_back(head, current);
+	(*i)++;
 }
 
-token_type	tokenize_type(char *input, int *i)
+void	handle_quoted(char *input, int *i, t_token **head)
 {
-	if (input[*i] == '>' && input[*i + 1] == '>')
-	{
+	char	quote;
+	int		start;
+	char	*token_value;
+	t_token	*current;
+
+	quote = input[(*i)++];
+	start = *i;
+	while (input[*i] && input[*i] != quote)
 		(*i)++;
-		return (REDIR_APPEND);
-	}
-	else if (input[*i] == '|')
-		return (PIPE);
-	else if (input[*i] == '<')
-		return (REDIR_IN);
-	else if (input[*i] == '>')
-		return (REDIR_OUT);
-	return (WORD);// my change ae-majd
+	token_value = ft_strndup(&input[start], (*i) - start);
+	current = token_creation(token_value, WORD);
+	token_add_back(head, current);
+	if (input[*i] == quote)
+		(*i)++;
 }
 
-token	*token_creation(char *value, token_type type)
+void	handle_word(char *input, int *i, t_token **head)
 {
-	token	*new_token;
-	
-	new_token = malloc (sizeof(token));
-	if (!new_token)
-		return (NULL);
-	new_token->value = value;
-	new_token->type = type;
-	new_token->next = NULL;
-	return (new_token);// my change ae-majd
+	int		start;
+	char	*token_value;
+	t_token	*current;
+
+	start = *i;
+	while (input[*i] && !(input[*i] == ' '
+			|| input[*i] == '\t' || input[*i] == '\n'
+			|| input[*i] == '|' || input[*i] == '<' || input[*i] == '>'))
+		(*i)++;
+	token_value = ft_strndup(&input[start], *i - start);
+	current = token_creation(token_value, WORD);
+	token_add_back(head, current);
 }
 
-void	token_add_back(token **head, token *new_token)
-{
-	token	*tmp;
-	if (!*head)
-		*head = new_token;
-	else
-	{
-		tmp = *head;
-		while (tmp->next != NULL)
-			tmp = tmp->next;
-		tmp->next = new_token;
-	}
-}
-
-token	*tokenize(char *input)
+t_token	*tokenize(char *input)
 {
 	int			i;
-	token		*head;
-	token		*current;
-	char		*token_value;
-	token_type	type;
-	int			start;
-	
+	t_token		*head;
+	t_token		*current;
+
 	i = 0;
 	head = NULL;
 	while (input[i] != '\0')
@@ -88,110 +76,27 @@ token	*tokenize(char *input)
 		if (input[i] == 32 || (input[i] >= 9 && input[i] <= 13))
 		{
 			i++;
-			continue;
+			continue ;
 		}
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
-			type = tokenize_type(input, &i);
-			token_value = malloc (3);
-			token_value[0] = input [i];
-			if (type == REDIR_APPEND)
-				token_value[1] = '>';
-			token_value[2] = '\0';
-			current = token_creation(token_value, type);
-			token_add_back(&head, current);
-			i++;
-			continue;
+			handle_operator(input, &i, &head);
+			continue ;
 		}
 		if (input[i] == '\'' || input[i] == '"')
-		{
-			char quote = input[i++];
-			start = i;
-			while (input[i] && input[i] != quote)
-				i++;
-			token_value = ft_strndup(&input[start], i - start);
-			current = token_creation(token_value, WORD);
-			token_add_back(&head, current);
-			if (input[i] == quote)
-			i++; // skip the closing quote
-		}
+			handle_quoted(input, &i, &head);
 		else 
-		{
-			start = i;
-			while (input[i] && !(input[i] == ' ' || input[i] == '\t' || input[i] == '\n'
-				|| input[i] == '|' || input[i] == '<' || input[i] == '>'))
-				i++;
-			token_value = ft_strndup(&input[start], i - start);
-			current = token_creation(token_value, WORD);
-			token_add_back(&head, current);
-		}
+			handle_word(input, &i, &head);
 	}
 	return (head);
 }
-
-t_cmd	*pars_token(token	*tok)
-{
-	t_cmd	*head = NULL;
-	t_cmd	*current = NULL;
-	t_cmd	*cmd;
-	char	**args;
-	int		argc;
-
-	while (tok)
-	{
-		cmd = malloc (sizeof(t_cmd));
-		if (!cmd)
-			return (NULL);
-        cmd->args = NULL;
-		cmd->infile = NULL;
-		cmd->out_file = NULL;
-		cmd->append = NULL;
-		cmd->next = NULL;
-		args = malloc (sizeof(char *) * 100);
-		argc = 0;
-		while (tok && tok->type != PIPE)
-		{
-			if (tok->type == REDIR_IN && tok->next)
-			{
-				cmd->infile = tok->next->value;
-				tok = tok->next->next;
-				continue;
-			}
-			else if (tok->type == REDIR_OUT && tok->next)
-			{
-				cmd->out_file = tok->next->value;
-				tok = tok->next->next;
-				continue;
-			}
-			else if (tok->type == REDIR_APPEND && tok->next)
-			{
-				cmd->append = tok->next->value;
-				tok = tok->next->next;
-				continue;
-			}
-			else if (tok->type == WORD)
-				args[argc++] = tok->value;
-			tok = tok->next;
-		}
-		args[argc] = NULL;
-		cmd->args = args;
-		if (!head)
-			head = cmd;
-		else
-			current->next = cmd;
-		current = cmd;
-		if (tok && tok->type == PIPE)
-			tok = tok->next;
-	}
-	return (head);
-}
-
 
 void	print_parsed_cmds(t_cmd *cmd_list)
 {
-	int i;
-	int cmd_n = 1;
+	int	i;
+	int	cmd_n;
 
+	cmd_n = 1;
 	while (cmd_list)
 	{
 		printf("-------- CMD #%d --------\n", cmd_n++);
@@ -211,23 +116,21 @@ void	print_parsed_cmds(t_cmd *cmd_list)
 		if (cmd_list->append)
 			printf("append: %s\n", cmd_list->append);
 		printf("-------------------------\n");
-		printf("the infile:  %s\n outfile: %s append: %s\n", cmd_list->infile, cmd_list->out_file, cmd_list->append);
 		cmd_list = cmd_list->next;
 	}
 }
 
 int	main(int ac, char **av, char **env)
 {
-	while(1)
+	while (1)
 	{
-		char *input = readline("\033[32mminishell$>\033[0m ");
-		token *tokens = tokenize(input);
+		char *input = readline("$ ");
+		if (input)
+			add_history(input);
+		t_token *tokens = tokenize(input);
 		t_cmd *cmds = pars_token(tokens);
-		exe(cmds, env);
-		// print_parsed_cmds(cmds);
+		exe(cmds, env);	
 	}
-
-	(void)ac;
-	(void)av;
+	
 	return (0);
 }

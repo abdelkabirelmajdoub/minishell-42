@@ -1,6 +1,6 @@
 CC = cc 
-CFLAGS = -Wall -Wextra -Werror
-SRC = parsing/tokenize.c execution/exec_cmd.c execution/utils.c 
+# CFLAGS = -Wall -Wextra -Werror
+SRC = parsing/tokenize.c parsing/tokenize_utils.c parsing/tokenize_pars.c execution/exec_cmd.c execution/utils.c 
 OBJ = $(SRC:.c=.o)
 NAME = minishell
 LIBFT =  libft/libft.a
