@@ -6,81 +6,68 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/29 13:31:07 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/04/30 10:05:31 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
 
-char	*ft_strndup(const char *s, int size)
+void	handle_operator(char *input, int *i, token **head)
 {
-	int		i;
-	char	*str;
+	char		*token_value;
+	token_type	type;
+	token		*current;
 
-	if (!s)
-		return (NULL);
-	str = malloc(sizeof(char) * size + 1);
-	if (!str)
-		return (NULL);
-	i = -1;
-	while(s[++i] && i < size)
-		str[i] = s[i];
-	str[i] = '\0';
-	return (str);
+	type = tokenize_type(input, &i);
+	token_value = malloc (3);
+	token_value[0] = input [*i];
+	if (type == REDIR_APPEND)
+		token_value[1] = '>';
+	token_value[2] = '\0';
+	current = token_creation(token_value, type);
+	token_add_back(&head, current);
+	(*i)++;
 }
 
-token_type	tokenize_type(char *input, int *i)
+void	handle_quoted(char *input, int *i, token **head)
 {
-	if (input[*i] == '>' && input[*i + 1] == '>')
-	{
-		(*i)++;
-		return (REDIR_APPEND);
-	}
-	else if (input[*i] == '|')
-		return (PIPE);
-	else if (input[*i] == '<')
-		return (REDIR_IN);
-	else if (input[*i] == '>')
-		return (REDIR_OUT);
-	return (WORD);// my change ae-majd
+	char	quote;
+	int		start;
+	char	*token_value;
+	token	*current;
+
+	start = i;
+	quote = input[(*i)++];
+	while (input[*i] && input[*i] != quote)
+		i++;
+	token_value = ft_strndup(&input[start], i - start);
+	current = token_creation(token_value, WORD);
+	token_add_back(&head, current);
+	if (input[*i] == quote)
+		i++;
 }
 
-token	*token_creation(char *value, token_type type)
+void	handle_word(char *input, int *i, token **head)
 {
-	token	*new_token;
-	
-	new_token = malloc (sizeof(token));
-	if (!new_token)
-		return (NULL);
-	new_token->value = value;
-	new_token->type = type;
-	new_token->next = NULL;
-	return (new_token);// my change ae-majd
-}
+	int		start;
+	char	*token_value;
+	token	*current;
 
-void	token_add_back(token **head, token *new_token)
-{
-	token	*tmp;
-	if (!*head)
-		*head = new_token;
-	else
-	{
-		tmp = *head;
-		while (tmp->next != NULL)
-			tmp = tmp->next;
-		tmp->next = new_token;
-	}
+	start = *i;
+	while (input[*i] && !(input[*i] == ' ' || input[*i] == '\t' || input[*i] == '\n'
+		|| input[*i] == '|' || input[*i] == '<' || input[*i] == '>'))
+		i++;
+	token_value = ft_strndup(&input[start], i - start);
+	current = token_creation(token_value, WORD);
+	token_add_back(&head, current);
 }
 
 token	*tokenize(char *input)
 {
 	int			i;
 	token		*head;
-	token		*current;
-	char		*token_value;
-	token_type	type;
-	int			start;
-	
+	token		*current;;
+
 	i = 0;
 	head = NULL;
 	while (input[i] != '\0')
@@ -92,100 +79,16 @@ token	*tokenize(char *input)
 		}
 		if (input[i] == '|' || input[i] == '>' || input[i] == '<')
 		{
-			type = tokenize_type(input, &i);
-			token_value = malloc (3);
-			token_value[0] = input [i];
-			if (type == REDIR_APPEND)
-				token_value[1] = '>';
-			token_value[2] = '\0';
-			current = token_creation(token_value, type);
-			token_add_back(&head, current);
-			i++;
+			handle_operator(input, &i, &head);
 			continue;
 		}
 		if (input[i] == '\'' || input[i] == '"')
-		{
-			char quote = input[i++];
-			start = i;
-			while (input[i] && input[i] != quote)
-				i++;
-			token_value = ft_strndup(&input[start], i - start);
-			current = token_creation(token_value, WORD);
-			token_add_back(&head, current);
-			if (input[i] == quote)
-			i++; // skip the closing quote
-		}
+			handle_quoted(input, &i, &head);
 		else 
-		{
-			start = i;
-			while (input[i] && !(input[i] == ' ' || input[i] == '\t' || input[i] == '\n'
-				|| input[i] == '|' || input[i] == '<' || input[i] == '>'))
-				i++;
-			token_value = ft_strndup(&input[start], i - start);
-			current = token_creation(token_value, WORD);
-			token_add_back(&head, current);
-		}
+			handle_word(input, &i, &head);
 	}
 	return (head);
 }
-
-t_cmd	*pars_token(token	*tok)
-{
-	t_cmd	*head = NULL;
-	t_cmd	*current = NULL;
-	t_cmd	*cmd;
-	char	**args;
-	int		argc;
-
-	while (tok)
-	{
-		cmd = malloc (sizeof(t_cmd));
-		if (!cmd)
-			return (NULL);
-        cmd->args = NULL;
-		cmd->infile = NULL;
-		cmd->out_file = NULL;
-		cmd->append = NULL;
-		cmd->next = NULL;
-		args = malloc (sizeof(char *) * 100);
-		argc = 0;
-		while (tok && tok->type != PIPE)
-		{
-			if (tok->type == REDIR_IN && tok->next)
-			{
-				cmd->infile = tok->next->value;
-				tok = tok->next->next;
-				continue;
-			}
-			else if (tok->type == REDIR_OUT && tok->next)
-			{
-				cmd->out_file = tok->next->value;
-				tok = tok->next->next;
-				continue;
-			}
-			else if (tok->type == REDIR_APPEND && tok->next)
-			{
-				cmd->append = tok->next->value;
-				tok = tok->next->next;
-				continue;
-			}
-			else if (tok->type == WORD)
-				args[argc++] = tok->value;
-			tok = tok->next;
-		}
-		args[argc] = NULL;
-		cmd->args = args;
-		if (!head)
-			head = cmd;
-		else
-			current->next = cmd;
-		current = cmd;
-		if (tok && tok->type == PIPE)
-			tok = tok->next;
-	}
-	return (head);
-}
-
 
 void	print_parsed_cmds(t_cmd *cmd_list)
 {
