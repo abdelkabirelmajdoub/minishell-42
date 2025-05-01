@@ -6,11 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/04/30 13:19:06 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 11:15:25 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parsing/parsing.h"
+#include "../include/minishell.h"
 
 
 void	redirect_in(char *filename)
@@ -53,13 +53,15 @@ void	redirect_out(char *filename, char *append)
 	close(fd);
 }
 
-
-
-
-void	execute_one(t_cmd *cmd, char **env)
+void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 {
 	pid_t	pid;
 	
+	if (is_builtin(cmd->args[0]))
+	{
+		run_builtin(cmd, env);
+		return;
+	}
 	pid = fork();
 	if (!pid)
 	{
@@ -67,7 +69,7 @@ void	execute_one(t_cmd *cmd, char **env)
 			redirect_in(cmd->infile);
 		if (cmd->out_file)
 			redirect_out(cmd->out_file, cmd->append);
-		execve(get_path(cmd->args[0], env), cmd->args, env);
+		execve(get_path(cmd->args[0], v_tmp), cmd->args, v_tmp);
 		printf("command not found: %s\n", cmd->args[0]);
 		exit(1);
 	}
@@ -75,7 +77,7 @@ void	execute_one(t_cmd *cmd, char **env)
 		waitpid(pid, NULL, 0);
 }
 
-void	execute_pipe(t_cmd *cmd, char **env)
+void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 {
 	int		pipefd[2];
 	int		prev_fd;
@@ -98,7 +100,10 @@ void	execute_pipe(t_cmd *cmd, char **env)
 				redirect_out(cmd->out_file, cmd->append);
 			close(pipefd[0]);
 			close(pipefd[1]);
-			execve(get_path(cmd->args[0], env), cmd->args, env);
+			if (is_builtin(cmd->args[0]))
+				exit(run_builtin(cmd, env));
+			else
+				execve(get_path(cmd->args[0], v_tmp), cmd->args, v_tmp);
 			printf("command not found: %s\n", cmd->args[0]);
 			exit(1);
 		}
@@ -116,10 +121,10 @@ int	is_pipe(t_cmd *cmd_list)
 	return (cmd_list && cmd_list->next);
 }
 
-void	exe(t_cmd  *cmd_list, char **env)
+void	exe(t_cmd  *cmd_list, char **v_tmp, t_env **env)
 {
 	if (is_pipe(cmd_list))
-		execute_pipe(cmd_list, env);
+		execute_pipe(cmd_list, env, v_tmp);
 	else
-		execute_one(cmd_list, env);
+		execute_one(cmd_list, env, v_tmp);
 }

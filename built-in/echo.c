@@ -6,16 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 11:08:50 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/04/29 13:29:03 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 11:05:32 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mini.h"
-
-
-#include <stdio.h>
-#include <string.h>
-#include <stdbool.h>
+#include "../include/minishell.h"
 
 int	is_n_option(const char *str)
 {
@@ -108,7 +103,7 @@ void	single_quotes(char 	*args)
 
 /// stilll need work on it
 
-void	handle_echo(char **args, t_env **env) 
+int	ft_echo(char **args, t_env **env) 
 {
 	int	i;
 	int newline;
@@ -133,6 +128,7 @@ void	handle_echo(char **args, t_env **env)
 	}
 	if (newline)
 		printf("\n");
+	return (0);
 }
 
 

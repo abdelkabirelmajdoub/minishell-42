@@ -6,11 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:57:44 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/04/27 12:02:07 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 11:06:07 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "mini.h"
+#include "../include/minishell.h"
 
 void	remove_var(t_env *env)
 {

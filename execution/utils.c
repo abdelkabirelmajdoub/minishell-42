@@ -6,11 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:34:39 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/04/30 09:34:52 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 11:06:17 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../parsing/parsing.h"
+#include "../include/minishell.h"
 
 
 char	*my_getenv(char *name, char **env)

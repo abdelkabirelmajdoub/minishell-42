@@ -6,11 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 13:14:26 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 11:09:29 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../include/minishell.h"
 
 void	handle_operator(char *input, int *i, t_token **head)
 {
@@ -67,7 +67,6 @@ t_token	*tokenize(char *input)
 {
 	int			i;
 	t_token		*head;
-	t_token		*current;
 
 	i = 0;
 	head = NULL;
@@ -120,17 +119,4 @@ void	print_parsed_cmds(t_cmd *cmd_list)
 	}
 }
 
-int	main(int ac, char **av, char **env)
-{
-	while (1)
-	{
-		char *input = readline("$ ");
-		if (input)
-			add_history(input);
-		t_token *tokens = tokenize(input);
-		t_cmd *cmds = pars_token(tokens);
-		exe(cmds, env);	
-	}
-	
-	return (0);
-}
+

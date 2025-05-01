@@ -1,9 +1,18 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "mini.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
+/*   Updated: 2025/05/01 11:25:48 by ael-majd         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-char	*ft_strndup(const char *s, int size)
+#include "../include/minishell.h"
+
+char	*ft_strndupli(const char *s, int size)
 {
 	int		i;
 	char	*str;
@@ -82,7 +91,7 @@ t_env	*creat_env(char **env)
 		eqaule_sign = ft_strchr(env[i], '=');
 		if (eqaule_sign)
 		{
-			new->key = ft_strndup(env[i], eqaule_sign - env[i]);
+			new->key = ft_strndupli(env[i], eqaule_sign - env[i]);
 			new->value = ft_strdup(eqaule_sign + 1);
 		}
 		else
@@ -100,11 +109,15 @@ t_env	*creat_env(char **env)
 	}
 	return (head);
 }
-void	env(t_env *tmp)
+
+int	ft_env(t_env **tmp)
 {
-	while(tmp)
+	t_env *env = *tmp;
+	while (env)
 	{
-		printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
+		if (env->value)
+			printf("%s=%s\n", env->key, env->value);
+		env = env->next;
 	}
+	return (0);
 }

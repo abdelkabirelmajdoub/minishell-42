@@ -1,10 +1,11 @@
-#include "mini.h"
+#include "../include/minishell.h"
 
 
-void run_cd(char *path)
+int run_cd(char *path)
 {
 	if (chdir(path) == -1)
 		perror("cd");
+	return (1);
 }
 
 void free_args(char **args)
@@ -19,10 +20,13 @@ void free_args(char **args)
 	}
 	free(args);
 }
-void	cd_cmd(char **args)
+int	ft_cd(char **args)
 {
-	if (args[1])
+	if (args[1] && args[1][0] == '~')
+		run_cd(getenv("HOME"));
+	else if (args[1])
 		run_cd(args[1]);
 	else
 		run_cd(getenv("HOME"));
+	return (0);
 }

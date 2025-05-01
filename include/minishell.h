@@ -1,25 +1,33 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.h                                          :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/26 11:20:26 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 13:13:21 by ael-majd         ###   ########.fr       */
+/*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
+/*   Updated: 2025/05/01 11:17:52 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef PARSING_H
-# define PARSING_H
-
-# include <readline/readline.h>
-# include <readline/history.h>
-# include <stdlib.h>
-#include <unistd.h>
-#include <fcntl.h>
-#include <stdio.h>
+#ifndef MINISHELL_H
+#define MINISHELL_H
 #include "../libft/libft.h"
+#include <unistd.h>
+#include <stdio.h> 
+#include <readline/readline.h>
+#include <readline/history.h>
+#include <stdlib.h>
+#include <fcntl.h>
+
+////// For parsing headers
+typedef struct s_env
+{
+	char			*key;
+	char			*value;
+	struct s_env	*next;
+}		t_env;
+
 typedef enum s_token_type
 {
 	WORD,
@@ -56,10 +64,28 @@ void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 
+////// For execution headers
 
-
-/// execution
- 
 char	*get_path(char *cmd, char **env);
-void	exe(t_cmd  *cmd_list, char **env);
+void	exe(t_cmd  *cmd_list, char **v_tmp, t_env **env);
+
+
+
+
+
+int		ft_unset(char *var, t_env **my_env);
+int		ft_env(t_env **tmp);
+int		ft_cd(char **args);
+int		ft_pwd(void);
+int		ft_exit(char **args);
+int		ft_echo(char **args, t_env **env) ;
+void 	free_args(char **args);
+t_env	*new_env_node(char *key, char *value);
+t_env	*creat_env(char **env);
+
+/// for execute builtin
+int	run_builtin(t_cmd *cmd, t_env **env);
+int	is_builtin(char *cmd);
+
+
 #endif
