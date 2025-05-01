@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/01 11:17:52 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:37:52 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ typedef enum s_token_type
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
+	REDIR_HEREDOC,
 }	t_token_type;
 
 typedef struct s_token
@@ -50,6 +51,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*out_file;
 	char			*append;
+	char			*limiter;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -63,7 +65,7 @@ void			handle_word(char *input, int *i, t_token **head);
 void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
-
+t_cmd			*pars_int(void);
 ////// For execution headers
 
 char	*get_path(char *cmd, char **env);
