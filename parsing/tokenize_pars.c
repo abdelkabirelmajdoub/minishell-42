@@ -6,26 +6,11 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 09:42:31 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 12:36:11 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:34:43 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
-
-t_cmd	*pars_int(void)
-{
-	t_cmd	*cmd;
-
-	cmd = malloc (sizeof(t_cmd));
-	if (!cmd)
-		return (NULL);
-	cmd->args = NULL;
-	cmd->infile = NULL;
-	cmd->out_file = NULL;
-	cmd->append = NULL;
-	cmd->next = NULL;
-	return (cmd);
-}
 
 char	**args_allocation(void)
 {
@@ -37,25 +22,28 @@ char	**args_allocation(void)
 	return (args);
 }
 
+void	pars_helper2(t_token **tok, t_cmd *cmd)
+{
+	if ((*tok)->type == REDIR_IN)
+		cmd->infile = (*tok)->next->value;
+	else if ((*tok)->type == REDIR_OUT)
+		cmd->out_file = (*tok)->next->value;
+	else if ((*tok)->type == REDIR_HEREDOC)
+		cmd->limiter = (*tok)->next->value;
+	else if ((*tok)->type == REDIR_APPEND)
+		cmd->append = (*tok)->next->value;
+}
+
 void	pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc)
 {
 	while ((*tok) && (*tok)->type != PIPE)
 	{
-		if ((*tok)->type == REDIR_IN && (*tok)->next)
+		if (((*tok)->type == REDIR_IN || (*tok)->type == REDIR_OUT
+				|| (*tok)->type == REDIR_APPEND 
+				|| (*tok)->type == REDIR_HEREDOC)
+			&& (*tok)->next)
 		{
-			cmd->infile = (*tok)->next->value;
-			*tok = (*tok)->next->next;
-			continue ;
-		}
-		else if ((*tok)->type == REDIR_OUT && (*tok)->next)
-		{
-			cmd->out_file = (*tok)->next->value;
-			*tok = (*tok)->next->next;
-			continue ;
-		}
-		else if ((*tok)->type == REDIR_APPEND && (*tok)->next)
-		{
-			cmd->append = (*tok)->next->value;
+			pars_helper2(tok, cmd);
 			*tok = (*tok)->next->next;
 			continue ;
 		}

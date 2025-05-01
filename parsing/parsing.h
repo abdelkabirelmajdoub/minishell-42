@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:20:26 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 12:37:11 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:30:39 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ typedef enum s_token_type
 	REDIR_IN,
 	REDIR_OUT,
 	REDIR_APPEND,
+	REDIR_HEREDOC,
 }	t_token_type;
 
 typedef struct s_token
@@ -39,6 +40,7 @@ typedef struct s_cmd
 	char			*infile;
 	char			*out_file;
 	char			*append;
+	char			*limiter;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -52,4 +54,5 @@ void			handle_word(char *input, int *i, t_token **head);
 void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
+void			pars_helper2(t_token **tok, t_cmd *cmd);
 #endif

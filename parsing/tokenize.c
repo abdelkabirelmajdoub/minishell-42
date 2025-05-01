@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 12:42:10 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:29:48 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	handle_operator(char *input, int *i, t_token **head)
 	token_value[0] = input [*i];
 	if (type == REDIR_APPEND)
 		token_value[1] = '>';
+	else if (type == REDIR_HEREDOC)
+		token_value[1] = '<';
 	token_value[2] = '\0';
 	current = token_creation(token_value, type);
 	token_add_back(head, current);
@@ -115,7 +117,9 @@ t_token	*tokenize(char *input)
 // 			printf("outfile: %s\n", cmd_list->out_file);
 // 		if (cmd_list->append)
 // 			printf("append: %s\n", cmd_list->append);
-// 		printf("-------------------------\n");
+// 		if (cmd_list->limiter)
+// 			printf("limiter: %s\n", cmd_list->limiter);
+// 		printf("-------------------------\n"); 
 // 		cmd_list = cmd_list->next;
 // 	}
 // }

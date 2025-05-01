@@ -6,11 +6,27 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:13:00 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 12:38:20 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/01 10:32:32 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "parsing.h"
+
+t_cmd	*pars_int(void)
+{
+	t_cmd	*cmd;
+
+	cmd = malloc (sizeof(t_cmd));
+	if (!cmd)
+		return (NULL);
+	cmd->args = NULL;
+	cmd->infile = NULL;
+	cmd->out_file = NULL;
+	cmd->append = NULL;
+	cmd->limiter = NULL;
+	cmd->next = NULL;
+	return (cmd);
+}
 
 char	*ft_strndup(const char *s, int size)
 {
@@ -63,6 +79,11 @@ t_token_type	tokenize_type(char *input, int *i)
 	{
 		(*i)++;
 		return (REDIR_APPEND);
+	}
+	if (input[*i] == '<' && input[*i + 1] == '<')
+	{
+		(*i)++;
+		return (REDIR_HEREDOC);
 	}
 	else if (input[*i] == '|')
 		return (PIPE);
