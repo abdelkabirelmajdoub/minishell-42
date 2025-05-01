@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/04/30 10:03:56 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 09:17:59 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ int	main(int ac, char **av, char **env)
 {
 	while(1)
 	{
-		char *input = readline("\033[32mminishell$>\033[0m ");
+		char *input = readline("\033[32mminishell$>\033[0m   ");
 		token *tokens = tokenize(input);
 		t_cmd *cmds = pars_token(tokens);
 		exe(cmds, env);
