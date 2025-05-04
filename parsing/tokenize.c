@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/01 13:29:07 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:16:19 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,42 +93,43 @@ t_token	*tokenize(char *input)
 	return (head);
 }
 
-// void	print_parsed_cmds(t_cmd *cmd_list)
-// {
-// 	int	i;
-// 	int	cmd_n;
+void	print_parsed_cmds(t_cmd *cmd_list)
+{
+	int	i;
+	int	cmd_n;
 
-// 	cmd_n = 1;
-// 	while (cmd_list)
-// 	{
-// 		printf("-------- CMD #%d --------\n", cmd_n++);
-// 		if (cmd_list->args)
-// 		{
-// 			i = 0;
-// 			while (cmd_list->args[i])
-// 			{
-// 				printf("arg[%d]: %s\n", i, cmd_list->args[i]);
-// 				i++;
-// 			}
-// 		}
-// 		if (cmd_list->infile)
-// 			printf("infile: %s\n", cmd_list->infile);
-// 		if (cmd_list->out_file)
-// 			printf("outfile: %s\n", cmd_list->out_file);
-// 		if (cmd_list->append)
-// 			printf("append: %s\n", cmd_list->append);
-// 		if (cmd_list->limiter)
-// 			printf("limiter: %s\n", cmd_list->limiter);
-// 		printf("-------------------------\n"); 
-// 		cmd_list = cmd_list->next;
-// 	}
-// }
+	cmd_n = 1;
+	while (cmd_list)
+	{
+		printf("-------- CMD #%d --------\n", cmd_n++);
+		if (cmd_list->args)
+		{
+			i = 0;
+			while (cmd_list->args[i])
+			{
+				printf("arg[%d]: %s\n", i, cmd_list->args[i]);
+				i++;
+			}
+		}
+		if (cmd_list->infile)
+			printf("infile: %s\n", cmd_list->infile);
+		if (cmd_list->out_file)
+			printf("outfile: %s\n", cmd_list->out_file);
+		if (cmd_list->append)
+			printf("append: %s\n", cmd_list->append);
+		if (cmd_list->limiter)
+			printf("limiter: %s\n", cmd_list->limiter);
+		printf("-------------------------\n"); 
+		cmd_list = cmd_list->next;
+	}
+}
 
-// int	main(void)
-// {
-// 	char *input = readline("$ ");
-// 	t_token *tokens = tokenize(input);
-// 	t_cmd *cmds = pars_token(tokens);
-// 	print_parsed_cmds(cmds);
-// 	return (0);
-// }
+int	main(void)
+{
+	char *input = readline("$ ");
+	t_token *tokens = tokenize(input);
+	t_cmd *cmds = pars_token(tokens);
+	handle_syn(input,tokens);
+	print_parsed_cmds(cmds);
+	return (0);
+}

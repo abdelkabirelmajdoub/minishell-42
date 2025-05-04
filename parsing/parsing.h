@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:20:26 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/01 10:30:39 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:11:24 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,4 +55,6 @@ void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 void			pars_helper2(t_token **tok, t_cmd *cmd);
+int				handle_syn(char *input, t_token *tok);
+t_cmd			*pars_int(void);
 #endif
