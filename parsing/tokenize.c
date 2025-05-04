@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/01 13:42:22 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/03 10:33:43 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,6 @@ t_token	*tokenize(char *input)
 {
 	int			i;
 	t_token		*head;
-	// t_token		*current;
 
 	i = 0;
 	head = NULL;
@@ -126,12 +125,9 @@ t_token	*tokenize(char *input)
 
 // int	main(void)
 // {
-// 	while(1)
-// 	{
-// 		char *input = readline("$ ");
-// 		t_token *tokens = tokenize(input);
-// 		t_cmd *cmds = pars_token(tokens);
-// 		print_parsed_cmds(cmds);
-// 	}
+// 	char *input = readline("$ ");
+// 	t_token *tokens = tokenize(input);
+// 	t_cmd *cmds = pars_token(tokens);
+// 	print_parsed_cmds(cmds);
 // 	return (0);
 // }
