@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/01 13:37:52 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/04 10:28:30 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,12 +66,16 @@ void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
+// libft
+int	ft_strcmp(const char *s1, const char *s2);
+
+
 ////// For execution headers
 
 char	*get_path(char *cmd, char **env);
 void	exe(t_cmd  *cmd_list, char **v_tmp, t_env **env);
-
-
+void	handle_heredoc(t_cmd *cmd);
+void	run_heredoc(char *limiter, int	write_end);
 
 
 
@@ -80,7 +84,8 @@ int		ft_env(t_env **tmp);
 int		ft_cd(char **args);
 int		ft_pwd(void);
 int		ft_exit(char **args);
-int		ft_echo(char **args, t_env **env) ;
+int		ft_echo(char **args, t_env **env);
+int		ft_export(t_env **env, char **args);
 void 	free_args(char **args);
 t_env	*new_env_node(char *key, char *value);
 t_env	*creat_env(char **env);

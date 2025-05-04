@@ -6,28 +6,12 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/01 11:25:48 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/01 14:31:41 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	*ft_strndupli(const char *s, int size)
-{
-	int		i;
-	char	*str;
-
-	if (!s)
-		return (NULL);
-	str = malloc(sizeof(char) * size + 1);
-	if (!str)
-		return (NULL);
-	i = -1;
-	while(s[++i] && i < size)
-		str[i] = s[i];
-	str[i] = '\0';
-	return (str);
-}
 
 t_env	*new_env_node(char *key, char *value)
 {
@@ -91,7 +75,7 @@ t_env	*creat_env(char **env)
 		eqaule_sign = ft_strchr(env[i], '=');
 		if (eqaule_sign)
 		{
-			new->key = ft_strndupli(env[i], eqaule_sign - env[i]);
+			new->key = ft_strndup(env[i], eqaule_sign - env[i]);
 			new->value = ft_strdup(eqaule_sign + 1);
 		}
 		else
