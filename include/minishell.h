@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/04 10:28:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/05 11:39:19 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,7 +89,7 @@ int		ft_export(t_env **env, char **args);
 void 	free_args(char **args);
 t_env	*new_env_node(char *key, char *value);
 t_env	*creat_env(char **env);
-
+void	inc_lvl(t_env **env);
 /// for execute builtin
 int	run_builtin(t_cmd *cmd, t_env **env);
 int	is_builtin(char *cmd);
