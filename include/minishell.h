@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/04 10:28:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/05 10:11:49 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,8 @@ void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
-// libft
-int	ft_strcmp(const char *s1, const char *s2);
-
-
+void			handle_syn(char *input, t_token *tok);
+void			handle_syn_helper(t_token *cpy_tok);
 ////// For execution headers
 
 char	*get_path(char *cmd, char **env);
