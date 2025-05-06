@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/05 10:11:49 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/06 10:27:38 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,6 +68,9 @@ int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
 void			handle_syn(char *input, t_token *tok);
 void			handle_syn_helper(t_token *cpy_tok);
+char			*get_env(char *key, t_env *env);
+char			*expand_variable(char *value,t_env *env);
+void			*expend_token (t_token *tokens, t_env *env);
 ////// For execution headers
 
 char	*get_path(char *cmd, char **env);
