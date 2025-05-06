@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/06 11:00:19 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/06 12:17:22 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,8 @@ void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
-void			handle_syn(char *input, t_token *tok);
-void			handle_syn_helper(t_token *cpy_tok);
+int				handle_syn(char *input, t_token *tok);
+int					handle_syn_helper(t_token *cpy_tok);
 ////// For execution headers
 
 char	*get_path(char *cmd, char **env);
