@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/05 13:38:02 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:13:23 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ t_env	*new_env_node(char *key, char *value)
 	if (!node)
 		return (NULL);
 	node->key = key;
-	node->value = value;
+	node->value = ft_strdup(value);
 	node->next = NULL;
 	return (node);
 }

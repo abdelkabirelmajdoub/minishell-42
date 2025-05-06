@@ -6,18 +6,14 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:53:52 by ael-majd          #+#    #+#             */
-<<<<<<< HEAD
 /*   Updated: 2025/05/06 09:35:34 by ael-majd         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/05 10:03:03 by yazlaigi         ###   ########.fr       */
->>>>>>> 1327811c29cb9bb34480570258e04fd8403de2ff
+/*   Updated: 2025/05/05 10:03:03 by ael-majd        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 
-<<<<<<< HEAD
 int	is_valid_key(char *key)
 {
 	int	i = 0;
@@ -144,7 +140,7 @@ int	print_export(t_env *env)
 			printf("declare -x %s\n", arr[i]->key);
 		i++;
 	}
-	// free_args(arr);
+	// free_args(arr); // need to freeee
 	return (0);
 }
 
@@ -185,6 +181,3 @@ int	ft_export(t_env **env, char **args)
 	}
 	return (0);
 }
-
-=======
->>>>>>> 1327811c29cb9bb34480570258e04fd8403de2ff

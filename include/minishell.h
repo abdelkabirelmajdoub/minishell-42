@@ -3,16 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/05/06 10:01:58 by ael-majd         ###   ########.fr       */
-=======
-/*   Updated: 2025/05/05 10:11:49 by yazlaigi         ###   ########.fr       */
->>>>>>> 1327811c29cb9bb34480570258e04fd8403de2ff
+/*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
+/*   Updated: 2025/05/06 11:00:19 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #ifndef MINISHELL_H
 #define MINISHELL_H
@@ -93,6 +90,8 @@ void 	free_args(char **args);
 t_env	*new_env_node(char *key, char *value);
 t_env	*creat_env(char **env);
 void	inc_lvl(t_env **env);
+int		ft_strcmp(const char *s1, const char *s2);
+void	env_add_back(t_env **env, t_env *new_node);
 /// for execute builtin
 int	run_builtin(t_cmd *cmd, t_env **env);
 int	is_builtin(char *cmd);
