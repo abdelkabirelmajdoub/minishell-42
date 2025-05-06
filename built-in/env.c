@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/05 11:49:06 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/05 13:38:02 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,19 +33,15 @@ void	empty_env(t_env **env)
 
 	if (!env)
 		return ;
-
 	if (!getcwd(cwd, sizeof(cwd)))
 		return ;
-
 	*env = new_env_node("PWD", ft_strdup(cwd));
 	if (!*env)
 		return ;
-
 	new = new_env_node("SHLVL", ft_strdup("1"));
 	if (!new)
 		return ;
 	(*env)->next = new;
-
 	new->next = new_env_node("_", ft_strdup("/usr/bin/env"));
 }
 

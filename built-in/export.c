@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:53:52 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/01 14:40:01 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/06 09:35:34 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,12 +29,15 @@ int	is_valid_key(char *key)
 }
 void	sort_env_array(t_env **arr)
 {
-	int		i, j;
+	int		i;
+	int		j;
 	t_env	*tmp;
 
-	for (i = 0; arr[i]; i++)
+	i = 0;
+	while(arr[i])
 	{
-		for (j = i + 1; arr[j]; j++)
+		j = i + 1;
+		while(arr[j])
 		{
 			if (ft_strcmp(arr[i]->key, arr[j]->key) > 0)
 			{
@@ -42,7 +45,9 @@ void	sort_env_array(t_env **arr)
 				arr[i] = arr[j];
 				arr[j] = tmp;
 			}
+			j++;
 		}
+		i++;
 	}
 }
 void	add_env_back(t_env **env, t_env *new)
@@ -61,22 +66,33 @@ void	add_env_back(t_env **env, t_env *new)
 
 void	update_env(t_env **env, char *key, char *value)
 {
-	t_env *cur = *env;
+	t_env	*cur;
+	t_env	*new;
+	char	*dup_value;
 
+	cur = *env;
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)
 		{
 			free(cur->value);
-			cur->value = value ? ft_strdup(value) : NULL;
+			if (value)
+				cur->value = ft_strdup(value);
+			else
+				cur->value = NULL;
 			free(key);
 			return;
 		}
 		cur = cur->next;
 	}
-	t_env *new = new_env_node(key, value ? ft_strdup(value) : NULL);
+	if (value)
+		dup_value = ft_strdup(value);
+	else
+		dup_value = NULL;
+	new = new_env_node(key, dup_value);
 	add_env_back(env, new);
 }
+
 int	env_size(t_env *env)
 {
 	int count = 0;
@@ -90,10 +106,12 @@ int	env_size(t_env *env)
 
 t_env	**env_to_array(t_env *env)
 {
-	int		size = env_size(env);
+	int		size;
 	int		i = 0;
-	t_env	**array = malloc(sizeof(t_env *) * (size + 1));
+	t_env	**array;
 
+	size = env_size(env);
+	array = malloc(sizeof(t_env *) * (size + 1));
 	if (!array)
 		return (NULL);
 	while (env)
@@ -105,15 +123,13 @@ t_env	**env_to_array(t_env *env)
 	return (array);
 }
 
-
-
-
 int	print_export(t_env *env)
 {
-	t_env	**arr = env_to_array(env);
+	t_env	**arr;
 	int		i;
 
-	sort_env_array(arr); // sort by key
+	arr = env_to_array(env);
+	sort_env_array(arr);
 	i = 0;
 	while (arr[i])
 	{
@@ -130,14 +146,14 @@ int	print_export(t_env *env)
 
 int	ft_export(t_env **env, char **args)
 {
-	int		i = 1;
+	int		i;
 	char	*key;
 	char	*value;
 	char	*eq;
 
-	if (!args[1]) // No arguments: print all in sorted order
+	if (!args[1])
 		return (print_export(*env));
-
+	i = 1;
 	while (args[i])
 	{
 		eq = ft_strchr(args[i], '=');
@@ -159,7 +175,7 @@ int	ft_export(t_env **env, char **args)
 			i++;
 			continue;
 		}
-		update_env(env, key, value); // add or update variable
+		update_env(env, key, value);
 		i++;
 	}
 	return (0);
