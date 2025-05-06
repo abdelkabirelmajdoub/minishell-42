@@ -1,7 +1,7 @@
 CC = cc 
 CFLAGS = -Wall -Wextra -Werror
-SRC = parsing/tokenize.c parsing/tokenize_utils.c parsing/tokenize_pars.c \
-	 execution/exec_cmd.c execution/utils.c   execution/heredoc.c \
+SRC = parsing/tokenize.c parsing/tokenize_utils.c parsing/tokenize_pars.c  parsing/handle_errors.c\
+	 execution/exec_cmd.c execution/utils.c \
 	 built-in/env.c  built-in/cd.c built-in/unset.c \
 	 built-in/exit.c built-in/export.c built-in/echo.c \
 	 built-in/run_built.c built-in/pwd.c main.c \
