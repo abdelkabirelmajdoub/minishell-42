@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/06 10:33:37 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/06 11:40:06 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include "gnl/get_next_line.h"
+// #include "gnl/get_next_line.h"
 
 ////// For parsing headers
 typedef struct s_env
