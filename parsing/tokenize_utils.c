@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:13:00 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/04 10:21:48 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:40:45 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../include/minishell.h"
 
 t_cmd	*pars_int(void)
 {

@@ -1,0 +1,52 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   heredoc.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
+/*   Updated: 2025/05/05 14:35:54 by ael-majd         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../include/minishell.h"
+
+void	run_heredoc(char *limiter, int	write_end)
+{
+	char	*line;
+
+	while(1)
+	{
+		line = get_next_line(0);
+		if (!line)
+			break;
+		if (!ft_strcmp(line, limiter))
+		{
+			free(line);
+			break;
+		}
+		write(write_end, line, ft_strlen(line));
+		write(write_end, "\n", 1);
+		free(line);
+	}
+}
+
+void	handle_heredoc(t_cmd *cmd)
+{
+	int		here_pipe[2];
+	pid_t	pid;
+	
+	pipe(here_pipe);
+	pid = fork();
+	if (!pid)
+	{
+		close(here_pipe[0]);
+		run_heredoc(cmd->limiter, here_pipe[1]);
+		exit(0);
+	}
+	close(here_pipe[1]);
+	waitpid(pid, NULL, 0);
+	dup2(here_pipe[0], STDIN_FILENO);
+	close(here_pipe[0]);
+}

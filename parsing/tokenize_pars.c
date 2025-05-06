@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_pars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 09:42:31 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/01 10:34:43 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/01 13:40:40 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "parsing.h"
+#include "../include/minishell.h"
 
 char	**args_allocation(void)
 {

@@ -1,24 +1,17 @@
-#include <unistd.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include "mini.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
+/*   Updated: 2025/05/05 13:38:02 by ael-majd         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-char	*ft_strndup(const char *s, int size)
-{
-	int		i;
-	char	*str;
+#include "../include/minishell.h"
 
-	if (!s)
-		return (NULL);
-	str = malloc(sizeof(char) * size + 1);
-	if (!str)
-		return (NULL);
-	i = -1;
-	while(s[++i] && i < size)
-		str[i] = s[i];
-	str[i] = '\0';
-	return (str);
-}
 
 t_env	*new_env_node(char *key, char *value)
 {
@@ -33,30 +26,25 @@ t_env	*new_env_node(char *key, char *value)
 	return (node);
 }
 
-t_env	*empty_env(void)
+void	empty_env(t_env **env)
 {
-	t_env	*head;
-	t_env	*current;
-	t_env	*new;
 	char	cwd[1337];
+	t_env	*new;
 
-	head = NULL;
-	current = NULL;
-	head = new_env_node("PWD", getcwd(cwd, sizeof(cwd)));
-	if (!head)
-		return (NULL);
-	current = head;
-	new = new_env_node("SHLVL", "1");
+	if (!env)
+		return ;
+	if (!getcwd(cwd, sizeof(cwd)))
+		return ;
+	*env = new_env_node("PWD", ft_strdup(cwd));
+	if (!*env)
+		return ;
+	new = new_env_node("SHLVL", ft_strdup("1"));
 	if (!new)
-		return (NULL);
-	current->next = new;
-	current = new;
-	new = new_env_node("_", "/usr/bin/env");
-	if (!new)
-		return (NULL);
-	current->next = new;
-	return (head);
+		return ;
+	(*env)->next = new;
+	new->next = new_env_node("_", ft_strdup("/usr/bin/env"));
 }
+
 
 t_env	*creat_env(char **env)
 {
@@ -70,10 +58,7 @@ t_env	*creat_env(char **env)
 	current = NULL;
 	i = 0;
 	if (!env || !env[0])
-	{
-		head = empty_env();
-		return (head);
-	}
+		return (NULL);
 	while(env[i])
 	{
 		new = malloc(sizeof(t_env));
@@ -100,11 +85,41 @@ t_env	*creat_env(char **env)
 	}
 	return (head);
 }
-void	env(t_env *tmp)
+void	inc_lvl(t_env **env)
 {
-	while(tmp)
+	t_env	*curr;
+	int		lvl;
+	char	*new;
+
+	if (!env || !*env)
 	{
-		printf("%s=%s\n", tmp->key, tmp->value);
-		tmp = tmp->next;
+		empty_env(env);
+		return ;
 	}
+	curr = *env;
+	while(curr)
+	{
+		if (!ft_strcmp(curr->key, "SHLVL"))
+		{
+			lvl = ft_atoi(curr->value);
+			lvl++;
+			new = ft_itoa(lvl);
+			if (!new)
+				return ;
+			free(curr->value);
+			curr->value = new;
+		}
+		curr  = curr->next;
+	}
+}
+int	ft_env(t_env **tmp)
+{
+	t_env *env = *tmp;
+	while (env)
+	{
+		if (env->value)
+			printf("%s=%s\n", env->key, env->value);
+		env = env->next;
+	}
+	return (0);
 }
