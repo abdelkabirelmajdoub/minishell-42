@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/06 10:27:38 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/06 10:33:37 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include "gnl/get_next_line.h"
 
 ////// For parsing headers
 typedef struct s_env
@@ -82,7 +83,7 @@ void	run_heredoc(char *limiter, int	write_end);
 
 int		ft_unset(char *var, t_env **my_env);
 int		ft_env(t_env **tmp);
-int		ft_cd(char **args);
+int		ft_cd(char **args, t_env **env);
 int		ft_pwd(void);
 int		ft_exit(char **args);
 int		ft_echo(char **args, t_env **env);
@@ -90,7 +91,7 @@ int		ft_export(t_env **env, char **args);
 void 	free_args(char **args);
 t_env	*new_env_node(char *key, char *value);
 t_env	*creat_env(char **env);
-
+void	inc_lvl(t_env **env);
 /// for execute builtin
 int	run_builtin(t_cmd *cmd, t_env **env);
 int	is_builtin(char *cmd);

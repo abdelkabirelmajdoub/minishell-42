@@ -4,7 +4,8 @@ SRC = parsing/tokenize.c parsing/tokenize_utils.c parsing/tokenize_pars.c  parsi
 	 execution/exec_cmd.c execution/utils.c \
 	 built-in/env.c  built-in/cd.c built-in/unset.c \
 	 built-in/exit.c built-in/export.c built-in/echo.c \
-	 built-in/run_built.c built-in/pwd.c main.c 
+	 built-in/run_built.c built-in/pwd.c main.c \
+	 include/gnl/get_next_line.c include/gnl/get_next_line_utils.c
 
 OBJ = $(SRC:.c=.o)
 NAME = minishell
