@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/06 12:17:22 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:28:35 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,6 +54,7 @@ typedef struct s_cmd
 	char			*out_file;
 	char			*append;
 	char			*limiter;
+	int				heredoc_fd;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -74,9 +75,8 @@ int					handle_syn_helper(t_token *cpy_tok);
 
 char	*get_path(char *cmd, char **env);
 void	exe(t_cmd  *cmd_list, char **v_tmp, t_env **env);
-void	handle_heredoc(t_cmd *cmd);
 void	run_heredoc(char *limiter, int	write_end);
-
+void	prepare_heredocs(t_cmd *cmd_list);
 
 
 int		ft_unset(char *var, t_env **my_env);
