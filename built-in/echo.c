@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 11:08:50 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/01 14:47:00 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/07 09:21:43 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	single_quotes(char 	*args)
 }
 
 
-/// stilll need work on it
+// stilll need work on it
 
 int	ft_echo(char **args, t_env **env) 
 {
