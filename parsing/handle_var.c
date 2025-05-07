@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/06 10:28:18 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:29:42 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,12 +45,41 @@ void	*expend_token(t_token *tokens, t_env *env)
 	cpy_tok = tokens;
 	while (cpy_tok)
 	{
-		if (cpy_tok->type == WORD && cpy_tok->value[0] == '$')
+		if (cpy_tok->type == WORD && cpy_tok->value[0] == '$' 
+			&& cpy_tok->quote_type != '\'')
 		{
 			expanded = expand_variable(cpy_tok->value, env);
-			free(cpy_tok->value);
-			cpy_tok->value = expanded; 
+			if (expanded)
+			{
+				free(cpy_tok->value);
+				cpy_tok->value = expanded;
+			}
 		}
 		cpy_tok = cpy_tok->next;
+	}
+}
+
+void	handle_quotes(t_token *tokens)
+{
+	t_token	*tok;
+	char	*new_value;
+
+	tok = tokens;
+	while (tok)
+	{
+		if (tok->type == WORD)
+		{
+			if ((tok->value[0] == '\'' || tok->value[0] == '"') 
+				&& tok->value[ft_strlen(tok->value) - 1] == tok->value[0])
+			{
+				tok->quote_type = tok->value[0];
+				new_value = ft_substr(tok->value, 1, ft_strlen(tok->value) - 2);
+				free(tok->value);
+				tok->value = new_value;
+			}
+			else
+				tok->quote_type = 0;
+		}
+		tok = tok->next;
 	}
 }

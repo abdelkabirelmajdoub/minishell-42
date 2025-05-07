@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:20:52 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/06 12:03:32 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:28:45 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	handle_syn_helper(t_token *cpy_tok)
 				|| cpy_tok->type == REDIR_IN || cpy_tok->type == REDIR_OUT)) 
 		{
 			if (cpy_tok->next == NULL || cpy_tok->next->type != WORD)
-				return (printf("syntax error near unexpected token `newline'\n"), 0);
+				return (printf("syntax error near unexpected token \n"), 0);
 		}
 		else if (cpy_tok->type == PIPE)
 		{

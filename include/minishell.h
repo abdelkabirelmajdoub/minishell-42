@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/06 12:04:16 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:22:11 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ typedef struct s_token
 {
 	char				*value;
 	t_token_type		type;
+	char				quote_type;
 	struct s_token		*next;
 }	t_token;
 
