@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 12:58:16 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:47:47 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,7 +115,7 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 		execve(path, cmd->args, v_tmp);
 		printf("minishell: %s: command not found\n", cmd->args[0]);
 		free(path);
-		exit(1);
+		exit(127);
 	}
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
@@ -158,7 +158,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 				execve(path, cmd->args, v_tmp);
 			printf("minishell: %s: command not found\n", cmd->args[0]);
 			free(path);
-			exit(1);
+			exit(127);
 		}
 		if (prev_fd != -1)
 			close(prev_fd);

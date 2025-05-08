@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 12:53:05 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:23:59 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <fcntl.h>
-
 
 ////// For parsing headers
 typedef struct s_env

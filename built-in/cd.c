@@ -19,8 +19,8 @@ void	env_add_back(t_env **env, t_env *new_node)
 int run_cd(char *path)
 {
 	if (chdir(path) == -1)
-		return (perror("cd"), 0);
-	return (1);
+		return (perror("cd"), 1);
+	return (0);
 }
 
 void free_args(char **args)
@@ -94,5 +94,5 @@ int	ft_cd(char **args, t_env **env)
 		update_oldpwd(env, oldpwd);
 		update_pwd(env);
 	}
-	return (0);
+	return (flag);
 }

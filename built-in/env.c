@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 12:00:31 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 14:30:35 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,7 @@ void	inc_lvl(t_env **env)
 int	ft_env(t_env **tmp)
 {
 	t_env *env = *tmp;
+
 	while (env)
 	{
 		if (env->value)
