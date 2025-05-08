@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/08 11:54:58 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/08 13:16:59 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ int	expand_variable_helper(char *value,t_env *env, char *var_name, int total_len
 char	*expand_variable(char *value, t_env *env)
 {
 	char	*result;
+	char	*exit_str;
 	int		total_len = 0;
 	int		i = 0, j = 0;
 	char	*var_value;
@@ -67,6 +68,14 @@ char	*expand_variable(char *value, t_env *env)
 	i = 0;
 	while (value[i])
 	{
+		if (value[i] == '$' && value[i + 1] == '?')
+		{
+			exit_str = ft_itoa(env->exit_status);
+			ft_memcpy(result + j, exit_str, ft_strlen(exit_str));
+			j += ft_strlen(exit_str);
+			free(exit_str);
+			i += 2;
+		}
 		if (value[i] == '$' && value[i + 1]
 			&& (ft_isalpha(value[i + 1]) || value[i + 1] == '_'))
 		{
