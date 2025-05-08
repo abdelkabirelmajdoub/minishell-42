@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 12:22:01 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:58:16 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,10 +94,12 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 {
 	pid_t	pid;
 	char	*path;
+	int		status;
 	
 	if (is_builtin(cmd->args[0]))
 	{
-		run_builtin(cmd, env);
+		status = run_builtin(cmd, env);
+		(*env)->exit_status = status;
 		return;
 	}
 	pid = fork();
@@ -115,8 +117,11 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 		free(path);
 		exit(1);
 	}
-	else
-		waitpid(pid, NULL, 0);
+	waitpid(pid, &status, 0);
+	if (WIFEXITED(status))
+		(*env)->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		(*env)->exit_status = 128 + WTERMSIG(status);
 }
 
 void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
@@ -125,6 +130,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 	int		prev_fd;
 	pid_t	pid;
 	char	*path;
+	int		status;
 
 	prev_fd = -1;
 	while(cmd)
@@ -161,7 +167,12 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 		close(pipefd[0]);
 		cmd = cmd->next;
 	}
-	while(wait(NULL) > 0);
+	while (wait(&status) > 0)
+		;
+	if (WIFEXITED(status))
+		(*env)->exit_status = WEXITSTATUS(status);
+	else if (WIFSIGNALED(status))
+		(*env)->exit_status = 128 + WTERMSIG(status);
 }
 
 int	is_pipe(t_cmd *cmd_list)

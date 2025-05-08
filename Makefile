@@ -13,10 +13,13 @@ LIBFT =  libft/libft.a
 all: $(NAME)
 
 $(NAME): $(OBJ)
+	@make -C libft
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 	@make clean
 clean:
+	@make clean -C libft
 	@rm -rf $(OBJ)
 fclean: clean
+	@make fclean -C libft
 	@rm -rf $(NAME)
 re : fclean all

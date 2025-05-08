@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/07 10:32:06 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:39:26 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void prepare_heredocs(t_cmd *cmd_list)
 			close(here_pipe[1]);
 			waitpid(pid, NULL, 0);
 			cmd->heredoc_fd = here_pipe[0];
+			close(here_pipe[0]);
 		}
 		cmd = cmd->next;
 	}
