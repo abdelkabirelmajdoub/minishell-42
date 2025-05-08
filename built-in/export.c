@@ -3,13 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/04/27 12:53:52 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/06 09:35:34 by ael-majd         ###   ########.fr       */
-/*   Updated: 2025/05/05 10:03:03 by ael-majd        ###   ########.fr       */
+/*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
+/*   Updated: 2025/05/08 12:14:35 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 
 #include "../include/minishell.h"
 
@@ -140,7 +140,7 @@ int	print_export(t_env *env)
 			printf("declare -x %s\n", arr[i]->key);
 		i++;
 	}
-	// free_args(arr); // need to freeee
+	free_env(*arr);
 	return (0);
 }
 

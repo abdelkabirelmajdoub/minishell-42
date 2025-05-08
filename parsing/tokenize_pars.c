@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 09:42:31 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/01 13:40:40 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/07 09:44:51 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,10 @@ void	pars_helper2(t_token **tok, t_cmd *cmd)
 	else if ((*tok)->type == REDIR_HEREDOC)
 		cmd->limiter = (*tok)->next->value;
 	else if ((*tok)->type == REDIR_APPEND)
+	{
 		cmd->append = (*tok)->next->value;
+		cmd->out_file = (*tok)->next->value;
+	}
 }
 
 void	pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc)

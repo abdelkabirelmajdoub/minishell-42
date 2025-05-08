@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/07 11:51:13 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:54:58 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,19 +22,72 @@ char	*get_env(char *key, t_env *env)
 	}
 	return (NULL);
 }
+int	expand_variable_helper(char *value,t_env *env, char *var_name, int total_len)
+{
+	int		i;
+	char	*var_value;
+	
+	i = 0;
+	total_len = 0;
+	while (value[i])
+	{
+		if (value[i] == '$' && value[i + 1]
+			&& (ft_isalpha(value[i + 1]) || value[i + 1] == '_'))
+		{
+			int k = 0;
+			i++;
+			while (value[i] && (ft_isalnum(value[i]) || value[i] == '_'))
+				var_name[k++] = value[i++];
+			var_name[k] = '\0';
+			var_value = get_env(var_name, env);
+			if (var_value)
+				total_len += ft_strlen(var_value);
+		}
+		else
+		{
+			total_len++;
+			i++;
+		}
+	}
+	return (total_len);
+}
 
 char	*expand_variable(char *value, t_env *env)
 {
+	char	*result;
+	int		total_len = 0;
+	int		i = 0, j = 0;
 	char	*var_value;
-	char	*var_name;
-	char	*output;
+	char	var_name[256];
 
-	var_name = value + 1;
-	var_value = get_env (var_name, env);
-	if (!var_value)
+	total_len = expand_variable_helper(value, env, var_name, total_len);
+	result = malloc(total_len + 1);
+	if (!result)
 		return (NULL);
-	output = ft_strdup(var_value);
-	return (output);
+	i = 0;
+	while (value[i])
+	{
+		if (value[i] == '$' && value[i + 1]
+			&& (ft_isalpha(value[i + 1]) || value[i + 1] == '_'))
+		{
+			int k = 0;
+			i++;
+			while (value[i] && (ft_isalnum(value[i]) || value[i] == '_'))
+				var_name[k++] = value[i++];
+			var_name[k] = '\0';
+			var_value = get_env(var_name, env);
+			if (var_value)
+			{
+				int len = ft_strlen(var_value);
+				ft_memcpy(result + j, var_value, len);
+				j += len;
+			}
+		}
+		else
+			result[j++] = value[i++];
+	}
+	result[j] = '\0';
+	return (result);
 }
 
 void	expend_token(t_token *tokens, t_env *env)
@@ -45,8 +98,8 @@ void	expend_token(t_token *tokens, t_env *env)
 	cpy_tok = tokens;
 	while (cpy_tok)
 	{
-		if (cpy_tok->type == WORD && cpy_tok->value[0] == '$' 
-			&& cpy_tok->quote_type != '\'')
+		if (cpy_tok->type == WORD && cpy_tok->quote_type != '\''
+			&& ft_strchr (cpy_tok->value, '$'))
 		{
 			expanded = expand_variable(cpy_tok->value, env);
 			if (expanded)
@@ -69,18 +122,15 @@ void	handle_quotes(t_token *tokens)
 	{
 		if (tok->type == WORD)
 		{
-			if ((tok->value[0] == '\'' || tok->value[0] == '"') 
+			if (ft_strlen(tok->value) >= 2 && (tok->value[0] == '\'' || tok->value[0] == '"') 
 				&& tok->value[ft_strlen(tok->value) - 1] == tok->value[0])
 			{
-				tok->quote_type = tok->value[0];
 				new_value = ft_substr(tok->value, 1, ft_strlen(tok->value) - 2);
 				free(tok->value);
 				tok->value = new_value;
 			}
-			else
-				tok->quote_type = 0;
 		}
 		tok = tok->next;
+
 	}
 }
-

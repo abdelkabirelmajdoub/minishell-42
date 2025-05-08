@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 11:50:34 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 12:22:01 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,11 +49,6 @@ void	free_env(t_env *env)
 		free(tmp);
 	}
 }
-
-
-
-
-
 
 void	redirect_in(char *filename)
 {
@@ -163,6 +158,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 			close(prev_fd);
 		close(pipefd[1]);
 		prev_fd = pipefd[0];
+		close(pipefd[0]);
 		cmd = cmd->next;
 	}
 	while(wait(NULL) > 0);
