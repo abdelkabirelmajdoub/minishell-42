@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/07 10:28:35 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:53:05 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ typedef struct s_token
 {
 	char				*value;
 	t_token_type		type;
+	char				quote_type;
 	struct s_token		*next;
 }	t_token;
 

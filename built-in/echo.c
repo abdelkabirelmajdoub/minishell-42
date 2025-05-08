@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 11:08:50 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/07 09:21:43 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/07 14:50:45 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,36 +27,7 @@ int	is_n_option(const char *str)
 	}
 	return (1);
 }
-// void	double_quotes(char *s, t_env **env)
-// {
-// 	int	i;
-// 	int start;
-// 	char *_var;
 
-// 	i = 0;
-// 	while(s[i])
-// 	{
-// 		if (s[i++] == '$')
-// 		{
-// 			start = i;
-// 			while(s[i] && s[i] != ' ')
-// 				i++;
-// 			_var = ft_substr(s, start, i - start);			
-// 		}
-// 		else
-// 			ft_putchar_fd(s[i], 1);
-// 		i++;
-// 	}
-// 	while(*env)
-// 	{
-// 		if (!ft_strncmp(_var, (*env)->key, ft_strlen(_var)))
-// 		{
-// 			printf("%s", (*env)->value);
-// 			break;
-// 		}
-// 		*env = (*env)->next;
-// 	}
-// }
 void	double_quotes(char *s, t_env **env)
 {
 	int		i;
@@ -100,9 +71,6 @@ void	single_quotes(char 	*args)
 		ft_putchar_fd(args[i], 1);
 }
 
-
-// stilll need work on it
-
 int	ft_echo(char **args, t_env **env) 
 {
 	int	i;
@@ -117,7 +85,7 @@ int	ft_echo(char **args, t_env **env)
 	while(args[i])
 	{
 		if (args[i][0] == '\"')
-			double_quotes(args[i], env); 
+			double_quotes(args[i], env);
 		else if (args[i][0] == '\'')
 			single_quotes(args[i]);
 		else
@@ -130,5 +98,6 @@ int	ft_echo(char **args, t_env **env)
 		printf("\n");
 	return (0);
 }
+
 
 
