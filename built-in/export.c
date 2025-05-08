@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 11:43:43 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/06 11:43:52 by yazlaigi         ###   ########.fr       */
+/*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
+/*   Updated: 2025/05/07 11:05:49 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -140,7 +140,7 @@ int	print_export(t_env *env)
 			printf("declare -x %s\n", arr[i]->key);
 		i++;
 	}
-	// free_args(arr);
+	// free_args(arr); // need to freeee
 	return (0);
 }
 
@@ -181,5 +181,3 @@ int	ft_export(t_env **env, char **args)
 	}
 	return (0);
 }
-
-

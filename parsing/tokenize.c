@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/03 10:33:43 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/08 09:59:47 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,7 @@ void	handle_quoted(char *input, int *i, t_token **head)
 		(*i)++;
 	token_value = ft_strndup(&input[start], (*i) - start);
 	current = token_creation(token_value, WORD);
+	current->quote_type = quote;
 	token_add_back(head, current);
 	if (input[*i] == quote)
 		(*i)++;

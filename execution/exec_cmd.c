@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/04 10:47:45 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:31:56 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,7 +66,7 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 	if (!pid)
 	{
 		if (cmd->limiter)
-			handle_heredoc(cmd);
+			dup2(cmd->heredoc_fd, STDIN_FILENO);
 		else if (cmd->infile)
 			redirect_in(cmd->infile);
 		if (cmd->out_file)
@@ -93,7 +93,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 		if (!pid)
 		{
 			if (cmd->limiter)
-				handle_heredoc(cmd);
+				dup2(cmd->heredoc_fd, STDIN_FILENO);
 			else if (cmd->infile)
 				redirect_in(cmd->infile);
 			else if (prev_fd != -1)
@@ -125,14 +125,9 @@ int	is_pipe(t_cmd *cmd_list)
 	return (cmd_list && cmd_list->next);
 }
 
-void	exe(t_cmd  *cmd_list, char **v_tmp, t_env **env)
+void exe(t_cmd  *cmd_list, char **v_tmp, t_env **env)
 {
-	if (!cmd_list->args || !cmd_list->args[0]) 
-	{
-		if (cmd_list->limiter)
-			run_heredoc(cmd_list->limiter, -1);
-		return;
-	}
+	prepare_heredocs(cmd_list);
 	if (is_pipe(cmd_list))
 		execute_pipe(cmd_list, env, v_tmp);
 	else

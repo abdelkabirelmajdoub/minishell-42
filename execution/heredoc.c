@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/05 14:35:54 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/07 10:32:06 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	run_heredoc(char *limiter, int	write_end)
 
 	while(1)
 	{
-		line = get_next_line(0);
+		line = readline("> ");
 		if (!line)
 			break;
 		if (!ft_strcmp(line, limiter))
@@ -32,21 +32,34 @@ void	run_heredoc(char *limiter, int	write_end)
 	}
 }
 
-void	handle_heredoc(t_cmd *cmd)
+void prepare_heredocs(t_cmd *cmd_list)
 {
-	int		here_pipe[2];
+	t_cmd	*cmd;
 	pid_t	pid;
-	
-	pipe(here_pipe);
-	pid = fork();
-	if (!pid)
+	int		here_pipe[2];
+
+	cmd = cmd_list;
+	while (cmd)
 	{
-		close(here_pipe[0]);
-		run_heredoc(cmd->limiter, here_pipe[1]);
-		exit(0);
+		if (cmd->limiter)
+		{
+			if (pipe(here_pipe) == -1)
+			{
+				perror("heredoc pipe");
+				exit(1);
+			}
+			pid = fork();
+			if (pid == 0)
+			{
+				close(here_pipe[0]);
+				run_heredoc(cmd->limiter, here_pipe[1]);
+				close(here_pipe[1]);
+				exit(0);
+			}
+			close(here_pipe[1]);
+			waitpid(pid, NULL, 0);
+			cmd->heredoc_fd = here_pipe[0];
+		}
+		cmd = cmd->next;
 	}
-	close(here_pipe[1]);
-	waitpid(pid, NULL, 0);
-	dup2(here_pipe[0], STDIN_FILENO);
-	close(here_pipe[0]);
 }

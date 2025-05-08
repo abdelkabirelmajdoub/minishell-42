@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:13:00 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/01 13:40:45 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 09:59:06 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_token	*token_creation(char *value, t_token_type type)
 	new_token->value = value;
 	new_token->type = type;
 	new_token->next = NULL;
+	new_token->next = 0;
 	return (new_token);
 }
 

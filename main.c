@@ -11,9 +11,10 @@ int	main(int ac, char **av, char **env)
 		if (input)
 			add_history(input);
 		t_token *tokens = tokenize(input);
+		handle_quotes(tokens);
+		expend_token(tokens, envp);
 		handle_syn(input, tokens);
 		t_cmd *cmds = pars_token(tokens);
-
 		if (!cmds)
 			continue;;
 		exe(cmds, env, &envp);	

@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:01:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/06 11:44:36 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/08 09:04:30 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include "gnl/get_next_line.h"
 
 ////// For parsing headers
 typedef struct s_env
@@ -43,6 +42,7 @@ typedef struct s_token
 {
 	char				*value;
 	t_token_type		type;
+	char				quote_type;
 	struct s_token		*next;
 }	t_token;
 
@@ -53,6 +53,7 @@ typedef struct s_cmd
 	char			*out_file;
 	char			*append;
 	char			*limiter;
+	int				heredoc_fd;
 	struct s_cmd	*next;
 }	t_cmd;
 
@@ -67,18 +68,19 @@ void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
-void			handle_syn(char *input, t_token *tok);
-void			handle_syn_helper(t_token *cpy_tok);
+int				handle_syn(char *input, t_token *tok);
+int				handle_syn_helper(t_token *cpy_tok);
 char			*get_env(char *key, t_env *env);
 char			*expand_variable(char *value,t_env *env);
-void			*expend_token (t_token *tokens, t_env *env);
+void			expend_token(t_token *tokens, t_env *env);
+void			handle_quotes(t_token *tokens);
 ////// For execution headers
 
 char	*get_path(char *cmd, char **env);
 void	exe(t_cmd  *cmd_list, char **v_tmp, t_env **env);
 void	handle_heredoc(t_cmd *cmd);
 void	run_heredoc(char *limiter, int	write_end);
-
+void	prepare_heredocs(t_cmd *cmd_list);
 
 
 int		ft_unset(char *var, t_env **my_env);
