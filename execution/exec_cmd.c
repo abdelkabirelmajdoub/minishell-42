@@ -6,11 +6,53 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/07 10:31:56 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:50:34 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+
+void	free_cmd(t_cmd *cmd)
+{
+	t_cmd	*tmp;
+	int		i;
+
+	while (cmd)
+	{
+		if (cmd->args)
+		{
+			for (i = 0; cmd->args[i]; i++)
+				free(cmd->args[i]);
+			free(cmd->args);
+		}
+		free(cmd->infile);
+		free(cmd->out_file);
+		free(cmd->append);
+		free(cmd->limiter);
+		tmp = cmd;
+		cmd = cmd->next;
+		free(tmp);
+	}
+}
+
+void	free_env(t_env *env)
+{
+	t_env *tmp;
+
+	while (env)
+	{
+		free(env->key);
+		free(env->value);
+		tmp = env;
+		env = env->next;
+		free(tmp);
+	}
+}
+
+
+
+
 
 
 void	redirect_in(char *filename)
@@ -56,6 +98,7 @@ void	redirect_out(char *filename, char *append)
 void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 {
 	pid_t	pid;
+	char	*path;
 	
 	if (is_builtin(cmd->args[0]))
 	{
@@ -71,8 +114,10 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 			redirect_in(cmd->infile);
 		if (cmd->out_file)
 			redirect_out(cmd->out_file, cmd->append);
-		execve(get_path(cmd->args[0], v_tmp), cmd->args, v_tmp);
-		printf("command not found: %s\n", cmd->args[0]);
+		path = get_path(cmd->args[0], v_tmp);
+		execve(path, cmd->args, v_tmp);
+		printf("minishell: %s: command not found\n", cmd->args[0]);
+		free(path);
 		exit(1);
 	}
 	else
@@ -84,6 +129,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 	int		pipefd[2];
 	int		prev_fd;
 	pid_t	pid;
+	char	*path;
 
 	prev_fd = -1;
 	while(cmd)
@@ -104,11 +150,13 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 				redirect_out(cmd->out_file, cmd->append);
 			close(pipefd[0]);
 			close(pipefd[1]);
+			path = get_path(cmd->args[0], v_tmp);
 			if (is_builtin(cmd->args[0]))
 				exit(run_builtin(cmd, env));
 			else
-				execve(get_path(cmd->args[0], v_tmp), cmd->args, v_tmp);
-			printf("command not found: %s\n", cmd->args[0]);
+				execve(path, cmd->args, v_tmp);
+			printf("minishell: %s: command not found\n", cmd->args[0]);
+			free(path);
 			exit(1);
 		}
 		if (prev_fd != -1)

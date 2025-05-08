@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/07 10:53:05 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/08 11:45:42 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <fcntl.h>
-#include "gnl/get_next_line.h"
+
 
 ////// For parsing headers
 typedef struct s_env
@@ -97,5 +97,6 @@ void	env_add_back(t_env **env, t_env *new_node);
 int	run_builtin(t_cmd *cmd, t_env **env);
 int	is_builtin(char *cmd);
 
-
+void	free_env(t_env *env);
+void	free_cmd(t_cmd *cmd);
 #endif
