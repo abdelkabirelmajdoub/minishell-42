@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/11 10:26:09 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/11 12:05:48 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -166,9 +166,9 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 			close(prev_fd);
 		close(pipefd[1]);
 		prev_fd = pipefd[0];
-		close(pipefd[0]);
 		cmd = cmd->next;
 	}
+	free_args(envp);
 	while (wait(&status) > 0)
 		;
 	if (WIFEXITED(status))
