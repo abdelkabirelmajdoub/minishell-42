@@ -15,8 +15,9 @@ void	free_tokens(t_token *tok)
 
 int	main(int ac, char **av, char **env)
 {
-	t_env *envp = creat_env(env);
+	t_env *envp;
 
+	envp = creat_env(env);
 	inc_lvl(&envp);	
 	while (1)
 	{
@@ -27,10 +28,11 @@ int	main(int ac, char **av, char **env)
 		handle_quotes(tokens);
 		expend_token(tokens, envp);
 		handle_syn(input, tokens);
+		// system("leaks -q minishell");
 		t_cmd *cmds = pars_token(tokens);
 		if (!cmds)
-			continue;;
-		exe(cmds, env, &envp);	
+			continue;
+		exe(cmds, &envp);	
 
 		free(cmds);
 		free(tokens);

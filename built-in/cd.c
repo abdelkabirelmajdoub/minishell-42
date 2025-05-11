@@ -1,20 +1,17 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cd.c                                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
+/*   Updated: 2025/05/11 10:56:38 by ael-majd         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+
 #include "../include/minishell.h"
-
-void	env_add_back(t_env **env, t_env *new_node)
-{
-	t_env *tmp;
-
-	tmp = *env;
-	if (!tmp)
-	{
-		*env = new_node;
-		return;
-	}
-	while (tmp->next)
-		tmp = tmp->next;
-	tmp->next = new_node;
-}
-
 
 int run_cd(char *path)
 {
@@ -89,7 +86,7 @@ int	ft_cd(char **args, t_env **env)
 		flag = run_cd(args[1]);
 	else
 		flag = run_cd(getenv("HOME"));
-	if (flag)
+	if (!flag)
 	{
 		update_oldpwd(env, oldpwd);
 		update_pwd(env);

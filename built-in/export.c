@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/08 12:14:35 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/11 10:51:10 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,19 +51,6 @@ void	sort_env_array(t_env **arr)
 		i++;
 	}
 }
-void	add_env_back(t_env **env, t_env *new)
-{
-	t_env *cur = *env;
-
-	if (!cur)
-	{
-		*env = new;
-		return;
-	}
-	while (cur->next)
-		cur = cur->next;
-	cur->next = new;
-}
 
 void	update_env(t_env **env, char *key, char *value)
 {
@@ -91,7 +78,7 @@ void	update_env(t_env **env, char *key, char *value)
 	else
 		dup_value = NULL;
 	new = new_env_node(key, dup_value);
-	add_env_back(env, new);
+	env_add_back(env, new);
 }
 
 int	env_size(t_env *env)
@@ -140,7 +127,7 @@ int	print_export(t_env *env)
 			printf("declare -x %s\n", arr[i]->key);
 		i++;
 	}
-	free_env(*arr);
+	free(arr);
 	return (0);
 }
 

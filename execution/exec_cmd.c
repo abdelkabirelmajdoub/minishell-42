@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 13:47:47 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/11 10:26:09 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	redirect_out(char *filename, char *append)
 	close(fd);
 }
 
-void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
+void	execute_one(t_cmd *cmd, t_env **env)
 {
 	pid_t	pid;
 	char	*path;
@@ -102,6 +102,7 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 		(*env)->exit_status = status;
 		return;
 	}
+	char **envp = env_list_to_array(env);
 	pid = fork();
 	if (!pid)
 	{
@@ -111,8 +112,8 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 			redirect_in(cmd->infile);
 		if (cmd->out_file)
 			redirect_out(cmd->out_file, cmd->append);
-		path = get_path(cmd->args[0], v_tmp);
-		execve(path, cmd->args, v_tmp);
+		path = get_path(cmd->args[0], envp);//
+		execve(path, cmd->args, envp);
 		printf("minishell: %s: command not found\n", cmd->args[0]);
 		free(path);
 		exit(127);
@@ -124,7 +125,7 @@ void	execute_one(t_cmd *cmd, t_env **env, char **v_tmp)
 		(*env)->exit_status = 128 + WTERMSIG(status);
 }
 
-void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
+void	execute_pipe(t_cmd *cmd, t_env **env)
 {
 	int		pipefd[2];
 	int		prev_fd;
@@ -132,6 +133,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 	char	*path;
 	int		status;
 
+	char **envp = env_list_to_array(env);
 	prev_fd = -1;
 	while(cmd)
 	{
@@ -151,11 +153,11 @@ void	execute_pipe(t_cmd *cmd, t_env **env, char **v_tmp)
 				redirect_out(cmd->out_file, cmd->append);
 			close(pipefd[0]);
 			close(pipefd[1]);
-			path = get_path(cmd->args[0], v_tmp);
+			path = get_path(cmd->args[0], envp);
 			if (is_builtin(cmd->args[0]))
 				exit(run_builtin(cmd, env));
 			else
-				execve(path, cmd->args, v_tmp);
+				execve(path, cmd->args, envp);
 			printf("minishell: %s: command not found\n", cmd->args[0]);
 			free(path);
 			exit(127);
@@ -180,11 +182,11 @@ int	is_pipe(t_cmd *cmd_list)
 	return (cmd_list && cmd_list->next);
 }
 
-void exe(t_cmd  *cmd_list, char **v_tmp, t_env **env)
+void exe(t_cmd  *cmd_list, t_env **env)
 {
 	prepare_heredocs(cmd_list);
 	if (is_pipe(cmd_list))
-		execute_pipe(cmd_list, env, v_tmp);
+		execute_pipe(cmd_list, env);
 	else
-		execute_one(cmd_list, env, v_tmp);
+		execute_one(cmd_list, env);
 }

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 14:23:59 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/11 10:45:12 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void			handle_quotes(t_token *tokens);
 ////// For execution headers
 
 char	*get_path(char *cmd, char **env);
-void	exe(t_cmd  *cmd_list, char **v_tmp, t_env **env);
+void	exe(t_cmd  *cmd_list, t_env **env);
 void	handle_heredoc(t_cmd *cmd);
 void	run_heredoc(char *limiter, int	write_end);
 void	prepare_heredocs(t_cmd *cmd_list);
@@ -95,7 +95,9 @@ void 	free_args(char **args);
 t_env	*new_env_node(char *key, char *value);
 t_env	*creat_env(char **env);
 void	inc_lvl(t_env **env);
+char	**env_list_to_array(t_env **env);//
 int		ft_strcmp(const char *s1, const char *s2);
+void	env_add_back(t_env **env, t_env *new_node);
 /// for execute builtin
 int	run_builtin(t_cmd *cmd, t_env **env);
 int	is_builtin(char *cmd);
