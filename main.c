@@ -1,17 +1,6 @@
 #include "include/minishell.h"
 
-void	free_tokens(t_token *tok)
-{
-	t_token *tmp;
 
-	while (tok)
-	{
-		tmp = tok;
-		tok = tok->next;
-		free(tmp->value);
-		free(tmp);
-	}
-}
 
 int	main(int ac, char **av, char **env)
 {
@@ -28,15 +17,15 @@ int	main(int ac, char **av, char **env)
 		handle_quotes(tokens);
 		expend_token(tokens, envp);
 		handle_syn(input, tokens);
-		// system("leaks -q minishell");
 		t_cmd *cmds = pars_token(tokens);
 		if (!cmds)
 			continue;
 		exe(cmds, &envp);	
 
-		free(cmds);
-		free(tokens);
+		// free_tokens(tokens);
+		free_cmd(cmds);
 		free(input);
+		// system("leaks -q minishell");
 	}
 
 	clear_history();

@@ -6,49 +6,12 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/11 12:05:48 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:05:30 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-
-void	free_cmd(t_cmd *cmd)
-{
-	t_cmd	*tmp;
-	int		i;
-
-	while (cmd)
-	{
-		if (cmd->args)
-		{
-			for (i = 0; cmd->args[i]; i++)
-				free(cmd->args[i]);
-			free(cmd->args);
-		}
-		free(cmd->infile);
-		free(cmd->out_file);
-		free(cmd->append);
-		free(cmd->limiter);
-		tmp = cmd;
-		cmd = cmd->next;
-		free(tmp);
-	}
-}
-
-void	free_env(t_env *env)
-{
-	t_env *tmp;
-
-	while (env)
-	{
-		free(env->key);
-		free(env->value);
-		tmp = env;
-		env = env->next;
-		free(tmp);
-	}
-}
 
 void	redirect_in(char *filename)
 {
@@ -94,6 +57,7 @@ void	execute_one(t_cmd *cmd, t_env **env)
 {
 	pid_t	pid;
 	char	*path;
+	char	**envp;
 	int		status;
 	
 	if (is_builtin(cmd->args[0]))
@@ -102,7 +66,7 @@ void	execute_one(t_cmd *cmd, t_env **env)
 		(*env)->exit_status = status;
 		return;
 	}
-	char **envp = env_list_to_array(env);
+	envp = env_list_to_array(env);
 	pid = fork();
 	if (!pid)
 	{
@@ -112,12 +76,13 @@ void	execute_one(t_cmd *cmd, t_env **env)
 			redirect_in(cmd->infile);
 		if (cmd->out_file)
 			redirect_out(cmd->out_file, cmd->append);
-		path = get_path(cmd->args[0], envp);//
+		path = get_path(cmd->args[0], envp);
 		execve(path, cmd->args, envp);
 		printf("minishell: %s: command not found\n", cmd->args[0]);
 		free(path);
 		exit(127);
 	}
+	free_args(envp);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		(*env)->exit_status = WEXITSTATUS(status);
@@ -131,9 +96,10 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 	int		prev_fd;
 	pid_t	pid;
 	char	*path;
+	char	**envp;
 	int		status;
 
-	char **envp = env_list_to_array(env);
+	envp = env_list_to_array(env);
 	prev_fd = -1;
 	while(cmd)
 	{
@@ -169,7 +135,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 		cmd = cmd->next;
 	}
 	free_args(envp);
-	while (wait(&status) > 0)
+	while (wait(NULL) > 0)
 		;
 	if (WIFEXITED(status))
 		(*env)->exit_status = WEXITSTATUS(status);

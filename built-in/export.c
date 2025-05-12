@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/11 10:51:10 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:38:21 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,7 +157,7 @@ int	ft_export(t_env **env, char **args)
 		}
 		if (!is_valid_key(key))
 		{
-			printf("export: `%s': not a valid identifier\n", args[i]);
+			printf("minishell: export: `%s': not a valid identifier\n", args[i]);
 			free(key);
 			free(value);
 			i++;

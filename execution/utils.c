@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:34:39 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 11:42:43 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:03:56 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,6 @@ char	*my_getenv(char *name, char **env)
 	return (NULL);
 }
 
-void	free_paths(char **s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-		free(s[i++]);
-	free(s);
-}
-
 char	*get_path(char *cmd, char **env)
 {
 	char	*path_part;
@@ -63,12 +53,12 @@ char	*get_path(char *cmd, char **env)
 		free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
 		{
-			free_paths(secure_paths);
+			free_args(secure_paths);
 			return (exec);
 		}
 		free(exec);
 		i++;
 	}
-	free_paths(secure_paths);
+	free_args(secure_paths);
 	return (cmd);
 }

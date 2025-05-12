@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/11 10:56:38 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/12 12:05:08 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,19 +18,6 @@ int run_cd(char *path)
 	if (chdir(path) == -1)
 		return (perror("cd"), 1);
 	return (0);
-}
-
-void free_args(char **args)
-{
-	int i;	
-
-	i = 0;
-	while (args[i])
-	{
-		free(args[i]);
-		i++;
-	}
-	free(args);
 }
 
 void	update_pwd(t_env **env)
