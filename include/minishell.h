@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/12 12:11:12 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:25:20 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ char	**env_list_to_array(t_env **env);//
 t_env	*creat_env(char **env);
 t_env	*new_env_node(char *key, char *value);
 void	env_add_back(t_env **env, t_env *new_node);
-
+char	*get_env(char *key, t_env *env);
 /*---------------------------------- execution cmds --------------------------------------*/
 
 int		run_builtin(t_cmd *cmd, t_env **env);

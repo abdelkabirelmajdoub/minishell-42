@@ -6,13 +6,12 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/12 12:38:21 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:21:58 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../include/minishell.h"
-
 
 int	is_valid_key(char *key)
 {
@@ -28,6 +27,7 @@ int	is_valid_key(char *key)
 	}
 	return (1);
 }
+
 void	sort_env_array(t_env **arr)
 {
 	int		i;
@@ -59,6 +59,7 @@ void	update_env(t_env **env, char *key, char *value)
 	char	*dup_value;
 
 	cur = *env;
+	
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:13 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/12 12:27:58 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/12 13:24:20 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,8 +34,14 @@ t_env	*new_env_node(char *key, char *value)
 	node = malloc(sizeof(t_env));
 	if (!node)
 		return (NULL);
-	node->key = key;
-	node->value = ft_strdup(value);
+	if (!key)
+		node->key = NULL;
+	else
+		node->key = key;
+	if (!value)
+		node->value = NULL;
+	else
+		node->value = ft_strdup(value);
 	node->next = NULL;
 	return (node);
 }
