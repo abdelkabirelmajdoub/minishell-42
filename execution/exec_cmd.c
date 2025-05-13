@@ -6,57 +6,33 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/12 12:05:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/13 10:30:36 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
 
-void	redirect_in(char *filename)
+void	child_proc(t_cmd *cmd, char **envp)
 {
-	int	fd;
+	char	*path;
 
-	fd = open(filename, O_RDONLY, 0777);
-	if (fd < 0)
-	{
-		perror("infile error");
-		exit(1);
-	}
-	if (dup2(fd, STDIN_FILENO) == -1)
-	{
-		perror("dup2 error");
-		close(fd);
-		exit(1);
-	}
-	close(fd);
-}
-void	redirect_out(char *filename, char *append)
-{
-	int	fd;
-
-	if (append)
-		fd = open(filename, O_RDWR | O_CREAT | O_APPEND, 0777);
-	else
-		fd = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0777);
-	if (fd < 0)
-	{
-		perror("outfile error");
-		exit(1);
-	}
-	if (dup2(fd, STDOUT_FILENO) == -1)
-	{
-		perror("dup2 error");
-		close(fd);
-		exit(1);
-	}
-	close(fd);
+	if (cmd->limiter)
+		dup2(cmd->heredoc_fd, STDIN_FILENO);
+	else if (cmd->infile)
+		redirect_in(cmd->infile);
+	if (cmd->out_file)
+		redirect_out(cmd->out_file, cmd->append);
+	path = get_path(cmd->args[0], envp);
+	execve(path, cmd->args, envp);
+	printf("minishell: %s: command not found\n", cmd->args[0]);
+	free(path);
+	exit(127);
 }
 
 void	execute_one(t_cmd *cmd, t_env **env)
 {
 	pid_t	pid;
-	char	*path;
 	char	**envp;
 	int		status;
 	
@@ -69,19 +45,7 @@ void	execute_one(t_cmd *cmd, t_env **env)
 	envp = env_list_to_array(env);
 	pid = fork();
 	if (!pid)
-	{
-		if (cmd->limiter)
-			dup2(cmd->heredoc_fd, STDIN_FILENO);
-		else if (cmd->infile)
-			redirect_in(cmd->infile);
-		if (cmd->out_file)
-			redirect_out(cmd->out_file, cmd->append);
-		path = get_path(cmd->args[0], envp);
-		execve(path, cmd->args, envp);
-		printf("minishell: %s: command not found\n", cmd->args[0]);
-		free(path);
-		exit(127);
-	}
+		child_proc(cmd, envp);
 	free_args(envp);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
@@ -98,6 +62,12 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 	char	*path;
 	char	**envp;
 	int		status;
+	pid_t	last_pid;
+	t_cmd	*last_cmd;
+
+	last_cmd = cmd;
+	while(last_cmd->next)
+		last_cmd = last_cmd->next;
 
 	envp = env_list_to_array(env);
 	prev_fd = -1;
@@ -132,20 +102,18 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 			close(prev_fd);
 		close(pipefd[1]);
 		prev_fd = pipefd[0];
+		if (cmd == last_cmd)
+			last_pid = pid;
 		cmd = cmd->next;
 	}
 	free_args(envp);
+	waitpid(last_pid, &status, 0);
 	while (wait(NULL) > 0)
 		;
 	if (WIFEXITED(status))
 		(*env)->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
 		(*env)->exit_status = 128 + WTERMSIG(status);
-}
-
-int	is_pipe(t_cmd *cmd_list)
-{
-	return (cmd_list && cmd_list->next);
 }
 
 void exe(t_cmd  *cmd_list, t_env **env)

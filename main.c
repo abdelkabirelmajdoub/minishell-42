@@ -18,13 +18,14 @@ int	main(int ac, char **av, char **env)
 		expend_token(tokens, envp);
 		handle_syn(input, tokens);
 		t_cmd *cmds = pars_token(tokens);
+		// printf("%s%s\n", cmds->args[0], cmds->args[1]);
 		if (!cmds)
 			continue;
 		exe(cmds, &envp);	
 
-		// free_tokens(tokens);
-		free_cmd(cmds);
-		free(input);
+		// // free_tokens(tokens);
+		// free_cmd(cmds);
+		// free(input);
 		// system("leaks -q minishell");
 	}
 
