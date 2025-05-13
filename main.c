@@ -18,10 +18,10 @@ int	main(int ac, char **av, char **env)
 		expend_token(tokens, envp);
 		handle_syn(input, tokens);
 		t_cmd *cmds = pars_token(tokens);
-		printf("%s %s\n", cmds->out_file[0], cmds->out_file[1]);
-		// if (!cmds)
-		// 	continue;
-		// exe(cmds, &envp);	
+		// printf("%s %s\n", cmds->out_file[0], cmds->out_file[1]);
+		if (!cmds)
+			continue;
+		exe(cmds, &envp);	
 
 		// // free_tokens(tokens);
 		// free_cmd(cmds);

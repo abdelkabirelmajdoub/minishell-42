@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/13 13:46:22 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/13 15:41:58 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,6 +60,17 @@ typedef struct s_cmd
 }	t_cmd;
 
 
+typedef struct s_exe_pipe
+{
+	int		pipefd[2];
+	int		prev_fd;
+	pid_t	pid;
+	char	**envp;
+	int		status;
+	pid_t	last_pid;
+	t_cmd	*last_cmd;
+}			t_exe_pipe;
+
 
 /*---------------------------------- lib-helper --------------------------------------*/
 int				ft_strcmp(const char *s1, const char *s2);
@@ -85,6 +96,7 @@ void			handle_quotes(t_token *tokens);
 int				handle_quoted(char *input, int *i, t_token **head);
 void			clean_empty_tokens(t_token **tokens);
 /*---------------------------------- BUILT-in cmds --------------------------------------*/
+
 int		ft_unset(char *var, t_env **my_env);
 int		ft_cd(char **args, t_env **env);
 int		ft_pwd(void);
@@ -93,7 +105,8 @@ int		ft_echo(char **args, t_env **env);
 int		ft_export(t_env **env, char **args);
 int		ft_env(t_env **tmp);
 void	inc_lvl(t_env **env);
-				// -------- envirement Utils -----//
+
+// -------- envirement Utils -----//
 
 char	**env_list_to_array(t_env **env);
 t_env	*creat_env(char **env);
@@ -107,6 +120,7 @@ int		run_builtin(t_cmd *cmd, t_env **env);
 int		is_builtin(char *cmd);
 char	*get_path(char *cmd, char **env);
 void	exe(t_cmd  *cmd_list, t_env **env);
+void	execute_pipe(t_cmd *cmd, t_env **env);
 int		is_pipe(t_cmd *cmd_list);
 void	handle_heredoc(t_cmd *cmd);
 void	run_heredoc(char *limiter, int	write_end);
@@ -116,8 +130,9 @@ void	prepare_heredocs(t_cmd *cmd_list);
 //-----------------files descriptors---------//
 
 void	redirect_in(char *filename);
-void	redirect_out(char *filename, char *append);
-
+void	redirect_out(t_cmd *cmd);
+void	x_pipe(int pipefd[2]);
+void	x_dup2(int fd, int target_fd);
 /*---------------------------------- cleaning --------------------------------------*/
 
 void	free_env(t_env *env);
