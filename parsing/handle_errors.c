@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:20:52 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/06 12:42:43 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/10 11:31:17 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,9 +42,13 @@ int	handle_syn(char *input, t_token *tok)
 	while (input[i] == 32 || (input[i] >= 9 && input[i] <= 13))
 		i++;
 	if (input[i] == '|')
+	{
 		return (printf("syntax error near unexpected token `|'\n"), 0);
+		return (0);
+	}
 	if (handle_syn_helper(cpy_tok) == 0)
 		return (0);
 	else
 		return (1);
+	return (1);
 }

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/13 09:59:23 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/13 13:46:22 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ typedef struct s_cmd
 {
 	char			**args;
 	char			*infile;
-	char			*out_file;
+	char			**out_file;
 	char			*append;
 	char			*limiter;
 	int				heredoc_fd;
@@ -73,7 +73,6 @@ void			token_add_back(t_token **head, t_token *new_token);
 t_token			*tokenize(char *input);
 t_cmd			*pars_token(t_token	*tok);
 void			handle_word(char *input, int *i, t_token **head);
-void			handle_quoted(char *input, int *i, t_token **head);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
@@ -83,8 +82,8 @@ char			*get_env(char *key, t_env *env);
 char			*expand_variable(char *value,t_env *env);
 void			expend_token(t_token *tokens, t_env *env);
 void			handle_quotes(t_token *tokens);
-
-
+int				handle_quoted(char *input, int *i, t_token **head);
+void			clean_empty_tokens(t_token **tokens);
 /*---------------------------------- BUILT-in cmds --------------------------------------*/
 int		ft_unset(char *var, t_env **my_env);
 int		ft_cd(char **args, t_env **env);

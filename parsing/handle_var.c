@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/08 13:16:59 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/13 12:42:52 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,14 @@ int	expand_variable_helper(char *value,t_env *env, char *var_name, int total_len
 	total_len = 0;
 	while (value[i])
 	{
-		if (value[i] == '$' && value[i + 1]
+		if (value[i] == '$' && value[i + 1] == '?')
+		{
+			char *exit_str = ft_itoa(env->exit_status);
+			total_len += ft_strlen(exit_str);
+			free(exit_str);
+			i += 2;
+		}
+		else if (value[i] == '$' && value[i + 1]
 			&& (ft_isalpha(value[i + 1]) || value[i + 1] == '_'))
 		{
 			int k = 0;
@@ -91,12 +98,40 @@ char	*expand_variable(char *value, t_env *env)
 				ft_memcpy(result + j, var_value, len);
 				j += len;
 			}
+			
 		}
 		else
 			result[j++] = value[i++];
 	}
 	result[j] = '\0';
 	return (result);
+}
+
+void	clean_empty_tokens(t_token **tokens)
+{
+	t_token *current = *tokens;
+	t_token *prev = NULL;
+	t_token *next;
+	
+	while (current)
+	{
+		next = current->next;
+		if (current->type == WORD && current->value && current->value[0] == '\0')
+		{
+			if (prev)
+				prev->next = next;
+			else
+				*tokens = next;
+				
+			free(current->value);
+			free(current);
+			current = next;
+			continue;
+		}
+		
+		prev = current;
+		current = next;
+	}
 }
 
 void	expend_token(t_token *tokens, t_env *env)
