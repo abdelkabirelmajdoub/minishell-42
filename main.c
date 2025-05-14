@@ -20,6 +20,9 @@ int	main(int ac, char **av, char **env)
 			continue;
 		
 		t_cmd *cmds = pars_token(tokens);
+		if (!cmds)
+			continue;
+		// printf("%s\n", cmds->limiter);
 
 		exe(cmds, &envp);	
 		free_tokens(tokens);
