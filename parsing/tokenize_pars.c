@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 09:42:31 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/14 11:06:53 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:09:12 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,8 +44,8 @@ void	pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc)
 
 	i = 0;
 	cmd->out_file = malloc(sizeof(char *) * 50);
-	// if (!cmd->out_file)
-	// 	return ;
+	if (!cmd->out_file)
+		return ;
 	while ((*tok) && (*tok)->type != PIPE)
 	{
 		if (((*tok)->type == REDIR_IN || (*tok)->type == REDIR_OUT

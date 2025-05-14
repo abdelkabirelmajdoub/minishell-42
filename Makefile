@@ -13,6 +13,10 @@ OBJ     = $(SRC:.c=.o)
 NAME    = minishell
 LIBFT   = libft/libft.a
 
+CCFLAGS += -I/opt/homebrew/opt/readline/include
+LDFLAGS += -L/opt/homebrew/opt/readline/lib -lreadline
+
+
 all: $(NAME)
 
 $(NAME): $(OBJ)

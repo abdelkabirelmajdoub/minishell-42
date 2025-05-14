@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:04:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/14 10:04:50 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 18:07:47 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ void	free_tokens(t_token *tok)
 	{
 		tmp = tok;
 		tok = tok->next;
+		free(tmp->value);
 		free(tmp);
 	}
 }
