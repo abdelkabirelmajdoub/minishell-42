@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/13 15:08:24 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:28:13 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	child_proc(t_cmd *cmd, char **envp)
 	execve(path, cmd->args, envp);
 	printf("minishell: %s: command not found\n", cmd->args[0]);
 	free(path);
+	free_cmd(cmd);
 	exit(127);
 }
 

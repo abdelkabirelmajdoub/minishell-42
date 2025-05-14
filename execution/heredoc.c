@@ -6,11 +6,31 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 12:39:26 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:27:48 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
+// int	open_quotes(char *s)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while
+// }
+
+// int	check_exp(char *line)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	while(line[i])
+// 	{
+// 		if (line[i] == '\'' || '')
+// 	}
+// }
+
 
 void	run_heredoc(char *limiter, int	write_end)
 {
@@ -43,11 +63,7 @@ void prepare_heredocs(t_cmd *cmd_list)
 	{
 		if (cmd->limiter)
 		{
-			if (pipe(here_pipe) == -1)
-			{
-				perror("heredoc pipe");
-				exit(1);
-			}
+			x_pipe(here_pipe);
 			pid = fork();
 			if (pid == 0)
 			{
@@ -57,9 +73,8 @@ void prepare_heredocs(t_cmd *cmd_list)
 				exit(0);
 			}
 			close(here_pipe[1]);
-			waitpid(pid, NULL, 0);
 			cmd->heredoc_fd = here_pipe[0];
-			close(here_pipe[0]);
+			waitpid(pid, NULL, 0);
 		}
 		cmd = cmd->next;
 	}

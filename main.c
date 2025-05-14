@@ -16,17 +16,17 @@ int	main(int ac, char **av, char **env)
 		t_token *tokens = tokenize(input);
 		handle_quotes(tokens);
 		expend_token(tokens, envp);
-		handle_syn(input, tokens);
+		if (!handle_syn(input, tokens))
+			continue;
 		t_cmd *cmds = pars_token(tokens);
-		// printf("%s %s\n", cmds->out_file[0], cmds->out_file[1]);
 		if (!cmds)
 			continue;
-		exe(cmds, &envp);	
 
-		// // free_tokens(tokens);
-		// free_cmd(cmds);
-		// free(input);
-		// system("leaks -q minishell");
+		exe(cmds, &envp);	
+		free_tokens(tokens);
+		free_cmd(cmds);
+		free(input);
+		system("leaks -q minishell");
 	}
 
 	clear_history();
