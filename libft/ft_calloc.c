@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_calloc.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/26 10:21:53 by ael-majd          #+#    #+#             */
-/*   Updated: 2024/11/12 09:33:50 by ael-majd         ###   ########.fr       */
+/*   Created: 2024/10/24 13:10:22 by yazlaigi          #+#    #+#             */
+/*   Updated: 2024/11/07 14:07:31 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,16 +14,21 @@
 
 void	*ft_calloc(size_t count, size_t size)
 {
-	void	*call;
-	size_t	n;
+	size_t	i;
+	char	*str;
 
-	n = size * count;
-	if (size && count > n / size)
+	if (size != 0 && count > 18446744073709551615LU / size)
 		return (NULL);
-	call = malloc(n);
-	if (!call)
+	if (count == 0 && size == 0)
+		return (malloc(1));
+	str = malloc(count * size);
+	if (str == NULL)
 		return (NULL);
-	else
-		ft_bzero(call, n);
-	return (call);
+	i = 0;
+	while (i < count * size)
+	{
+		str[i] = 0;
+		i++;
+	}
+	return (str);
 }

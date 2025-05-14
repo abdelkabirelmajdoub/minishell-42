@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/03 10:33:43 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/10 11:29:19 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,7 +31,7 @@ void	handle_operator(char *input, int *i, t_token **head)
 	(*i)++;
 }
 
-void	handle_quoted(char *input, int *i, t_token **head)
+int	handle_quoted(char *input, int *i, t_token **head)
 {
 	char	quote;
 	int		start;
@@ -42,11 +42,18 @@ void	handle_quoted(char *input, int *i, t_token **head)
 	start = *i;
 	while (input[*i] && input[*i] != quote)
 		(*i)++;
+	if (input[*i] == '\0')
+	{
+		printf("syntax error near unexpected token \n");
+		return (0);
+	}
 	token_value = ft_strndup(&input[start], (*i) - start);
 	current = token_creation(token_value, WORD);
+	current->quote_type = quote;
 	token_add_back(head, current);
 	if (input[*i] == quote)
 		(*i)++;
+	return (1);
 }
 
 void	handle_word(char *input, int *i, t_token **head)

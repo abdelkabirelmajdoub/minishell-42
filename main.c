@@ -1,9 +1,12 @@
 #include "include/minishell.h"
 
+
+
 int	main(int ac, char **av, char **env)
 {
-	t_env *envp = creat_env(env);
+	t_env *envp;
 
+	envp = creat_env(env);
 	inc_lvl(&envp);	
 	while (1)
 	{
@@ -11,16 +14,19 @@ int	main(int ac, char **av, char **env)
 		if (input)
 			add_history(input);
 		t_token *tokens = tokenize(input);
+		handle_quotes(tokens);
+		expend_token(tokens, envp);
 		handle_syn(input, tokens);
 		t_cmd *cmds = pars_token(tokens);
-
+		// printf("%s %s\n", cmds->out_file[0], cmds->out_file[1]);
 		if (!cmds)
-			continue;;
-		exe(cmds, env, &envp);	
+			continue;
+		exe(cmds, &envp);	
 
-		free(cmds);
-		free(tokens);
+		free_tokens(tokens);
+		free_cmd(cmds);
 		free(input);
+		system("leaks -q minishell");
 	}
 
 	clear_history();

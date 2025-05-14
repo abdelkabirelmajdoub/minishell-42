@@ -3,35 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/22 14:53:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2024/11/17 10:56:28 by ael-majd         ###   ########.fr       */
+/*   Created: 2024/10/23 13:26:51 by yazlaigi          #+#    #+#             */
+/*   Updated: 2024/11/06 10:22:21 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dst, const void *src, size_t n)
 {
-	unsigned char			*d;
-	const unsigned char		*s;
-	size_t					i;
+	unsigned char	*srs;
+	unsigned char	*dest;
+	size_t			i;
 
-	if (dest == src)
-		return (dest);
-	d = dest;
-	s = src;
+	srs = (unsigned char *)src;
+	dest = (unsigned char *)dst;
 	i = 0;
-	if (d < s)
-		ft_memcpy(dest, src, n);
-	else
+	if (dest < srs)
+	{
+		while (i < n)
+		{
+			dest[i] = srs[i];
+			i++;
+		}
+	}
+	else if (dest > srs)
 	{
 		while (n > 0)
 		{
-			d[n - 1] = s[n - 1];
+			dest[n - 1] = srs[n - 1];
 			n--;
 		}
 	}
-	return (dest);
+	return (dst);
 }

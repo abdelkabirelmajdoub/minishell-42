@@ -3,28 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   ft_substr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/26 15:19:29 by ael-majd          #+#    #+#             */
-/*   Updated: 2024/11/12 09:42:20 by ael-majd         ###   ########.fr       */
+/*   Created: 2024/10/26 12:16:37 by yazlaigi          #+#    #+#             */
+/*   Updated: 2024/11/02 12:41:19 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
+static char	*allocatenewstring(void)
+{
+	char	*a;
+
+	a = malloc(1);
+	if (a == NULL)
+		return (NULL);
+	a[0] = '\0';
+	return (a);
+}
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	char	*str;
+	unsigned int	i;
+	size_t			s_len;
+	char			*a;
 
-	if (!s)
+	if (s == NULL)
 		return (NULL);
-	if (start >= ft_strlen(s))
-		return (ft_strdup(""));
-	if (len > ft_strlen(s) - start)
-		len = ft_strlen(s) - start;
-	str = malloc(len + 1);
-	if (!str)
+	s_len = ft_strlen(s);
+	i = 0;
+	if (start >= s_len)
+	{
+		return (allocatenewstring());
+	}
+	if (len > s_len - start)
+		len = s_len - start;
+	a = malloc(len + 1);
+	if (a == NULL)
 		return (NULL);
-	ft_strlcpy(str, &s[start], len + 1);
-	return (str);
+	while (i < len)
+	{
+		a[i] = s[start + i];
+		i++;
+	}
+	a[i] = '\0';
+	return (a);
 }

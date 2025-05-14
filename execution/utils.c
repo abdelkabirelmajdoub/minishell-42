@@ -6,12 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:34:39 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/01 11:06:17 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/13 09:59:31 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 
 char	*my_getenv(char *name, char **env)
 {
@@ -37,16 +36,6 @@ char	*my_getenv(char *name, char **env)
 	return (NULL);
 }
 
-void	free_paths(char **s)
-{
-	int	i;
-
-	i = 0;
-	while (s[i])
-		free(s[i++]);
-	free(s);
-}
-
 char	*get_path(char *cmd, char **env)
 {
 	char	*path_part;
@@ -63,12 +52,17 @@ char	*get_path(char *cmd, char **env)
 		free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
 		{
-			free_paths(secure_paths);
+			free_args(secure_paths);
 			return (exec);
 		}
 		free(exec);
 		i++;
 	}
-	free_paths(secure_paths);
+	free_args(secure_paths);
 	return (cmd);
+}
+
+int	is_pipe(t_cmd *cmd_list)
+{
+	return (cmd_list && cmd_list->next);
 }

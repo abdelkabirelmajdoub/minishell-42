@@ -3,16 +3,15 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/05/06 11:43:43 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/06 11:43:52 by yazlaigi         ###   ########.fr       */
+/*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
+/*   Updated: 2025/05/12 13:21:58 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 
 #include "../include/minishell.h"
-
 
 int	is_valid_key(char *key)
 {
@@ -28,6 +27,7 @@ int	is_valid_key(char *key)
 	}
 	return (1);
 }
+
 void	sort_env_array(t_env **arr)
 {
 	int		i;
@@ -51,19 +51,6 @@ void	sort_env_array(t_env **arr)
 		i++;
 	}
 }
-void	add_env_back(t_env **env, t_env *new)
-{
-	t_env *cur = *env;
-
-	if (!cur)
-	{
-		*env = new;
-		return;
-	}
-	while (cur->next)
-		cur = cur->next;
-	cur->next = new;
-}
 
 void	update_env(t_env **env, char *key, char *value)
 {
@@ -72,6 +59,7 @@ void	update_env(t_env **env, char *key, char *value)
 	char	*dup_value;
 
 	cur = *env;
+	
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)
@@ -91,7 +79,7 @@ void	update_env(t_env **env, char *key, char *value)
 	else
 		dup_value = NULL;
 	new = new_env_node(key, dup_value);
-	add_env_back(env, new);
+	env_add_back(env, new);
 }
 
 int	env_size(t_env *env)
@@ -140,7 +128,7 @@ int	print_export(t_env *env)
 			printf("declare -x %s\n", arr[i]->key);
 		i++;
 	}
-	// free_args(arr);
+	free(arr);
 	return (0);
 }
 
@@ -170,7 +158,7 @@ int	ft_export(t_env **env, char **args)
 		}
 		if (!is_valid_key(key))
 		{
-			printf("export: `%s': not a valid identifier\n", args[i]);
+			printf("minishell: export: `%s': not a valid identifier\n", args[i]);
 			free(key);
 			free(value);
 			i++;
@@ -181,5 +169,3 @@ int	ft_export(t_env **env, char **args)
 	}
 	return (0);
 }
-
-
