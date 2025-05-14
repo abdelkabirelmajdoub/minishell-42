@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/14 11:27:48 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:54:27 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@
 // }
 
 
-void	run_heredoc(char *limiter, int	write_end)
+void	run_heredoc(char *limiter, int	w_end, t_env **env)
 {
 	char	*line;
 
@@ -41,18 +41,19 @@ void	run_heredoc(char *limiter, int	write_end)
 		line = readline("> ");
 		if (!line)
 			break;
+		line = expand_variable(line, *env);
 		if (!ft_strcmp(line, limiter))
 		{
 			free(line);
 			break;
 		}
-		write(write_end, line, ft_strlen(line));
-		write(write_end, "\n", 1);
+		write(w_end, line, ft_strlen(line));
+		write(w_end, "\n", 1);
 		free(line);
 	}
 }
 
-void prepare_heredocs(t_cmd *cmd_list)
+void	prepare_heredocs(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 	pid_t	pid;
@@ -68,7 +69,7 @@ void prepare_heredocs(t_cmd *cmd_list)
 			if (pid == 0)
 			{
 				close(here_pipe[0]);
-				run_heredoc(cmd->limiter, here_pipe[1]);
+				run_heredoc(cmd->limiter, here_pipe[1], env);
 				close(here_pipe[1]);
 				exit(0);
 			}

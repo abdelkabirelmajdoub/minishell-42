@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/14 11:28:13 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 12:59:30 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,8 @@ void	execute_one(t_cmd *cmd, t_env **env)
 	char	**envp;
 	int		status;
 	
+	if (cmd->args)
+		return ;
 	if (is_builtin(cmd->args[0]))
 	{
 		status = run_builtin(cmd, env);
@@ -57,7 +59,7 @@ void	execute_one(t_cmd *cmd, t_env **env)
 
 void exe(t_cmd  *cmd_list, t_env **env)
 {
-	prepare_heredocs(cmd_list);
+	prepare_heredocs(cmd_list, env);
 	if (is_pipe(cmd_list))
 		execute_pipe(cmd_list, env);
 	else

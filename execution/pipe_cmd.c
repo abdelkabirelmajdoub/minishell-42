@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/14 11:28:22 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 13:00:07 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 {
 	t_exe_pipe	exec;
 
+	if (cmd->args)
+		return ;
 	exec.envp = env_list_to_array(env);
 	exec.prev_fd = -1;
 	exec.last_cmd = cmd;
