@@ -17,6 +17,7 @@ int	main(int ac, char **av, char **env)
 		{
 			free_env(envp);
 			write(1, "exit\n", 5);
+				system("leaks -q minishell");
 			exit(0);
 		}
 		if (*input)
@@ -39,7 +40,6 @@ int	main(int ac, char **av, char **env)
 		free_cmd(cmds);
 		free_tokens(tokens);
 	}
-
 	free_env(envp);
 	clear_history();
 	(void)ac;

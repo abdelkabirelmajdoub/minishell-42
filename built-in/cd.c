@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/14 19:08:29 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/15 11:58:37 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ int	ft_cd(char **args, t_env **env)
 		if (args[1][0] == '~')
 		{
 			if (!home)
-				return (ft_putstr_fd("minishell: cd: HOME not set", 2), 1);
+				return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
 			if (args[1][1] == '\0')
 				full_path = ft_strdup(home);
 			else if (args[1][1] == '/')
@@ -92,7 +92,7 @@ int	ft_cd(char **args, t_env **env)
 	{
 		home = get_env("HOME", *env);
 		if (!home)
-			return (ft_putstr_fd("minishell: cd: HOME not set", 2), 1);
+			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
 		flag = run_cd(home);
 	}
 	if (!flag)
