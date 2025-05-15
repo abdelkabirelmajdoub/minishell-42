@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/14 17:24:46 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/15 11:51:44 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 {
 	char	*path;
 
+	if (!cmd->args)
+		return ;
 	if (cmd->limiter)
 		x_dup2(cmd->heredoc_fd, STDIN_FILENO);
 	else if (cmd->infile)
@@ -36,7 +38,6 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 		execve(path, cmd->args, exec->envp);
 	printf("minishell: %s: command not found\n", cmd->args[0]);
 	free(path);
-	// free_cmd(cmd);
 	exit(127);
 }
 
@@ -58,8 +59,6 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 {
 	t_exe_pipe	exec;
 
-	if (!cmd->args || !cmd->args[0])
-		return ;
 	exec.envp = env_list_to_array(env);
 	exec.prev_fd = -1;
 	exec.last_cmd = cmd;

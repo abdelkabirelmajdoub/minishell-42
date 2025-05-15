@@ -33,11 +33,11 @@ int	main(int ac, char **av, char **env)
 		}
 		free(input);
 		cmds = pars_token(tokens);
-		// free_tokens(tokens);
 		if (!cmds)
 			continue;
 		exe(cmds, &envp);	
-		// free_cmd(cmds);
+		free_cmd(cmds);
+		free_tokens(tokens);
 	}
 
 	free_env(envp);
@@ -49,7 +49,7 @@ int	main(int ac, char **av, char **env)
 
 /*
 To fix:
-cd ~/Desktop
+cd ~/Desktop fixed
 
 
 
