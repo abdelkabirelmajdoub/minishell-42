@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/15 16:21:52 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/15 16:40:12 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,22 @@ void	child_proc(t_cmd *cmd, char **envp)
 	free(path);
 	exit(127);
 }
+
+int	exist_infile(char *filename)
+{
+	int	fd;
+
+	fd = open(filename, O_RDONLY, 0777);
+	if (fd < 0)
+	{
+		perror("infile error");
+		return (0);
+	}
+	x_dup2(fd, STDIN_FILENO);
+	close(fd);
+	return (1);
+}
+
 void	cmd_builtin(t_cmd *cmd, t_env **env, int *status)
 {
 	int	in_save;
@@ -40,8 +56,8 @@ void	cmd_builtin(t_cmd *cmd, t_env **env, int *status)
 	out_save = dup(STDOUT_FILENO);
 	if (cmd->limiter)
 		x_dup2(cmd->heredoc_fd, STDIN_FILENO);
-	else if (cmd->infile)
-		redirect_in(cmd->infile);
+	else if (cmd->infile && !exist_infile(cmd->infile))
+		return ;
 	if (cmd->out_file)
 		redirect_out(cmd);
 	*status = run_builtin(cmd, env);
