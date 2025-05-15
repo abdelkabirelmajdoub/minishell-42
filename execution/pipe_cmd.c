@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/15 11:51:44 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/15 15:55:55 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,9 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 		exit(run_builtin(cmd, env));
 	else
 		execve(path, cmd->args, exec->envp);
-	printf("minishell: %s: command not found\n", cmd->args[0]);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->args[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
 	free(path);
 	exit(127);
 }
