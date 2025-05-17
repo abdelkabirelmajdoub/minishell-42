@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/15 16:40:12 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:30:19 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,11 +42,36 @@ int	exist_infile(char *filename)
 		perror("infile error");
 		return (0);
 	}
-	x_dup2(fd, STDIN_FILENO);
+	if (dup2(fd, STDIN_FILENO) == -1)
+		return (0);
 	close(fd);
 	return (1);
 }
 
+int out_exist(t_cmd *cmd)
+{
+	int	i;
+	int	fd;
+
+	i = -1;
+	while(cmd->out_file[++i])
+	{
+		if (cmd->append)
+			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_APPEND, 0777);
+		else
+			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_TRUNC, 0777);
+		if (fd < 0)
+		{
+			perror("outfile error");
+			return (0);
+		}
+		if (cmd->out_file[i + 1] == NULL)
+			if (dup2(fd, STDOUT_FILENO) == -1)
+				return (0);
+		close(fd);
+	}
+	return (1);
+}
 void	cmd_builtin(t_cmd *cmd, t_env **env, int *status)
 {
 	int	in_save;
@@ -58,8 +83,8 @@ void	cmd_builtin(t_cmd *cmd, t_env **env, int *status)
 		x_dup2(cmd->heredoc_fd, STDIN_FILENO);
 	else if (cmd->infile && !exist_infile(cmd->infile))
 		return ;
-	if (cmd->out_file)
-		redirect_out(cmd);
+	if (cmd->out_file && !out_exist(cmd))
+		return ;
 	*status = run_builtin(cmd, env);
 	(*env)->exit_status = *status;
 	x_dup2(in_save, STDIN_FILENO);
