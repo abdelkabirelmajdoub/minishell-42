@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_pars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 09:42:31 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/13 13:45:34 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/14 11:05:45 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void	pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc)
 			&& (*tok)->next)
 		{
 			pars_helper2(tok, cmd, &i);
-			if ((*tok)->type == REDIR_OUT || (*tok)->type == REDIR_APPEND)
 			*tok = (*tok)->next->next;
 			continue ;
 		}

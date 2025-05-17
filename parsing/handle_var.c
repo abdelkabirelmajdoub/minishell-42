@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/13 12:42:52 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/17 11:34:00 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*expand_variable(char *value, t_env *env)
 			free(exit_str);
 			i += 2;
 		}
-		if (value[i] == '$' && value[i + 1]
+		else if (value[i] == '$' && value[i + 1]
 			&& (ft_isalpha(value[i + 1]) || value[i + 1] == '_'))
 		{
 			int k = 0;

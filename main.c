@@ -1,7 +1,5 @@
 #include "include/minishell.h"
 
-
-
 int	main(int ac, char **av, char **env)
 {
 	t_env *envp;
@@ -13,20 +11,21 @@ int	main(int ac, char **av, char **env)
 		char *input = readline("\033[36mmini\033[31mshell$ \033[0m");
 		if (input)
 			add_history(input);
-		t_token *tokens = tokenize(input);
+		t_token *tokens = tokenize(input, envp);
 		handle_quotes(tokens);
 		expend_token(tokens, envp);
-		handle_syn(input, tokens);
+		if (!handle_syn(input, tokens))
+			continue;
 		t_cmd *cmds = pars_token(tokens);
-		// printf("%s %s\n", cmds->out_file[0], cmds->out_file[1]);
+		// printf("%s\n", cmds->args[0]);
+		// printf("%d \n", tokens->type );
 		if (!cmds)
 			continue;
-		exe(cmds, &envp);	
-
 		free_tokens(tokens);
+		exe(cmds, &envp);
 		free_cmd(cmds);
 		free(input);
-		system("leaks -q minishell");
+		// system("leaks -q minishell");
 	}
 
 	clear_history();

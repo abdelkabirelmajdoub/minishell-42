@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/13 15:41:58 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/17 12:33:32 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ typedef struct s_token
 	t_token_type		type;
 	char				quote_type;
 	struct s_token		*next;
+	int					error;
 }	t_token;
 
 typedef struct s_cmd
@@ -81,9 +82,9 @@ char			*ft_strndup(const char *s, int size);
 t_token_type	tokenize_type(char *input, int *i);
 t_token			*token_creation(char *value, t_token_type type);
 void			token_add_back(t_token **head, t_token *new_token);
-t_token			*tokenize(char *input);
+t_token			*tokenize(char *input, t_env *env);// edit function
 t_cmd			*pars_token(t_token	*tok);
-void			handle_word(char *input, int *i, t_token **head);
+void			handle_word(char *input, int *i, t_token **head, t_env *env);// edit function
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
