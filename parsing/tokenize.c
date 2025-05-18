@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/17 12:29:11 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/18 14:48:56 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,43 +68,47 @@ void	handle_word(char *input, int *i, t_token **head, t_env *env)
 	char	buffer[1024];
 	char	tmp[1024];
 	t_token	*current;
+	int		has_single_quotes = 0;
 
 	j = 0;
 	while (input[*i] && !(input[*i] == ' '
 			|| input[*i] == '\t' || input[*i] == '\n'
 			|| input[*i] == '|' || input[*i] == '<' || input[*i] == '>'))
+	{
+		if (input[*i] == '\'' || input[*i] == '"')
 		{
-			if (input[*i] == '\'' || input[*i] == '"')
+			int k = 0;
+			quote = input[(*i)];
+			(*i)++;
+			while (input[*i] && input[*i] != quote )
+				tmp[k++] = input[(*i)++];
+			tmp[k] = '\0';
+			if (input[*i] == '\0')
+				printf("syntax error near unexpected token \n");
+			if (input[*i] == quote)
+				(*i)++;
+			if (quote == '\'')
 			{
-				int k = 0;
-				quote = input[(*i)++];
-				while (input[*i] && input[*i] != quote )
-					tmp[k++] = input[(*i)++];
-				tmp[k] = '\0';
-				if (input[*i] == '\0')
-					printf("syntax error near unexpected token \n");
-				if (input[*i] == quote)
-					(*i)++;
-				if (quote == '"') // expand in double quotes
-				{
-					char *expanded = expand_variable(tmp, env);
-					int len = ft_strlen(expanded);
-					ft_memcpy(buffer + j, expanded, len);
-					j += len;
-					free(expanded);
-				}
-				else
-				{
-					ft_memcpy(buffer + j, tmp, k);
-					j += k;
-				}
+				has_single_quotes = 1;
+				ft_memcpy(buffer + j, tmp, k);
+				j += k;
 			}
-			else
-				buffer[j++] = input[(*i)++];		
+			else if (quote == '"')
+			{
+				char *expanded = expand_variable(tmp, env);
+				int len = ft_strlen(expanded);
+				ft_memcpy(buffer + j, expanded, len);
+				j += len;
+				free(expanded);
+			}
 		}
+		else
+			buffer[j++] = input[(*i)++];		
+	}
 	buffer[j] = '\0';
-	char	*expanded = expand_variable(buffer, env);
-	current = token_creation(expanded , WORD);
+	current = token_creation(ft_strdup(buffer), WORD);
+	if (has_single_quotes)
+		current->quote_type = '\'';
 	token_add_back(head, current);
 }
 
@@ -129,8 +133,8 @@ t_token	*tokenize(char *input, t_env *env)
 		}
 		if (input[i] == 92)
 			i++;
-		if ((input[i] == '\'' || input[i] == '"'))
-			handle_quoted(input, &i, &head);
+		// if ((input[i] == '\'' || input[i] == '"'))
+		// 	handle_quoted(input, &i, &head);
 		else
 			handle_word(input, &i, &head, env);
 	}

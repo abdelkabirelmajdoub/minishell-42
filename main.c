@@ -14,6 +14,7 @@ int	main(int ac, char **av, char **env)
 		t_token *tokens = tokenize(input, envp);
 		handle_quotes(tokens);
 		expend_token(tokens, envp);
+		// printf ("%s\n", tokens->value);
 		if (!handle_syn(input, tokens))
 			continue;
 		t_cmd *cmds = pars_token(tokens);
