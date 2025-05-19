@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:13:00 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/15 11:39:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/19 09:47:06 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,7 @@ t_token	*token_creation(char *value, t_token_type type)
 	new_token->value = ft_strdup(value);
 	new_token->type = type;
 	new_token->next = NULL;
+	new_token->next = 0;
 	return (new_token);
 }
 

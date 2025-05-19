@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_var.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/18 13:44:08 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/18 13:28:08 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ char	*expand_variable(char *value, t_env *env)
 			free(exit_str);
 			i += 2;
 		}
-		if (value[i] == '$' && value[i + 1]
+		else if (value[i] == '$' && value[i + 1]
 			&& (ft_isalpha(value[i + 1]) || value[i + 1] == '_'))
 		{
 			int k = 0;

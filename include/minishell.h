@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/18 10:43:22 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/19 09:27:01 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,9 +82,9 @@ char			*ft_strndup(const char *s, int size);
 t_token_type	tokenize_type(char *input, int *i);
 t_token			*token_creation(char *value, t_token_type type);
 void			token_add_back(t_token **head, t_token *new_token);
-t_token			*tokenize(char *input);
+t_token			*tokenize(char *input, t_env *env);
 t_cmd			*pars_token(t_token	*tok);
-void			handle_word(char *input, int *i, t_token **head);
+void			handle_word(char *input, int *i, t_token **head, t_env *env);
 void			handle_operator(char *input, int *i, t_token **head);
 int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
