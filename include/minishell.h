@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/14 12:54:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/18 10:43:22 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,7 @@ int		ft_unset(char *var, t_env **my_env);
 int		ft_cd(char **args, t_env **env);
 int		ft_pwd(void);
 int		ft_exit(char **args);
-int		ft_echo(char **args, t_env **env);
+int		ft_echo(char **args);
 int		ft_export(t_env **env, char **args);
 int		ft_env(t_env **tmp);
 void	inc_lvl(t_env **env);

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 11:08:50 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/15 15:56:58 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/18 10:43:04 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ int	is_n_option(const char *str)
 	return (1);
 }
 
-int	ft_echo(char **args, t_env **env) 
+int	ft_echo(char **args) 
 {
 	int	i;
 	int newline;
@@ -48,6 +48,5 @@ int	ft_echo(char **args, t_env **env)
 	}
 	if (newline)
 		printf("\n");
-	(void) env;
 	return (0);
 }
