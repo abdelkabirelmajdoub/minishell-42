@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/19 09:27:01 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:06:56 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,7 @@ void	redirect_in(char *filename);
 void	redirect_out(t_cmd *cmd);
 void	x_pipe(int pipefd[2]);
 void	x_dup2(int fd, int target_fd);
+
 /*---------------------------------- cleaning --------------------------------------*/
 
 void	free_env(t_env *env);
