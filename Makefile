@@ -1,5 +1,5 @@
 CC      = cc
-CFLAGS  = #-Wall -Wextra -Werror
+CFLAGS  = -Wall -Wextra -Werror
 SRC     = parsing/tokenize.c parsing/tokenize_utils.c parsing/tokenize_pars.c  \
           parsing/handle_errors.c parsing/handle_var.c \
           execution/exec_cmd.c execution/utils.c execution/heredoc.c \
@@ -24,7 +24,7 @@ $(NAME): $(OBJ)
 # @make -C libft
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
 	@make clean
-	@./minishell
+	# @./minishell
 
 %.o:%.c include/minishell.h
 	@$(CC) $(CFLAGS) -c $< -o $@

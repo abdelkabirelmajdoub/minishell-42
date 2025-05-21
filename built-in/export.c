@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/15 12:11:39 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:22:01 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,6 +132,29 @@ int	print_export(t_env *env)
 	return (0);
 }
 
+void	append_env(t_env **env, char *key, char *value)
+{
+	t_env	*tmp;
+	char	*val_tmp;
+
+	tmp = *env;
+	while(tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+		{
+			val_tmp = tmp->value;
+			if (val_tmp)
+				tmp->value = ft_strjoin(val_tmp, value);
+			else
+				tmp->value = ft_strjoin("", value);
+			free(key);
+			free(val_tmp);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	update_env(env, key, value);
+}
 
 int	ft_export(t_env **env, char **args)
 {
@@ -139,6 +162,7 @@ int	ft_export(t_env **env, char **args)
 	char	*key;
 	char	*value;
 	char	*eq;
+	int		append;
 
 	if (!args[1])
 		return (print_export(*env));
@@ -146,9 +170,15 @@ int	ft_export(t_env **env, char **args)
 	while (args[i])
 	{
 		eq = ft_strchr(args[i], '=');
+		append = 0;
+		if (eq && eq != args[i] && *(eq - 1) == '+')
+		    append = 1;
 		if (eq)
 		{
-			key = ft_strndup(args[i], eq - args[i]);
+			if (append)
+   				key = ft_strndup(args[i], (eq - args[i]) - 1);
+			else
+    			key = ft_strndup(args[i], eq - args[i]);
 			value = ft_strdup(eq + 1);
 		}
 		else
@@ -164,7 +194,10 @@ int	ft_export(t_env **env, char **args)
 			i++;
 			continue;
 		}
-		update_env(env, key, value);
+		if (append)
+			append_env(env, key, value);
+		else
+			update_env(env, key, value);
 		free(value);
 		i++;
 	}
