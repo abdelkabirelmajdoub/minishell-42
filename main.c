@@ -1,5 +1,29 @@
 #include "include/minishell.h"
 
+#include <signal.h>
+#include <readline/readline.h>
+#include <readline/history.h>
+
+#include <signal.h>
+#include <readline/readline.h>
+#include <unistd.h>
+
+void	handle_sigint_prompt(int sig)
+{
+	(void)sig;
+	write(1, "\n", 1);
+	rl_replace_line("", 0);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
+void	set_signal_prompt(void)
+{
+	signal(SIGINT, handle_sigint_prompt);
+	signal(SIGQUIT, SIG_IGN);  // Ignore Ctrl-
+}
+
+
 int	main(int ac, char **av, char **env)
 {
 	t_env *envp;
@@ -8,6 +32,7 @@ int	main(int ac, char **av, char **env)
 	inc_lvl(&envp);	
 	while (1)
 	{
+		set_signal_prompt();
 		char *input = readline("\033[36mmini\033[31mshell$ \033[0m");
 		if (!input)
 		{

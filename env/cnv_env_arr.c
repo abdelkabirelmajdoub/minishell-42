@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:03:46 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/11 10:25:47 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/25 12:59:52 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,43 +27,65 @@ int env_count(t_env **env)
 	return (count);
 }
 
-char	*create_env_string(t_env *env)
-{
-	char *key;
-	char *full;
 
-	key = ft_strjoin(env->key, "=");
-	if (!key)
+char	*ft_strjoin_free(char *s1, const char *s2)
+{
+	char	*joined;
+	size_t	len1 = ft_strlen(s1);
+	size_t	len2 = ft_strlen(s2);
+
+	joined = malloc(len1 + len2 + 1);
+	if (!joined)
+	{
+		free(s1);
 		return (NULL);
-	full = ft_strjoin(key, env->value);
-	free(key);
-	return (full);
+	}
+	ft_memcpy(joined, s1, len1);
+	ft_memcpy(joined + len1, s2, len2);
+	joined[len1 + len2] = '\0';
+	free(s1);
+	return (joined);
+}
+
+int	count_non_null(t_env **env)
+{
+	t_env	*tmp;
+	int		count;
+
+	count = 0;
+	tmp = *env;
+	while (tmp)
+	{
+		if (tmp->value != NULL)
+			count++;
+		tmp = tmp->next;
+	}
+	return (count);
 }
 
 char	**env_list_to_array(t_env **env)
 {
-	char **arr;
-	t_env	*tmp;
-	int	i;
-	
-	arr = malloc(sizeof(char *) * (env_count(env) + 1));
+	t_env	*cur;
+	int		count;
+	char	**arr;
+	char	*tmp;
+
+	count = count_non_null(env);
+	arr = malloc(sizeof(char *) * (count + 1));
 	if (!arr)
 		return (NULL);
-	i = 0;
-	tmp = *env;
-	while(i < env_count(env))
+	cur = *env;
+	count = 0;
+	while (cur)
 	{
-		arr[i] = create_env_string(tmp);
-		if (!arr[i])
+		if (cur->value != NULL)
 		{
-			while (--i >= 0)
-				free(arr[i]);
-			free(arr);
-			return (NULL);
+			tmp = ft_strjoin(cur->key, "=");
+			arr[count++] = ft_strjoin(tmp, cur->value);
+			free(tmp);
 		}
-		tmp = tmp->next;
-		i++;
+		cur = cur->next;
 	}
-	arr[i] = NULL;
+	arr[count] = NULL;
 	return (arr);
 }
