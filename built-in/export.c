@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/22 12:06:03 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/27 10:40:48 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -163,10 +163,12 @@ int	ft_export(t_env **env, char **args)
 	char	*value;
 	char	*eq;
 	int		append;
+	int		flag;
 
 	if (!args[1])
 		return (print_export(*env));
 	i = 1;
+	flag = 0;
 	while (args[i])
 	{
 		eq = ft_strchr(args[i], '=');
@@ -188,9 +190,12 @@ int	ft_export(t_env **env, char **args)
 		}
 		if (!is_valid_key(key))
 		{
-			printf("minishell: export: `%s': not a valid identifier\n", args[i]);
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
 			free(key);
 			free(value);
+			flag = 1;
 			i++;
 			continue;
 		}
@@ -201,5 +206,5 @@ int	ft_export(t_env **env, char **args)
 		free(value);
 		i++;
 	}
-	return (0);
+	return (flag);
 }

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:05:36 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/15 16:05:35 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:14:25 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,15 @@ int	is_number(char *s)
 	int	i;
 
 	i = 0;
-	if (s[0] == '-')
+	if (!s)
+		return (0);
+	if ((s[0] == '-' || s[0] == '+') && s[1] == '\0')
+		return (0);
+	if (s[0] == '-' || s[0] == '+')
 		i++;
 	while(s[i])
 	{
-		if (s[i] < '0' || s[i] > '9')
+		if (!ft_isdigit(s[i]))
 			return (0);
 		i++;
 	}
@@ -38,9 +42,9 @@ int	ft_exit(char **args)
 	{
 		if (!is_number(args[1]))
 		{
-			ft_putstr_fd("exit: ", 2);
+			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(args[1], 2);
-			ft_putstr_fd(":numeric argument required\n", 2);
+			ft_putstr_fd(": numeric argument required\n", 2);
 			exit(255);
 		}
 		if (args[2])
@@ -50,8 +54,6 @@ int	ft_exit(char **args)
 		}
 		exit_code = ft_atoi(args[1]);
 	}
-	else 
-		ft_putstr_fd("exit\n", 2);
 	exit(exit_code);
 	return (0);
 }

@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **env)
 	inc_lvl(&envp);	
 	while (1)
 	{
-		set_signal_prompt();
+		// set_signal_prompt();
 		char *input = readline("\033[36mmini\033[31mshell$ \033[0m");
 		if (!input)
 		{

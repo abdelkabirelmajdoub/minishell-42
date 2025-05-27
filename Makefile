@@ -21,7 +21,7 @@ $(NAME): $(OBJ)
 # @make -C libft
 	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline  -o $(NAME)
 	@make clean
-	@./minishell
+	# @./minishell
 
 %.o:%.c include/minishell.h
 	@$(CC) $(CFLAGS) -c $< -o $@

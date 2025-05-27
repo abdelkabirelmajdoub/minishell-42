@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/15 11:58:37 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/27 12:48:43 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,13 @@
 int run_cd(char *path)
 {
 	if (chdir(path) == -1)
-		return (perror("cd"), 1);
+	{
+		ft_putstr_fd("cd: ", 2);
+		ft_putstr_fd(path, 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
+		return (1);
+	}
 	return (0);
 }
 
