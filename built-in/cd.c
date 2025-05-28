@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/28 10:28:27 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:49:46 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,5 @@ int	ft_cd(char **args, t_env **env)
 		update_oldpwd(env, oldpwd);
 		update_pwd(env);
 	}
-	free(home);
 	return (flag);
 }
