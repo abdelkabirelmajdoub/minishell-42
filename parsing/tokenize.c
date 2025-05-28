@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/19 09:48:41 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:40:35 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ void	handle_word(char *input, int *i, t_token **head, t_env *env)
 	char	tmp[1024];
 	t_token	*current;
 	int		has_single_quotes = 0;
-
+	int		has_double_quotes = 0;
 	j = 0;
 	while (input[*i] && !(input[*i] == ' '
 			|| input[*i] == '\t' || input[*i] == '\n'
@@ -88,20 +88,36 @@ void	handle_word(char *input, int *i, t_token **head, t_env *env)
 				ft_putstr_fd("syntax error near unexpected token \n", 2);
 			if (input[*i] == quote)
 				(*i)++;
+			// if (quote == '\'')
+			// {
+			// 	has_single_quotes = 1;
+			// 	ft_memcpy(buffer + j, tmp, k);
+			// 	j += k;
+			// }
+			// else if (quote == '"')
+			// {
+			// 	char *expanded = expand_variable(tmp, env);
+			// 	int len = ft_strlen(expanded);
+			// 	ft_memcpy(buffer + j, expanded, len);
+			// 	j += len;
+			// 	free(expanded);
+			// }
 			if (quote == '\'')
 			{
 				has_single_quotes = 1;
 				ft_memcpy(buffer + j, tmp, k);
 				j += k;
 			}
-			else if (quote == '"')
+			else if (quote == '"')//// here my change
 			{
+				has_double_quotes = 1;
 				char *expanded = expand_variable(tmp, env);
 				int len = ft_strlen(expanded);
 				ft_memcpy(buffer + j, expanded, len);
 				j += len;
 				free(expanded);
 			}
+
 		}
 		else
 			buffer[j++] = input[(*i)++];		
@@ -110,6 +126,8 @@ void	handle_word(char *input, int *i, t_token **head, t_env *env)
 	current = token_creation(buffer, WORD);
 	if (has_single_quotes)
 		current->quote_type = '\'';
+	else if (has_double_quotes)//// here my change
+		current->quote_type = '"';
 	token_add_back(head, current);
 }
 
@@ -134,8 +152,6 @@ t_token	*tokenize(char *input, t_env *env)
 		}
 		if (input[i] == 92)
 			i++;
-		// if ((input[i] == '\'' || input[i] == '"'))
-		// 	handle_quoted(input, &i, &head);
 		else
 			handle_word(input, &i, &head, env);
 	}

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/27 14:29:33 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:32:36 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,7 @@ void	inc_lvl(t_env **env)
 	new = ft_itoa(lvl);
 	if (!new)
 		return ;
+	free(curr->value);
 	curr->value = new;
 }
 

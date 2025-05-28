@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/27 12:48:43 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:28:27 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,25 +72,17 @@ int	ft_cd(char **args, t_env **env)
 	int		flag;
 	char	oldpwd[1024];
 	char	*home;
-	char	*full_path;
 
 	getcwd(oldpwd, sizeof(oldpwd));
 	if (args[1])
 	{
+		if (!args[1][0])
+			return (0);
 		home = get_env("HOME", *env);
-		if (args[1][0] == '~')
-		{
-			if (!home)
-				return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
-			if (args[1][1] == '\0')
-				full_path = ft_strdup(home);
-			else if (args[1][1] == '/')
-				full_path = ft_strjoin(home, args[1] + 1);
-			else
-				full_path = ft_strdup(args[1]);
-			flag = run_cd(full_path);
-			free(full_path);	
-		}
+		if (!home)
+			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
+		else if (args[1][0] == '-')
+			flag = run_cd(get_env("OLDPWD", *env));
 		else
 			flag = run_cd(args[1]);
 	}
@@ -106,5 +98,6 @@ int	ft_cd(char **args, t_env **env)
 		update_oldpwd(env, oldpwd);
 		update_pwd(env);
 	}
+	free(home);
 	return (flag);
 }

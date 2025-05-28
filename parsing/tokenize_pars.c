@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 09:42:31 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/15 11:38:09 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 09:53:21 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,14 @@ void	pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc)
 			continue ;
 		}
 		else if ((*tok)->type == WORD && (*tok)->value 
-				&& (*tok)->value[0] != '\0')
-			args[(*argc)++] = ft_strdup((*tok)->value);
+				&& (*tok)->value[0] == '\0')
+			args[(*argc)++] = ft_strdup(""); //// here my change
+		else if ((*tok)->type == WORD && (*tok)->value 
+         && ((*tok)->value[0] != '\0' || (*tok)->quote_type != 0))
+		{
+		    args[(*argc)++] = ft_strdup((*tok)->value);
+		}
+
 		*tok = (*tok)->next;
 	}
 	cmd->out_file[i] = NULL;

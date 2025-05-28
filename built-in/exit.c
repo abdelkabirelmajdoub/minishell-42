@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:05:36 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/27 12:14:25 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 09:55:49 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,8 @@ int	ft_exit(char **args)
 	exit_code = 0;
 	if (args[1])
 	{
-		if (!is_number(args[1]))
+		
+		if (!is_number(args[1]) || !args[1][0])
 		{
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(args[1], 2);

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/25 12:49:25 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:33:47 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,6 +134,25 @@ void	clean_empty_tokens(t_token **tokens)
 	}
 }
 
+char	*expand_tilde(const char *value, t_env *env) //// here my change
+{
+    char	*home;
+    char	*rest;
+    char	*result;
+
+	home = get_env("HOME", env);
+    if (!home)
+        return ft_strdup(value);
+    if (value[0] == '~' && (value[1] == '\0' || value[1] == '/'))
+    {
+        rest = ft_strdup(value + 1);
+        result = ft_strjoin(home, rest);
+        free(rest);
+        return result;
+    }
+    return ft_strdup(value);
+}
+
 void	expend_token(t_token *tokens, t_env *env)
 {
 	t_token	*cpy_tok;
@@ -142,12 +161,17 @@ void	expend_token(t_token *tokens, t_env *env)
 	cpy_tok = tokens;
 	while (cpy_tok)
 	{
-		if (cpy_tok->type == WORD && cpy_tok->quote_type != '\''
-			&& ft_strchr (cpy_tok->value, '$'))
+		if (cpy_tok->type == WORD)
 		{
-			expanded = expand_variable(cpy_tok->value, env);
-			if (expanded)
+			if (cpy_tok->quote_type != '\'' && ft_strchr(cpy_tok->value, '$'))
 			{
+				expanded = expand_variable(cpy_tok->value, env);
+				free(cpy_tok->value);
+				cpy_tok->value = expanded;
+			}
+			if (cpy_tok->quote_type == 0 && cpy_tok->value[0] == '~') //// here my change
+			{ 
+				expanded = expand_tilde(cpy_tok->value, env);
 				free(cpy_tok->value);
 				cpy_tok->value = expanded;
 			}

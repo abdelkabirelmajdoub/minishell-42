@@ -20,7 +20,7 @@ void	handle_sigint_prompt(int sig)
 void	set_signal_prompt(void)
 {
 	signal(SIGINT, handle_sigint_prompt);
-	signal(SIGQUIT, SIG_IGN);  // Ignore Ctrl-
+	signal(SIGQUIT, SIG_IGN);
 }
 
 
@@ -32,7 +32,7 @@ int	main(int ac, char **av, char **env)
 	inc_lvl(&envp);	
 	while (1)
 	{
-		// set_signal_prompt();
+		set_signal_prompt();
 		char *input = readline("\033[36mmini\033[31mshell$ \033[0m");
 		if (!input)
 		{
@@ -48,7 +48,6 @@ int	main(int ac, char **av, char **env)
 		if (!handle_syn(input, tokens))
 			continue;
 		t_cmd *cmds = pars_token(tokens);
-
 		if (!cmds)
 			continue;
 		free_tokens(tokens);
