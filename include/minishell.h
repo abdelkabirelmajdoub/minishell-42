@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/17 12:33:32 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/05/21 12:14:41 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@ typedef struct s_token
 	char				quote_type;
 	struct s_token		*next;
 	int					error;
+	int					inside_quote;
 }	t_token;
 
 typedef struct s_cmd
@@ -60,7 +61,19 @@ typedef struct s_cmd
 	struct s_cmd	*next;
 }	t_cmd;
 
-
+/*---------------------------------- some struct for norm by (yazlaigi) --------------------------------------*/
+typedef struct s_expand_tools
+{
+	char	*result;
+	char	*exit_str;
+	int		t_len;
+	int		i;
+	int		j;
+	int		k;
+	char	*var_value;
+	char	var_name[256];
+} t_ex;
+/*---------------------------------- some struct for norm by (yazlaigi) --------------------------------------*/
 typedef struct s_exe_pipe
 {
 	int		pipefd[2];
@@ -77,25 +90,34 @@ typedef struct s_exe_pipe
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strndup(const char *s, int size);
 
+
 /*---------------------------------- Parsing functions --------------------------------------*/
 
-t_token_type	tokenize_type(char *input, int *i);
+int				handle_syn_helper(t_token *cpy_tok);
+int				handle_syn(char *input, t_token *tok);
+void			clean_empty_tokens(t_token **tokens);
+int				expand_variable_helper1(t_env *env, int *i, int total_len);
+int				expand_helper(char *value, t_env *env, char *v_nam, int t_len);
+void			expand_variables_int(char *value, t_env *env, t_ex *tools);
+void			expand_variable_help(char *value, t_env *env, t_ex *tools, int *i);
+char			*expand_variable(char *value, t_env *env, t_ex *tools);
+char			*get_env(char *key, t_env *env);
+void			handle_quotes(t_token *tokens);
+void			expend_token(t_token *tokens, t_env *env, t_ex *expand);
+int				expand_variable_helper2(int *i, int total_len);
+char			**args_allocation(void);
+void			pars_helper2(t_token **tok, t_cmd *cmd, int *i);
+void			pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc);
+int				init_cmd(t_cmd **cmd, char ***args);
+t_cmd			*pars_token(t_token	*tok);
+t_cmd			*pars_int(void);
+char			*ft_strndup(const char *s, int size);
 t_token			*token_creation(char *value, t_token_type type);
 void			token_add_back(t_token **head, t_token *new_token);
-t_token			*tokenize(char *input, t_env *env);// edit function
-t_cmd			*pars_token(t_token	*tok);
-void			handle_word(char *input, int *i, t_token **head, t_env *env);// edit function
+t_token_type	tokenize_type(char *input, int *i);
 void			handle_operator(char *input, int *i, t_token **head);
-int				init_cmd(t_cmd **cmd, char ***args);
-t_cmd			*pars_int(void);
-int				handle_syn(char *input, t_token *tok);
-int				handle_syn_helper(t_token *cpy_tok);
-char			*get_env(char *key, t_env *env);
-char			*expand_variable(char *value,t_env *env);
-void			expend_token(t_token *tokens, t_env *env);
-void			handle_quotes(t_token *tokens);
-int				handle_quoted(char *input, int *i, t_token **head);
-void			clean_empty_tokens(t_token **tokens);
+void			handle_word(char *input, int *i, t_token **head, t_env *env, t_ex *expand);
+t_token			*tokenize(char *input, t_env *env, t_ex *expand);
 /*---------------------------------- BUILT-in cmds --------------------------------------*/
 
 int		ft_unset(char *var, t_env **my_env);
