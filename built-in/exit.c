@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:05:36 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/28 11:25:19 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/31 12:05:36 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ int	ft_exit(char **args, t_env **env)
 		exit_code = ft_atoi(trimmed);
 		free(trimmed);
 	}
-	exit(exit_code);
 	ft_putstr_fd("exit\n", 2);
+	exit(exit_code);
 	return (0);
 }

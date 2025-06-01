@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/22 12:01:07 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/01 11:09:46 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,8 @@ void	child_proc(t_cmd *cmd, char **envp)
 		redirect_in(cmd->infile);
 	if (cmd->out_file)
 		redirect_out(cmd);
+	if (!cmd->args || !cmd->args[0])
+		exit(0);
 	path = get_path(cmd->args[0], envp);
 	execve(path, cmd->args, envp);
 	ft_putstr_fd("minishell: ", 2);
@@ -99,8 +101,6 @@ void	execute_one(t_cmd *cmd, t_env **env)
 	char	**envp;
 	int		status;
 	
-	if (!cmd->args || !cmd->args[0])
-		return ;
 	if (is_builtin(cmd->args[0]))
 		return cmd_builtin(cmd, env, &status);
 	envp = env_list_to_array(env);

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/26 11:53:21 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/28 10:40:35 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 12:52:08 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,7 +85,10 @@ void	handle_word(char *input, int *i, t_token **head, t_env *env)
 				tmp[k++] = input[(*i)++];
 			tmp[k] = '\0';
 			if (input[*i] == '\0')
+			{
 				ft_putstr_fd("syntax error near unexpected token \n", 2);
+				(*head)->error = 0;
+			}
 			if (input[*i] == quote)
 				(*i)++;
 			// if (quote == '\'')
