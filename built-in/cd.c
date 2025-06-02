@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/28 10:49:46 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/01 12:22:05 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,9 +78,6 @@ int	ft_cd(char **args, t_env **env)
 	{
 		if (!args[1][0])
 			return (0);
-		home = get_env("HOME", *env);
-		if (!home)
-			return (ft_putstr_fd("minishell: cd: HOME not set\n", 2), 1);
 		else if (args[1][0] == '-')
 			flag = run_cd(get_env("OLDPWD", *env));
 		else

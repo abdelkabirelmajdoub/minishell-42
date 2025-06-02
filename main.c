@@ -50,6 +50,7 @@ int	main(int ac, char **av, char **env)
 		t_cmd *cmds = pars_token(tokens);
 		if (!cmds)
 			continue;
+
 		free_tokens(tokens);
 
 		
