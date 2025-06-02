@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/01 14:46:41 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:08:59 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -134,7 +134,7 @@ void	clean_empty_tokens(t_token **tokens)
 	}
 }
 
-char	*expand_tilde(const char *value) //// here my change
+char	*expand_tilde(const char *value)
 {
     char	*home;
     char	*rest;
@@ -169,7 +169,7 @@ void	expend_token(t_token *tokens, t_env *env)
 				free(cpy_tok->value);
 				cpy_tok->value = expanded;
 			}
-			if (cpy_tok->quote_type == 0 && cpy_tok->value[0] == '~') //// here my change
+			if (cpy_tok->quote_type == 0 && cpy_tok->value[0] == '~')
 			{ 
 				expanded = expand_tilde(cpy_tok->value);
 				free(cpy_tok->value);

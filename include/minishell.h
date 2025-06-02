@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/01 10:31:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/02 12:01:45 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include <stdlib.h>
 #include <fcntl.h>
+#include <signal.h>
 
 /*--------------------------- Structs----------------------*/
 
@@ -45,7 +46,6 @@ typedef struct s_token
 	char				*value;
 	t_token_type		type;
 	char				quote_type;
-	int					error;
 	struct s_token		*next;
 }	t_token;
 
