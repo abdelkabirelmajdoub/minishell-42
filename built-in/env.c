@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/12 12:12:19 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 10:32:36 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,27 @@ void	inc_lvl(t_env **env)
 	char	*new;
 
 	if (!env || !*env)
-	{
-		empty_env(env);
-		return ;
-	}
+		return (empty_env(env));
 	curr = *env;
-	while(curr)
+	while(curr && ft_strcmp(curr->key, "SHLVL") != 0)
+		curr = curr->next;
+	if (!curr)
+		return (empty_env(env));
+	lvl = ft_atoi(curr->value) + 1;
+	if (lvl > 1000)
 	{
-		if (!ft_strcmp(curr->key, "SHLVL"))
-		{
-			lvl = ft_atoi(curr->value);
-			lvl++;
-			new = ft_itoa(lvl);
-			if (!new)
-				return ;
-			free(curr->value);
-			curr->value = new;
-		}
-		curr  = curr->next;
+		ft_putstr_fd("minishell: warning: shell level (", 2);
+		ft_putnbr_fd(lvl, 2);
+		ft_putstr_fd(") too high, resetting to 1\n", 2);
+		lvl = 1;
 	}
+	else if (lvl < 0)
+		lvl = 0;
+	new = ft_itoa(lvl);
+	if (!new)
+		return ;
+	free(curr->value);
+	curr->value = new;
 }
 
 int	ft_env(t_env **tmp)

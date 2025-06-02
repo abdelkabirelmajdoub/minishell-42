@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/12 13:21:58 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/27 10:40:48 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	update_env(t_env **env, char *key, char *value)
 		cur = cur->next;
 	}
 	if (value)
-		dup_value = ft_strdup(value);
+		dup_value = value;
 	else
 		dup_value = NULL;
 	new = new_env_node(key, dup_value);
@@ -132,6 +132,29 @@ int	print_export(t_env *env)
 	return (0);
 }
 
+void	append_env(t_env **env, char *key, char *value)
+{
+	t_env	*tmp;
+	char	*val_tmp;
+
+	tmp = *env;
+	while(tmp)
+	{
+		if (!ft_strcmp(tmp->key, key))
+		{
+			val_tmp = tmp->value;
+			if (val_tmp)
+				tmp->value = ft_strjoin(val_tmp, value);
+			else
+				tmp->value = ft_strjoin("", value);
+			free(key);
+			free(val_tmp);
+			return ;
+		}
+		tmp = tmp->next;
+	}
+	update_env(env, key, value);
+}
 
 int	ft_export(t_env **env, char **args)
 {
@@ -139,16 +162,25 @@ int	ft_export(t_env **env, char **args)
 	char	*key;
 	char	*value;
 	char	*eq;
+	int		append;
+	int		flag;
 
 	if (!args[1])
 		return (print_export(*env));
 	i = 1;
+	flag = 0;
 	while (args[i])
 	{
 		eq = ft_strchr(args[i], '=');
+		append = 0;
+		if (eq && eq != args[i] && *(eq - 1) == '+')
+		    append = 1;
 		if (eq)
 		{
-			key = ft_strndup(args[i], eq - args[i]);
+			if (append)
+   				key = ft_strndup(args[i], (eq - args[i]) - 1);
+			else
+    			key = ft_strndup(args[i], eq - args[i]);
 			value = ft_strdup(eq + 1);
 		}
 		else
@@ -158,14 +190,21 @@ int	ft_export(t_env **env, char **args)
 		}
 		if (!is_valid_key(key))
 		{
-			printf("minishell: export: `%s': not a valid identifier\n", args[i]);
+			ft_putstr_fd("minishell: export: `", 2);
+			ft_putstr_fd(args[i], 2);
+			ft_putstr_fd("': not a valid identifier\n", 2);
 			free(key);
 			free(value);
+			flag = 1;
 			i++;
 			continue;
 		}
-		update_env(env, key, value);
+		if (append)
+			append_env(env, key, value);
+		else
+			update_env(env, key, value);
+		free(value);
 		i++;
 	}
-	return (0);
+	return (flag);
 }

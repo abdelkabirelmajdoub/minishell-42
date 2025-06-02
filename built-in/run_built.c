@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 10:18:34 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/08 13:37:43 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/28 11:14:28 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	is_builtin(char *cmd)
 int	run_builtin(t_cmd *cmd, t_env **env)
 {
 	if (!ft_strcmp(cmd->args[0], "echo"))
-		return (ft_echo(cmd->args, env));
+		return (ft_echo(cmd->args));
 	else if (!ft_strcmp(cmd->args[0], "cd"))
 		return (ft_cd(cmd->args, env));
 	else if (!ft_strcmp(cmd->args[0], "pwd"))
@@ -51,6 +51,6 @@ int	run_builtin(t_cmd *cmd, t_env **env)
 	else if (!ft_strcmp(cmd->args[0], "export"))
 		return (ft_export(env, cmd->args));
 	else if (!ft_strcmp(cmd->args[0], "exit"))
-		return (ft_exit(cmd->args));
+		return (ft_exit(cmd->args, env));
 	return (1);
 }

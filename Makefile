@@ -1,7 +1,7 @@
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror
 SRC     = parsing/tokenize.c parsing/tokenize_utils.c parsing/tokenize_pars.c  \
-          parsing/handle_errors.c parsing/handle_var.c parsing/helping_expa.c\
+          parsing/handle_errors.c parsing/handle_var.c \
           execution/exec_cmd.c execution/utils.c execution/heredoc.c \
 		  execution/io_file.c execution/pipe_cmd.c \
           built-in/env.c built-in/cd.c built-in/unset.c \
@@ -13,13 +13,16 @@ OBJ     = $(SRC:.c=.o)
 NAME    = minishell
 LIBFT   = libft/libft.a
 
+
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@echo "\033[1;32m                       🚧  Building MINISHELL... 🚧                        \033[0m"
 # @make -C libft
-	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline -o $(NAME)
+	@$(CC) $(CFLAGS) $(OBJ) $(LIBFT) -lreadline  -o $(NAME)
 	@make clean
+	# @./minishell
+
 %.o:%.c include/minishell.h
 	@$(CC) $(CFLAGS) -c $< -o $@
 

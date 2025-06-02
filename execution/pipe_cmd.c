@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/13 16:20:25 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:38:27 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,15 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 {
 	char	*path;
 
+	if (!cmd->args)
+		return ;
 	if (cmd->limiter)
 		x_dup2(cmd->heredoc_fd, STDIN_FILENO);
 	else if (cmd->infile)
 		redirect_in(cmd->infile);
 	else if (exec->prev_fd != -1)
 		x_dup2(exec->prev_fd, STDIN_FILENO);
-	if (cmd->next)
+	if (cmd->next && !cmd->out_file[0])
 		x_dup2(exec->pipefd[1], STDOUT_FILENO);
 	else if (cmd->out_file)
 		redirect_out(cmd);
@@ -34,9 +36,11 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 		exit(run_builtin(cmd, env));
 	else
 		execve(path, cmd->args, exec->envp);
-	printf("minishell: %s: command not found\n", cmd->args[0]);
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(cmd->args[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
 	free(path);
-	exit(127);
+	exit(127);	
 }
 
 void	close_wait(t_env **env, t_exe_pipe *exec)
@@ -66,6 +70,8 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 	{
 		x_pipe(exec.pipefd);
 		exec.pid = fork();
+		if (exec.pid < 0)
+			return (perror("fork error"));
 		if (!exec.pid)
 			child(cmd, env, &exec);
 		if (exec.prev_fd != -1)
@@ -78,3 +84,4 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 	}
 	close_wait(env, &exec);
 }
+ 
