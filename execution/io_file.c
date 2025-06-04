@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:54:10 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/01 10:29:01 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:23:38 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,10 @@ void	redirect_in(char *filename)
 	fd = open(filename, O_RDONLY, 0777);
 	if (fd < 0)
 	{
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(filename, 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
 		perror("infile error");
 		exit(1);
 	}
@@ -60,7 +64,10 @@ void	redirect_out(t_cmd	*cmd)
 			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_TRUNC, 0777);
 		if (fd < 0)
 		{
-			perror("outfile error");
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->out_file[i], 2);
+			ft_putstr_fd(": ", 2);
+			perror("");
 			exit(1);
 		}
 		if (cmd->out_file[i + 1] == NULL)

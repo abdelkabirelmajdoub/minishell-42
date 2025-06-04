@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:05:36 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/02 12:13:27 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/02 14:44:54 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ int	ft_exit(char **args, t_env **env)
 		trimmed = ft_strtrim(args[1], " ");
 		if (!is_number(trimmed) || trimmed[0] == '\0')
 		{
+			ft_putstr_fd("exit\n", 2);
 			ft_putstr_fd("minishell: exit: ", 2);
 			ft_putstr_fd(args[1], 2);
 			ft_putstr_fd(": numeric argument required\n", 2);
@@ -51,6 +52,7 @@ int	ft_exit(char **args, t_env **env)
 		}
 		if (args[2])
 		{
+			ft_putstr_fd("exit\n", 2);
 			ft_putstr_fd("exit: too many arguments\n", 2);
 			free(trimmed);
 			return (1);

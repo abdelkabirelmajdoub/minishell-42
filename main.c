@@ -6,7 +6,6 @@ void	handle_sigint_prompt(int sig)
 	write(1, "\n", 1);
 	rl_replace_line("", 0);
 	rl_on_new_line();
-	rl_redisplay();
 }
 
 void	set_signal_prompt(void)
@@ -57,14 +56,14 @@ void	process(t_env *envp)
 		}
 		if (input)
 			add_history(input);
+		tokens = tokenize(input, envp);
+		handle_quotes(tokens);
+		expend_token(tokens, envp);
 		if (!unclosed_quotes(input))
 		{
 			free(input);
 			continue;
 		}
-		tokens = tokenize(input, envp);
-		handle_quotes(tokens);
-		expend_token(tokens, envp);
 		if (!handle_syn(input, tokens))
 		{
 			free_tokens(tokens);
@@ -73,7 +72,10 @@ void	process(t_env *envp)
 		}
 		cmds = pars_token(tokens);
 		if (!cmds)
+		{
+			free(input);
 			continue;
+		}
 		free_tokens(tokens);	
 		exe(cmds, &envp);
 		free_cmd(cmds);

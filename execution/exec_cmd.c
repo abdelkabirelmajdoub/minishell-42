@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/01 14:20:14 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/04 13:24:17 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,10 @@ int	exist_infile(char *filename)
 	fd = open(filename, O_RDONLY, 0777);
 	if (fd < 0)
 	{
-		perror("infile error");
+		ft_putstr_fd("minishell: ", 2);
+		ft_putstr_fd(filename, 2);
+		ft_putstr_fd(": ", 2);
+		perror("");
 		return (0);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
@@ -64,7 +67,10 @@ int out_exist(t_cmd *cmd)
 			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_TRUNC, 0777);
 		if (fd < 0)
 		{
-			perror("outfile error");
+			ft_putstr_fd("minishell: ", 2);
+			ft_putstr_fd(cmd->out_file[i], 2);
+			ft_putstr_fd(": ", 2);
+			perror("");
 			return (0);
 		}
 		if (cmd->out_file[i + 1] == NULL)

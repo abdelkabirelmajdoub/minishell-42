@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/02 12:08:59 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/04 12:53:59 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,25 +180,25 @@ void	expend_token(t_token *tokens, t_env *env)
 	}
 }
 
-void	handle_quotes(t_token *tokens)
+void	handle_quotes(t_token *tokens)//my change
 {
 	t_token	*tok;
 	char	*new_value;
+	size_t	len;
 
 	tok = tokens;
 	while (tok)
 	{
-		if (tok->type == WORD)
+		if (tok->type == WORD && (tok->quote_type == '\'' || tok->quote_type == '"'))
 		{
-			if (ft_strlen(tok->value) >= 2 && (tok->value[0] == '\'' || tok->value[0] == '"') 
-				&& tok->value[ft_strlen(tok->value) - 1] == tok->value[0])
+			len = ft_strlen(tok->value);
+			if (len >= 2 && tok->value[0] == tok->quote_type && tok->value[len - 1] == tok->quote_type)
 			{
-				new_value = ft_substr(tok->value, 1, ft_strlen(tok->value) - 2);
+				new_value = ft_substr(tok->value, 1, len - 2);
 				free(tok->value);
 				tok->value = new_value;
 			}
 		}
 		tok = tok->next;
-
 	}
 }
