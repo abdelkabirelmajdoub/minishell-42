@@ -6,12 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 10:20:37 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:39:52 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 
 void	empty_env(t_env **env)
 {
@@ -49,7 +48,7 @@ void	inc_lvl(t_env **env)
 	if (!env || !*env)
 		return (empty_env(env));
 	curr = *env;
-	while(curr && ft_strcmp(curr->key, "SHLVL") != 0)
+	while (curr && ft_strcmp(curr->key, "SHLVL") != 0)
 		curr = curr->next;
 	if (!curr)
 		return (empty_env(env));
@@ -67,8 +66,9 @@ void	inc_lvl(t_env **env)
 
 int	ft_env(t_env **tmp)
 {
-	t_env *env = *tmp;
+	t_env	*env;
 
+	env = *tmp;
 	while (env)
 	{
 		if (env->value)

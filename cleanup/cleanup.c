@@ -6,15 +6,15 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:04:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/25 11:46:26 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:36:15 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void free_args(char **args)
+void	free_args(char **args)
 {
-	int i;	
+	int	i;	
 
 	if (!args)
 		return ;
@@ -26,7 +26,7 @@ void free_args(char **args)
 
 void	free_env(t_env *env)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	while (env)
 	{
@@ -40,7 +40,7 @@ void	free_env(t_env *env)
 
 void	free_tokens(t_token *tok)
 {
-	t_token *tmp;
+	t_token	*tmp;
 
 	while (tok)
 	{
@@ -60,7 +60,7 @@ void	free_cmd(t_cmd *cmd)
 {
 	t_cmd	*tmp;
 
-	while(cmd)
+	while (cmd)
 	{
 		tmp = cmd;
 		cmd = cmd->next;

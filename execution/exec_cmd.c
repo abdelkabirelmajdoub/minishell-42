@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/04 13:24:17 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 14:43:39 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -113,6 +113,7 @@ void	execute_one(t_cmd *cmd, t_env **env)
 	pid = fork();
 	if (!pid)
 		child_proc(cmd, envp);
+	close(cmd->heredoc_fd);
 	free_args(envp);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:56:13 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/12 13:24:20 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:33:19 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,13 +14,13 @@
 
 void	env_add_back(t_env **env, t_env *new_node)
 {
-	t_env *tmp;
+	t_env	*tmp;
 
 	tmp = *env;
 	if (!tmp)
 	{
 		*env = new_node;
-		return;
+		return ;
 	}
 	while (tmp->next)
 		tmp = tmp->next;
@@ -87,7 +87,7 @@ t_env	*creat_env(char **env)
 	i = 0;
 	if (!env || !*env)
 		return (NULL);
-	while(env[i])
+	while (env[i])
 	{
 		new = node_of_env(env[i]);
 		if (!new)

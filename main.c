@@ -76,7 +76,7 @@ void	process(t_env *envp)
 			free(input);
 			continue;
 		}
-		free_tokens(tokens);	
+		free_tokens(tokens);
 		exe(cmds, &envp);
 		free_cmd(cmds);
 		free(input);

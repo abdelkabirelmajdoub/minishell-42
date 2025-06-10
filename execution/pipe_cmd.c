@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/01 14:20:08 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:19:24 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 		exec.prev_fd = exec.pipefd[0];
 		if (cmd == exec.last_cmd)
 			exec.last_pid = exec.pid;
+		close(cmd->heredoc_fd);
 		cmd = cmd->next;
 	}
 	close_wait(env, &exec);

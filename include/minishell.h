@@ -6,30 +6,30 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/02 12:01:45 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 15:52:12 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
-#define MINISHELL_H
-#include "../libft/libft.h"
-#include <unistd.h>
-#include <stdio.h> 
-#include <readline/readline.h>
-#include <readline/history.h>
-#include <stdlib.h>
-#include <fcntl.h>
-#include <signal.h>
-
+# define MINISHELL_H
+# include "../libft/libft.h"
+# include <unistd.h>
+# include <stdio.h> 
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <stdlib.h>
+# include <fcntl.h>
+# include <signal.h>
+# include <sys/ioctl.h>
+# include "gnl/gnl.h"
 /*--------------------------- Structs----------------------*/
-
 typedef struct s_env
 {
 	char			*key;
 	char			*value;
 	struct s_env	*next;
 	int				exit_status;
-}		t_env;
+}					t_env;
 
 typedef enum s_token_type
 {
@@ -47,7 +47,7 @@ typedef struct s_token
 	t_token_type		type;
 	char				quote_type;
 	struct s_token		*next;
-}	t_token;
+}						t_token;
 
 typedef struct s_cmd
 {
@@ -58,8 +58,7 @@ typedef struct s_cmd
 	char			*limiter;
 	int				heredoc_fd;
 	struct s_cmd	*next;
-}	t_cmd;
-
+}					t_cmd;
 
 typedef struct s_exe_pipe
 {
@@ -72,74 +71,78 @@ typedef struct s_exe_pipe
 	t_cmd	*last_cmd;
 }			t_exe_pipe;
 
+typedef struct s_export_data
+{
+	char	*key;
+	char	*value;
+	int		append;
+	char	*_arg;
+}			t_export_data;
 
-/*---------------------------------- lib-helper --------------------------------------*/
+/*-------- lib-helper ------------*/
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strndup(const char *s, int size);
-
-/*---------------------------------- Parsing functions --------------------------------------*/
-
+/*-------- Parsing functions ------------*/
 t_token_type	tokenize_type(char *input, int *i);
 t_token			*token_creation(char *value, t_token_type type);
-void			token_add_back(t_token **head, t_token *new_token);
 t_token			*tokenize(char *input, t_env *env);
 t_cmd			*pars_token(t_token	*tok);
-void			handle_word(char *input, int *i, t_token **head, t_env *env);
-void			handle_operator(char *input, int *i, t_token **head);
-int				init_cmd(t_cmd **cmd, char ***args);
 t_cmd			*pars_int(void);
+int				init_cmd(t_cmd **cmd, char ***args);
 int				handle_syn(char *input, t_token *tok);
 int				handle_syn_helper(t_token *cpy_tok);
+int				handle_quoted(char *input, int *i, t_token **head);
 char			*get_env(char *key, t_env *env);
-char			*expand_variable(char *value,t_env *env);
+char			*expand_variable(char *value, t_env *env);
+void			token_add_back(t_token **head, t_token *new_token);
 void			expend_token(t_token *tokens, t_env *env);
 void			handle_quotes(t_token *tokens);
-int				handle_quoted(char *input, int *i, t_token **head);
+void			handle_word(char *input, int *i, t_token **head, t_env *env);
+void			handle_operator(char *input, int *i, t_token **head);
 void			clean_empty_tokens(t_token **tokens);
-/*---------------------------------- BUILT-in cmds --------------------------------------*/
-
-int		ft_unset(char *var, t_env **my_env);
-int		ft_cd(char **args, t_env **env);
-int		ft_pwd(void);
-int		ft_exit(char **args, t_env **env);
-int		ft_echo(char **args);
-int		ft_export(t_env **env, char **args);
-int		ft_env(t_env **tmp);
-void	inc_lvl(t_env **env);
+/*--------- BUILT-in cmds -------------*/
+int				ft_unset(char *var, t_env **my_env);
+int				ft_cd(char **args, t_env **env);
+int				ft_pwd(void);
+int				ft_exit(char **args, t_env **env);
+int				ft_echo(char **args);
+//-----------
+int				ft_export(t_env **env, char **args);
+int				is_valid_key(char *key);
+int				print_export(t_env *env);
+//-----------
+int				ft_env(t_env **tmp);
+void			inc_lvl(t_env **env);
 
 // -------- envirement Utils -----//
 
-char	**env_list_to_array(t_env **env);
-t_env	*creat_env(char **env);
-t_env	*new_env_node(char *key, char *value);
-void	env_add_back(t_env **env, t_env *new_node);
-char	*get_env(char *key, t_env *env);
+char			**env_list_to_array(t_env **env);
+t_env			*creat_env(char **env);
+t_env			*new_env_node(char *key, char *value);
+void			env_add_back(t_env **env, t_env *new_node);
+char			*get_env(char *key, t_env *env);
+int				env_count(t_env **env);
+t_env			**env_to_array(t_env *env);
 
-/*---------------------------------- execution cmds --------------------------------------*/
+/*------------- execution cmds -----------------*/
 
-int		run_builtin(t_cmd *cmd, t_env **env);
-int		is_builtin(char *cmd);
-char	*get_path(char *cmd, char **env);
-void	exe(t_cmd  *cmd_list, t_env **env);
-void	execute_pipe(t_cmd *cmd, t_env **env);
-int		is_pipe(t_cmd *cmd_list);
-void	handle_heredoc(t_cmd *cmd);
-void	run_heredoc(char *limiter, int	write_end, t_env **env);
-void	prepare_heredocs(t_cmd *cmd_list, t_env **env);
-
-
-//-----------------files descriptors---------//
-
-void	redirect_in(char *filename);
-void	redirect_out(t_cmd *cmd);
-void	x_pipe(int pipefd[2]);
-void	x_dup2(int fd, int target_fd);
-
-/*---------------------------------- cleaning --------------------------------------*/
-
-void	free_env(t_env *env);
-void	free_cmd(t_cmd *cmd);
-void 	free_args(char **args);
-void	free_tokens(t_token *tok);
-
+int				run_builtin(t_cmd *cmd, t_env **env);
+int				is_builtin(char *cmd);
+char			*get_path(char *cmd, char **env);
+void			exe(t_cmd *cmd_list, t_env **env);
+void			execute_pipe(t_cmd *cmd, t_env **env);
+int				is_pipe(t_cmd *cmd_list);
+void			handle_heredoc(t_cmd *cmd);
+void			run_heredoc(char *limiter, int write_end, t_env **env);
+void			prepare_heredocs(t_cmd *cmd_list, t_env **env);
+//-----------------files descriptors---------/
+void			redirect_in(char *filename);
+void			redirect_out(t_cmd *cmd);
+void			x_pipe(int pipefd[2]);
+void			x_dup2(int fd, int target_fd);
+/*------- cleaning -----------*/
+void			free_env(t_env *env);
+void			free_cmd(t_cmd *cmd);
+void			free_args(char **args);
+void			free_tokens(t_token *tok);
 #endif

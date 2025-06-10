@@ -6,14 +6,13 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 10:15:36 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:42:20 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../include/minishell.h"
 
-int run_cd(char *path)
+int	run_cd(char *path)
 {
 	if (chdir(path) == -1)
 	{
@@ -32,7 +31,7 @@ void	update_pwd(t_env **env)
 	char	cwd[1024];
 
 	tmp = *env;
-	while(tmp)
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, "PWD"))
 		{
@@ -43,6 +42,7 @@ void	update_pwd(t_env **env)
 		tmp = tmp->next;
 	}
 }
+
 void	update_oldpwd(t_env **env, char *oldpwd)
 {
 	t_env	*tmp;
@@ -50,17 +50,17 @@ void	update_oldpwd(t_env **env, char *oldpwd)
 
 	found = 0;
 	tmp = *env;
-	while(tmp)
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, "OLDPWD"))
 		{
 			free(tmp->value);
 			tmp->value = ft_strdup(oldpwd);
 			found = 1;
-			break;
+			break ;
 		}
 		if (!tmp->next)
-			break;
+			break ;
 		tmp = tmp->next;
 	}
 	if (!found)

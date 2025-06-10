@@ -6,20 +6,20 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:03:46 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/25 12:59:52 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:35:33 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int env_count(t_env **env)
+int	env_count(t_env **env)
 {
 	int		count;
 	t_env	*tmp;
 
-	tmp = *env;	
+	tmp = *env;
 	count = 0;
-	while(tmp)
+	while (tmp)
 	{
 		count++;
 		tmp = tmp->next;
@@ -27,13 +27,14 @@ int env_count(t_env **env)
 	return (count);
 }
 
-
 char	*ft_strjoin_free(char *s1, const char *s2)
 {
 	char	*joined;
-	size_t	len1 = ft_strlen(s1);
-	size_t	len2 = ft_strlen(s2);
+	size_t	len1;
+	size_t	len2;
 
+	len1 = ft_strlen(s1);
+	len2 = ft_strlen(s2);
 	joined = malloc(len1 + len2 + 1);
 	if (!joined)
 	{

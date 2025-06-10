@@ -6,11 +6,12 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/19 09:54:37 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 16:05:30 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
+
 
 void	run_heredoc(char *limiter, int	w_end, t_env **env)
 {
@@ -18,17 +19,19 @@ void	run_heredoc(char *limiter, int	w_end, t_env **env)
 
 	while(1)
 	{
-		line = readline("> ");
+		ft_putstr_fd("> ", 1);
+		line = get_next_line(0);
 		line = expand_variable(line, *env);
-		if (!line || !ft_strcmp(line, limiter))
+		if (!line || (!ft_strncmp(line, limiter, ft_strlen(limiter))
+			&& ft_strlen(line) == ft_strlen(limiter) + 1))
 		{
 			free(line);
 			break;
 		}
 		write(w_end, line, ft_strlen(line));
-		write(w_end, "\n", 1);
 		free(line);
 	}
+	close(w_end);
 }
 
 void	prepare_heredocs(t_cmd *cmd_list, t_env **env)
@@ -36,6 +39,7 @@ void	prepare_heredocs(t_cmd *cmd_list, t_env **env)
 	t_cmd	*cmd;
 	pid_t	pid;
 	int		here_pipe[2];
+	int		stat;
 
 	cmd = cmd_list;
 	while (cmd)

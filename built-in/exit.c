@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:05:36 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 10:24:42 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:38:52 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	is_number(char *s)
 		return (0);
 	if (s[0] == '-' || s[0] == '+')
 		i++;
-	while(s[i])
+	while (s[i])
 	{
 		if (!ft_isdigit(s[i]))
 			return (0);

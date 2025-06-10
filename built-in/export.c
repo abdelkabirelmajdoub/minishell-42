@@ -6,51 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/10 10:28:56 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 11:37:23 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-
 #include "../include/minishell.h"
-
-int	is_valid_key(char *key)
-{
-	int	i = 0;
-
-	if (!key || !(ft_isalpha(key[0]) || key[0] == '_'))
-		return (0);
-	while (key[i])
-	{
-		if (!(ft_isalnum(key[i]) || key[i] == '_'))
-			return (0);
-		i++;
-	}
-	return (1);
-}
-
-void	sort_env_array(t_env **arr)
-{
-	int		i;
-	int		j;
-	t_env	*tmp;
-
-	i = 0;
-	while(arr[i])
-	{
-		j = i + 1;
-		while(arr[j])
-		{
-			if (ft_strcmp(arr[i]->key, arr[j]->key) > 0)
-			{
-				tmp = arr[i];
-				arr[i] = arr[j];
-				arr[j] = tmp;
-			}
-			j++;
-		}
-		i++;
-	}
-}
 
 void	update_env(t_env **env, char *key, char *value)
 {
@@ -69,7 +29,7 @@ void	update_env(t_env **env, char *key, char *value)
 			else
 				cur->value = NULL;
 			free(key);
-			return;
+			return ;
 		}
 		cur = cur->next;
 	}
@@ -81,63 +41,13 @@ void	update_env(t_env **env, char *key, char *value)
 	env_add_back(env, new);
 }
 
-int	env_size(t_env *env)
-{
-	int count = 0;
-	while (env)
-	{
-		count++;
-		env = env->next;
-	}
-	return count;
-}
-
-t_env	**env_to_array(t_env *env)
-{
-	int		size;
-	int		i = 0;
-	t_env	**array;
-
-	size = env_size(env);
-	array = malloc(sizeof(t_env *) * (size + 1));
-	if (!array)
-		return (NULL);
-	while (env)
-	{
-		array[i++] = env;
-		env = env->next;
-	}
-	array[i] = NULL;
-	return (array);
-}
-
-int	print_export(t_env *env)
-{
-	t_env	**arr;
-	int		i;
-
-	arr = env_to_array(env);
-	sort_env_array(arr);
-	i = 0;
-	while (arr[i])
-	{
-		if (arr[i]->value)
-			printf("declare -x %s=\"%s\"\n", arr[i]->key, arr[i]->value);
-		else
-			printf("declare -x %s\n", arr[i]->key);
-		i++;
-	}
-	free(arr);
-	return (0);
-}
-
 void	append_env(t_env **env, char *key, char *value)
 {
 	t_env	*tmp;
 	char	*val_tmp;
 
 	tmp = *env;
-	while(tmp)
+	while (tmp)
 	{
 		if (!ft_strcmp(tmp->key, key))
 		{
@@ -155,14 +65,55 @@ void	append_env(t_env **env, char *key, char *value)
 	update_env(env, key, value);
 }
 
+int	export_assign(t_env **env, t_export_data *data)
+{
+	if (!is_valid_key(data->key))
+	{
+		ft_putstr_fd("minishell: export: `", 2);
+		ft_putstr_fd(data->_arg, 2);
+		ft_putstr_fd("': not a valid identifier\n", 2);
+		free(data->key);
+		free(data->value);
+		return (1);
+	}
+	if (data->append)
+		append_env(env, data->key, data->value);
+	else
+		update_env(env, data->key, data->value);
+	free(data->value);
+	return (0);
+}
+
+int	process_export_arg(t_env **env, char *arg)
+{
+	t_export_data	data;
+	char			*eq;
+
+	data.append = 0;
+	eq = ft_strchr(arg, '=');
+	data._arg = arg;
+	if (eq && eq != arg && *(eq - 1) == '+')
+		data.append = 1;
+	if (eq)
+	{
+		if (data.append)
+			data.key = ft_strndup(arg, (eq - arg) - 1);
+		else
+			data.key = ft_strndup(arg, eq - arg);
+		data.value = ft_strdup(eq + 1);
+	}
+	else
+	{
+		data.key = ft_strdup(arg);
+		data.value = NULL;
+	}
+	return (export_assign(env, &data));
+}
+
 int	ft_export(t_env **env, char **args)
 {
-	int		i;
-	char	*key;
-	char	*value;
-	char	*eq;
-	int		append;
-	int		flag;
+	int	i;
+	int	flag;
 
 	if (!args[1])
 		return (print_export(*env));
@@ -170,39 +121,8 @@ int	ft_export(t_env **env, char **args)
 	flag = 0;
 	while (args[i])
 	{
-		eq = ft_strchr(args[i], '=');
-		append = 0;
-		if (eq && eq != args[i] && *(eq - 1) == '+')
-		    append = 1;
-		if (eq)
-		{
-			if (append)
-   				key = ft_strndup(args[i], (eq - args[i]) - 1);
-			else
-    			key = ft_strndup(args[i], eq - args[i]);
-			value = ft_strdup(eq + 1);
-		}
-		else
-		{
-			key = ft_strdup(args[i]);
-			value = NULL;
-		}
-		if (!is_valid_key(key))
-		{
-			ft_putstr_fd("minishell: export: `", 2);
-			ft_putstr_fd(args[i], 2);
-			ft_putstr_fd("': not a valid identifier\n", 2);
-			free(key);
-			free(value);
+		if (process_export_arg(env, args[i]))
 			flag = 1;
-			i++;
-			continue;
-		}
-		if (append)
-			append_env(env, key, value);
-		else
-			update_env(env, key, value);
-		free(value);
 		i++;
 	}
 	return (flag);
