@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 12:05:36 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/02 14:44:54 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 10:24:42 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,19 @@ int	is_number(char *s)
 	return (1);
 }
 
+void	first_arg(char *trimmed, char **args)
+{
+	if (!is_number(trimmed) || trimmed[0] == '\0')
+	{
+		ft_putstr_fd("exit\n", 2);
+		ft_putstr_fd("minishell: exit: ", 2);
+		ft_putstr_fd(args[1], 2);
+		ft_putstr_fd(": numeric argument required\n", 2);
+		free(trimmed);
+		exit(255);
+	}
+}
+
 int	ft_exit(char **args, t_env **env)
 {
 	int		exit_code;
@@ -41,15 +54,7 @@ int	ft_exit(char **args, t_env **env)
 	if (args[1])
 	{
 		trimmed = ft_strtrim(args[1], " ");
-		if (!is_number(trimmed) || trimmed[0] == '\0')
-		{
-			ft_putstr_fd("exit\n", 2);
-			ft_putstr_fd("minishell: exit: ", 2);
-			ft_putstr_fd(args[1], 2);
-			ft_putstr_fd(": numeric argument required\n", 2);
-			free(trimmed);
-			exit(255);
-		}
+		first_arg(trimmed, args);
 		if (args[2])
 		{
 			ft_putstr_fd("exit\n", 2);

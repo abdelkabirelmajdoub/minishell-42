@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/28 10:32:36 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 10:20:37 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,14 @@ void	empty_env(t_env **env)
 	new->next = new_env_node("_", ft_strdup("/usr/bin/env"));
 }
 
+void	hight_lvl(int *lvl)
+{
+	ft_putstr_fd("minishell: warning: shell level (", 2);
+	ft_putnbr_fd(*lvl, 2);
+	ft_putstr_fd(") too high, resetting to 1\n", 2);
+	*lvl = 1;
+}
+
 void	inc_lvl(t_env **env)
 {
 	t_env	*curr;
@@ -47,12 +55,7 @@ void	inc_lvl(t_env **env)
 		return (empty_env(env));
 	lvl = ft_atoi(curr->value) + 1;
 	if (lvl > 1000)
-	{
-		ft_putstr_fd("minishell: warning: shell level (", 2);
-		ft_putnbr_fd(lvl, 2);
-		ft_putstr_fd(") too high, resetting to 1\n", 2);
-		lvl = 1;
-	}
+		hight_lvl(&lvl);
 	else if (lvl < 0)
 		lvl = 0;
 	new = ft_itoa(lvl);

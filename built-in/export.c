@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/27 10:40:48 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 10:28:56 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,6 @@ void	update_env(t_env **env, char *key, char *value)
 	char	*dup_value;
 
 	cur = *env;
-	
 	while (cur)
 	{
 		if (ft_strcmp(cur->key, key) == 0)

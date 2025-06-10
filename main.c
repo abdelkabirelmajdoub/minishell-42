@@ -56,14 +56,14 @@ void	process(t_env *envp)
 		}
 		if (input)
 			add_history(input);
-		tokens = tokenize(input, envp);
-		handle_quotes(tokens);
-		expend_token(tokens, envp);
 		if (!unclosed_quotes(input))
 		{
 			free(input);
 			continue;
 		}
+		tokens = tokenize(input, envp);
+		handle_quotes(tokens);
+		expend_token(tokens, envp);
 		if (!handle_syn(input, tokens))
 		{
 			free_tokens(tokens);

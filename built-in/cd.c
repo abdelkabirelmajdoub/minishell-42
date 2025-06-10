@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/01 12:22:05 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/10 10:15:36 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,12 @@ void	update_oldpwd(t_env **env, char *oldpwd)
 		env_add_back(env, new_env_node("OLDPWD", oldpwd));
 }
 
+void	updated_env(t_env **env, char *oldpwd)
+{
+	update_oldpwd(env, oldpwd);
+	update_pwd(env);
+}
+
 int	ft_cd(char **args, t_env **env)
 {
 	int		flag;
@@ -91,9 +97,6 @@ int	ft_cd(char **args, t_env **env)
 		flag = run_cd(home);
 	}
 	if (!flag)
-	{
-		update_oldpwd(env, oldpwd);
-		update_pwd(env);
-	}
+		updated_env(env, oldpwd);
 	return (flag);
 }
