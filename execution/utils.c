@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:34:39 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/13 09:59:31 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 16:19:13 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ char	*get_path(char *cmd, char **env)
 	int		i;
 
 	secure_paths = ft_split(my_getenv("PATH", env), ':');
+	if (!secure_paths || !*secure_paths)
+		return (cmd);
 	i = 0;
 	while (secure_paths[i])
 	{
@@ -51,10 +53,7 @@ char	*get_path(char *cmd, char **env)
 		exec = ft_strjoin(path_part, cmd);
 		free(path_part);
 		if (access(exec, F_OK | X_OK) == 0)
-		{
-			free_args(secure_paths);
-			return (exec);
-		}
+			return (free_args(secure_paths), exec);
 		free(exec);
 		i++;
 	}
