@@ -1,107 +1,88 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/06/11 13:48:19 by ael-majd          #+#    #+#             */
+/*   Updated: 2025/06/11 15:10:16 by ael-majd         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "include/minishell.h"
 
-void	set_terminal_echoctl(void)
+void	prompt(char **input, t_env *envp)
 {
-	struct termios	term;
-
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~ECHOCTL;
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
-}
-void	handle_signals(int sig)
-{
-	if (sig == SIGINT)
+	set_signals();
+	*input = readline("\033[36mmini\033[31mshell$ \033[0m");
+	if (!*input)
 	{
-		write(1, "\n", 1);
-		rl_on_new_line();
-		rl_replace_line("", 0);
-		rl_redisplay();
+		if (isatty(STDIN_FILENO))
+			write(2, "exit\n", 6);
+		exit(envp->exit_status);
 	}
-	else if (sig == SIGQUIT)
-		return ;
+	if (*input)
+		add_history(*input);
 }
 
-void	setup_signals(void)
+int	q_input(char *input)
 {
-	set_terminal_echoctl();
-	signal(SIGINT, handle_signals);
-	signal(SIGQUIT, handle_signals);
-}
-
-
-int	unclosed_quotes(const char *input)
-{
-	int		i;
-	char	quote;
-
-	i = 0;
-	quote = 0;
-	while (input[i])
+	if (!unclosed_quotes(input))
 	{
-		if ((input[i] == '\'' || input[i] == '"') && quote == 0)
-			quote = input[i];
-		else if (input[i] == quote)
-			quote = 0;
-		i++;
-	}
-	if (quote != 0)
-	{
-		ft_putstr_fd("syntax error: unclosed quote\n", 2);
+		free(input);
 		return (0);
 	}
+	return (1);
+}
+
+int	parsing_execution(char *input, t_env **envp)
+{
+	t_token	*tokens;
+	t_cmd	*cmds;
+
+	tokens = tokenize(input, *envp);
+	handle_quotes(tokens);
+	expend_token(tokens, *envp);
+	if (!handle_syn(input, tokens))
+	{
+		free_tokens(tokens);
+		free(input);
+		return (0);
+	}
+	cmds = pars_token(tokens);
+	if (!cmds)
+	{
+		free(input);
+		return (0);
+	}
+	free_tokens(tokens);
+	exe(cmds, envp);
+	free_cmd(cmds);
+	free(input);
 	return (1);
 }
 
 void	process(t_env *envp)
 {
 	char	*input;
-	t_token	*tokens;
-	t_cmd	*cmds;
 
 	while (1)
 	{
-		setup_signals();
-		input = readline("\033[36mmini\033[31mshell$ \033[0m");
-		if (!input)
-		{
-		    if (isatty(STDIN_FILENO))
-				write(2, "exit\n", 6);
-		    exit (envp->exit_status);
-		}
-		if (input)
-			add_history(input);
-		if (!unclosed_quotes(input))
-		{
-			free(input);
-			continue;
-		}
-		tokens = tokenize(input, envp);
-		handle_quotes(tokens);
-		expend_token(tokens, envp);
-		if (!handle_syn(input, tokens))
-		{
-			free_tokens(tokens);
-			free(input);
-			continue;
-		}
-		cmds = pars_token(tokens);
-		if (!cmds)
-		{
-			free(input);
-			continue;
-		}
-		free_tokens(tokens);
-		exe(cmds, &envp);
-		free_cmd(cmds);
-		free(input);
+		prompt(&input, envp);
+		if (!q_input(input))
+			continue ;
+		if (!parsing_execution(input, &envp))
+			continue ;
 	}
 }
+
 int	main(int ac, char **av, char **env)
 {
 	t_env	*envp;
 
 	envp = creat_env(env);
-	inc_lvl(&envp);	
+	inc_lvl(&envp);
 	process(envp);
 	clear_history();
 	(void)ac;

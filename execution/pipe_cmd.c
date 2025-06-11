@@ -6,12 +6,20 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/11 12:59:37 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:51:30 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
+void	cmd_nfound(char **args, char *path)
+{
+	ft_putstr_fd("minishell: ", 2);
+	ft_putstr_fd(args[0], 2);
+	ft_putstr_fd(": command not found\n", 2);
+	free(path);
+	exit(127);
+}
 
 void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 {
@@ -38,11 +46,7 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 		exit(run_builtin(cmd, env));
 	else
 		execve(path, cmd->args, exec->envp);
-	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(cmd->args[0], 2);
-	ft_putstr_fd(": command not found\n", 2);
-	free(path);
-	exit(127);	
+	cmd_nfound(cmd->args, path);
 }
 
 void	close_wait(t_env **env, t_exe_pipe *exec)
@@ -61,6 +65,20 @@ void	close_wait(t_env **env, t_exe_pipe *exec)
 		(*env)->exit_status = 128 + WTERMSIG(exec->status);
 }
 
+void	run_cmds(t_cmd *cmd, t_exe_pipe *exec, t_env **env)
+{
+	if (!exec->pid)
+		child(cmd, env, exec);
+	if (exec->prev_fd != -1)
+		close(exec->prev_fd);
+	close(exec->pipefd[1]);
+	exec->prev_fd = exec->pipefd[0];
+	if (cmd == exec->last_cmd)
+		exec->last_pid = exec->pid;
+	if (cmd->heredoc_fd > 0)
+		close(cmd->heredoc_fd);
+}
+
 void	execute_pipe(t_cmd *cmd, t_env **env)
 {
 	t_exe_pipe	exec;
@@ -68,26 +86,16 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 	exec.envp = env_list_to_array(env);
 	exec.prev_fd = -1;
 	exec.last_cmd = cmd;
-	while(exec.last_cmd->next)
+	while (exec.last_cmd->next)
 		exec.last_cmd = exec.last_cmd->next;
-	while(cmd)
+	while (cmd)
 	{
 		x_pipe(exec.pipefd);
 		exec.pid = fork();
 		if (exec.pid < 0)
 			return (perror("fork error"));
-		if (!exec.pid)
-			child(cmd, env, &exec);
-		if (exec.prev_fd != -1)
-			close(exec.prev_fd);
-		close(exec.pipefd[1]);
-		exec.prev_fd = exec.pipefd[0];
-		if (cmd == exec.last_cmd)
-			exec.last_pid = exec.pid;
-		if (cmd->heredoc_fd > 0)
-			close(cmd->heredoc_fd);
+		run_cmds(cmd, &exec, env);
 		cmd = cmd->next;
 	}
 	close_wait(env, &exec);
 }
- 

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:54:10 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/05/21 08:35:51 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:53:38 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	x_pipe(int pipefd[2])
 	{
 		perror("pipe");
 		exit(1);
-	} 
+	}
 }
 
 void	redirect_in(char *filename)
@@ -52,7 +52,7 @@ void	redirect_out(t_cmd	*cmd)
 	int	fd;
 
 	i = -1;
-	while(cmd->out_file[++i])
+	while (cmd->out_file[++i])
 	{
 		if (cmd->append)
 			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_APPEND, 0777);
@@ -67,4 +67,29 @@ void	redirect_out(t_cmd	*cmd)
 			x_dup2(fd, STDOUT_FILENO);
 		close(fd);
 	}
+}
+
+int	out_exist(t_cmd *cmd)
+{
+	int	i;
+	int	fd;
+
+	i = -1;
+	while (cmd->out_file[++i])
+	{
+		if (cmd->append)
+			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_APPEND, 0777);
+		else
+			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_TRUNC, 0777);
+		if (fd < 0)
+		{
+			perror("outfile error");
+			return (0);
+		}
+		if (cmd->out_file[i + 1] == NULL)
+			if (dup2(fd, STDOUT_FILENO) == -1)
+				return (0);
+		close(fd);
+	}
+	return (1);
 }

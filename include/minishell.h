@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/11 13:14:08 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 14:53:01 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,9 +99,11 @@ void			handle_quotes(t_token *tokens);
 void			handle_word(char *input, int *i, t_token **head, t_env *env);
 void			handle_operator(char *input, int *i, t_token **head);
 void			clean_empty_tokens(t_token **tokens);
+int				unclosed_quotes(const char *input);
 /*--------- BUILT-in cmds -------------*/
 int				ft_unset(char *var, t_env **my_env);
 int				ft_cd(char **args, t_env **env);
+int				out_exist(t_cmd *cmd);
 int				ft_pwd(void);
 int				ft_exit(char **args, t_env **env);
 int				ft_echo(char **args);
@@ -144,6 +146,7 @@ void			free_env(t_env *env);
 void			free_cmd(t_cmd *cmd);
 void			free_args(char **args);
 void			free_tokens(t_token *tok);
-void			setup_signals(void);
+/*------- signals -----------*/
+void			set_signals(void);
 void			set_terminal_echoctl(void);
 #endif
