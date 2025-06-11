@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:20:52 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/02 12:12:44 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:02:30 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,9 @@ int	handle_syn_helper(t_token *cpy_tok)
 		else if (cpy_tok->type == PIPE)
 		{
 			if (cpy_tok->next == NULL)
-				return (ft_putstr_fd("syntax error near unexpected token \n", 2), 0);
+				return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2), 0);
+			if (cpy_tok->next->type == PIPE)
+				return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2), 0);
 		}
 		cpy_tok = cpy_tok->next;
 	}
@@ -45,7 +47,5 @@ int	handle_syn(char *input, t_token *tok)
 		return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2), 0);
 	if (handle_syn_helper(cpy_tok) == 0)
 		return (0);
-	else
-		return (1);
 	return (1);
 }
