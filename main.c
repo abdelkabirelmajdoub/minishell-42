@@ -1,18 +1,33 @@
 #include "include/minishell.h"
 
-void	handle_sigint_prompt(int sig)
+void	set_terminal_echoctl(void)
 {
-	(void)sig;
-	write(1, "\n", 1);
-	rl_replace_line("", 0);
-	rl_on_new_line();
+	struct termios	term;
+
+	tcgetattr(STDIN_FILENO, &term);
+	term.c_lflag &= ~ECHOCTL;
+	tcsetattr(STDIN_FILENO, TCSANOW, &term);
+}
+void	handle_signals(int sig)
+{
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		rl_on_new_line();
+		rl_replace_line("", 0);
+		rl_redisplay();
+	}
+	else if (sig == SIGQUIT)
+		return ;
 }
 
-void	set_signal_prompt(void)
+void	setup_signals(void)
 {
-	signal(SIGINT, handle_sigint_prompt);
-	signal(SIGQUIT, SIG_IGN);
+	set_terminal_echoctl();
+	signal(SIGINT, handle_signals);
+	signal(SIGQUIT, handle_signals);
 }
+
 
 int	unclosed_quotes(const char *input)
 {
@@ -37,7 +52,6 @@ int	unclosed_quotes(const char *input)
 	return (1);
 }
 
-
 void	process(t_env *envp)
 {
 	char	*input;
@@ -46,12 +60,12 @@ void	process(t_env *envp)
 
 	while (1)
 	{
-		set_signal_prompt();
+		setup_signals();
 		input = readline("\033[36mmini\033[31mshell$ \033[0m");
 		if (!input)
 		{
 		    if (isatty(STDIN_FILENO))
-			write(2, "exit\n", 6);
+				write(2, "exit\n", 6);
 		    exit (envp->exit_status);
 		}
 		if (input)

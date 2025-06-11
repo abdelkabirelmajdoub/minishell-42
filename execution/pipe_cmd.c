@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 15:19:24 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 12:59:37 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,8 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 {
 	char	*path;
 
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_DFL);
 	if (cmd->limiter)
 		x_dup2(cmd->heredoc_fd, STDIN_FILENO);
 	else if (cmd->infile)
@@ -48,6 +50,8 @@ void	close_wait(t_env **env, t_exe_pipe *exec)
 	close(exec->pipefd[0]);
 	close(exec->pipefd[1]);
 	free_args(exec->envp);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	waitpid(exec->last_pid, &exec->status, 0);
 	while (wait(NULL) > 0)
 		;
@@ -80,7 +84,8 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 		exec.prev_fd = exec.pipefd[0];
 		if (cmd == exec.last_cmd)
 			exec.last_pid = exec.pid;
-		close(cmd->heredoc_fd);
+		if (cmd->heredoc_fd > 0)
+			close(cmd->heredoc_fd);
 		cmd = cmd->next;
 	}
 	close_wait(env, &exec);

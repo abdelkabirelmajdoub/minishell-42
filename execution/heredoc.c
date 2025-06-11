@@ -6,12 +6,11 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 16:05:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:10:01 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
-
 
 void	run_heredoc(char *limiter, int	w_end, t_env **env)
 {
@@ -19,22 +18,35 @@ void	run_heredoc(char *limiter, int	w_end, t_env **env)
 
 	while(1)
 	{
-		ft_putstr_fd("> ", 1);
-		line = get_next_line(0);
+		line = readline("> ");
 		line = expand_variable(line, *env);
-		if (!line || (!ft_strncmp(line, limiter, ft_strlen(limiter))
-			&& ft_strlen(line) == ft_strlen(limiter) + 1))
+		if (!line || !ft_strcmp(line, limiter))
 		{
 			free(line);
 			break;
 		}
 		write(w_end, line, ft_strlen(line));
+		write(w_end, "\n", 1);
 		free(line);
 	}
-	close(w_end);
 }
 
-void	prepare_heredocs(t_cmd *cmd_list, t_env **env)
+void	heredoc_sig(int sig)
+{
+	if (sig == SIGINT)
+	{
+		write(1, "\n", 1);
+		exit(1);
+	}
+	else if (sig == SIGQUIT)
+		return ;
+}
+void	set_heredoc()
+{
+	signal(SIGINT, heredoc_sig);
+	signal(SIGQUIT, heredoc_sig);
+}
+int	prepare_heredocs(t_cmd *cmd_list, t_env **env)
 {
 	t_cmd	*cmd;
 	pid_t	pid;
@@ -42,6 +54,9 @@ void	prepare_heredocs(t_cmd *cmd_list, t_env **env)
 	int		stat;
 
 	cmd = cmd_list;
+	cmd->heredoc_fd = -1;
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	while (cmd)
 	{
 		if (cmd->limiter)
@@ -50,6 +65,7 @@ void	prepare_heredocs(t_cmd *cmd_list, t_env **env)
 			pid = fork();
 			if (pid == 0)
 			{
+				set_heredoc();
 				close(here_pipe[0]);
 				run_heredoc(cmd->limiter, here_pipe[1], env);
 				close(here_pipe[1]);
@@ -57,8 +73,21 @@ void	prepare_heredocs(t_cmd *cmd_list, t_env **env)
 			}
 			close(here_pipe[1]);
 			cmd->heredoc_fd = here_pipe[0];
-			waitpid(pid, NULL, 0);
+			waitpid(pid, &stat, 0);
+			if (WIFEXITED(stat) && WEXITSTATUS(stat) == 1)
+			{
+				close(here_pipe[0]);
+				while (cmd)
+				{
+					if (cmd->limiter)
+						cmd->heredoc_fd = open("/dev/null", O_RDONLY);
+					cmd = cmd->next;
+				}
+				(*env)->exit_status = 1;
+				return (1);
+			}
 		}
 		cmd = cmd->next;
 	}
+	return (0);
 }

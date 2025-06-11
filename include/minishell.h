@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 15:52:12 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:14:08 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,7 @@
 # include <stdlib.h>
 # include <fcntl.h>
 # include <signal.h>
-# include <sys/ioctl.h>
-# include "gnl/gnl.h"
+# include <termios.h>
 /*--------------------------- Structs----------------------*/
 typedef struct s_env
 {
@@ -134,7 +133,7 @@ void			execute_pipe(t_cmd *cmd, t_env **env);
 int				is_pipe(t_cmd *cmd_list);
 void			handle_heredoc(t_cmd *cmd);
 void			run_heredoc(char *limiter, int write_end, t_env **env);
-void			prepare_heredocs(t_cmd *cmd_list, t_env **env);
+int				prepare_heredocs(t_cmd *cmd_list, t_env **env);
 //-----------------files descriptors---------/
 void			redirect_in(char *filename);
 void			redirect_out(t_cmd *cmd);
@@ -145,4 +144,6 @@ void			free_env(t_env *env);
 void			free_cmd(t_cmd *cmd);
 void			free_args(char **args);
 void			free_tokens(t_token *tok);
+void			setup_signals(void);
+void			set_terminal_echoctl(void);
 #endif

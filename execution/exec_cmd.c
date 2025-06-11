@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 14:43:39 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 13:10:14 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,10 +41,7 @@ int	exist_infile(char *filename)
 	fd = open(filename, O_RDONLY, 0777);
 	if (fd < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
-		ft_putstr_fd(filename, 2);
-		ft_putstr_fd(": ", 2);
-		perror("");
+		perror("infile error");
 		return (0);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
@@ -67,10 +64,7 @@ int out_exist(t_cmd *cmd)
 			fd = open(cmd->out_file[i], O_RDWR | O_CREAT | O_TRUNC, 0777);
 		if (fd < 0)
 		{
-			ft_putstr_fd("minishell: ", 2);
-			ft_putstr_fd(cmd->out_file[i], 2);
-			ft_putstr_fd(": ", 2);
-			perror("");
+			perror("outfile error");
 			return (0);
 		}
 		if (cmd->out_file[i + 1] == NULL)
@@ -113,8 +107,8 @@ void	execute_one(t_cmd *cmd, t_env **env)
 	pid = fork();
 	if (!pid)
 		child_proc(cmd, envp);
-	close(cmd->heredoc_fd);
 	free_args(envp);
+	close(cmd->heredoc_fd);
 	waitpid(pid, &status, 0);
 	if (WIFEXITED(status))
 		(*env)->exit_status = WEXITSTATUS(status);
@@ -124,7 +118,9 @@ void	execute_one(t_cmd *cmd, t_env **env)
 
 void exe(t_cmd  *cmd_list, t_env **env)
 {
-	prepare_heredocs(cmd_list, env);
+	if (prepare_heredocs(cmd_list, env))
+		return ;
+	setup_signals();
 	if (is_pipe(cmd_list))
 		execute_pipe(cmd_list, env);
 	else
