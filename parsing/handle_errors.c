@@ -6,18 +6,17 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:20:52 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/11 17:02:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/11 17:09:38 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-int	handle_syn_helper(t_token *cpy_tok)
+int handle_syn_helper(t_token *cpy_tok)
 {
 	while (cpy_tok)
 	{
-		if ((cpy_tok->type == REDIR_APPEND || cpy_tok->type == REDIR_HEREDOC
-				|| cpy_tok->type == REDIR_IN || cpy_tok->type == REDIR_OUT)) 
+		if ((cpy_tok->type == REDIR_APPEND || cpy_tok->type == REDIR_HEREDOC || cpy_tok->type == REDIR_IN || cpy_tok->type == REDIR_OUT))
 		{
 			if (cpy_tok->next == NULL || cpy_tok->next->type != WORD)
 				return (ft_putstr_fd("syntax error near unexpected token `newline'\n", 2), 0);
@@ -34,10 +33,10 @@ int	handle_syn_helper(t_token *cpy_tok)
 	return (1);
 }
 
-int	handle_syn(char *input, t_token *tok)
+int handle_syn(char *input, t_token *tok)
 {
-	int		i;
-	t_token	*cpy_tok;
+	int i;
+	t_token *cpy_tok;
 
 	cpy_tok = tok;
 	i = 0;

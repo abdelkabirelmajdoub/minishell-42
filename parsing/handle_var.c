@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/05 11:32:11 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/10 17:56:10 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/12 10:29:04 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,7 +180,7 @@ void	expend_token(t_token *tokens, t_env *env)
 	}
 }
 
-void	handle_quotes(t_token *tokens)//my change
+void	handle_quotes(t_token *tokens)
 {
 	t_token	*tok;
 	char	*new_value;

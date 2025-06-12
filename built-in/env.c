@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 11:05:40 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 11:39:52 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/12 13:18:28 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,14 @@ void	empty_env(t_env **env)
 		return ;
 	if (!getcwd(cwd, sizeof(cwd)))
 		return ;
-	*env = new_env_node("PWD", ft_strdup(cwd));
+	*env = new_env_node("PWD", cwd);
 	if (!*env)
 		return ;
-	new = new_env_node("SHLVL", ft_strdup("1"));
+	new = new_env_node("SHLVL", "1");
 	if (!new)
 		return ;
 	(*env)->next = new;
-	new->next = new_env_node("_", ft_strdup("/usr/bin/env"));
+	new->next = new_env_node("_", "/usr/bin/env");
 }
 
 void	hight_lvl(int *lvl)
