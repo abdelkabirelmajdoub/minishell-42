@@ -1,7 +1,9 @@
 CC      = cc
 CFLAGS  = -Wall -Wextra -Werror
-SRC     = parsing/tokenize.c parsing/tokenize_utils.c parsing/tokenize_pars.c  \
-          parsing/handle_errors.c parsing/handle_var.c \
+SRC     = parsing/tokenize1.c parsing/tokenize_utils.c parsing/tokenize_pars.c \
+		  parsing/tokenize_pars2.c parsing/tokenize2.c parsing/tokenize3.c parsing/tokenize4.c \
+          parsing/handle_errors.c parsing/handle_var1.c parsing/handle_var2.c\
+		  parsing/handle_var3.c parsing/handle_var4.c \
           execution/exec_cmd.c execution/utils.c execution/heredoc.c \
 		  execution/io_file.c execution/pipe_cmd.c \
           built-in/env.c built-in/cd.c built-in/unset.c \

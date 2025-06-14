@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:48:19 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/11 15:10:16 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/14 12:35:54 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,11 +26,12 @@ void	prompt(char **input, t_env *envp)
 		add_history(*input);
 }
 
-int	q_input(char *input)
+int	q_input(char *input, t_env **env)
 {
 	if (!unclosed_quotes(input))
 	{
 		free(input);
+		(*env)->exit_status = 258;
 		return (0);
 	}
 	return (1);
@@ -44,7 +45,7 @@ int	parsing_execution(char *input, t_env **envp)
 	tokens = tokenize(input, *envp);
 	handle_quotes(tokens);
 	expend_token(tokens, *envp);
-	if (!handle_syn(input, tokens))
+	if (!handle_syn(input, tokens, envp))
 	{
 		free_tokens(tokens);
 		free(input);
@@ -70,7 +71,7 @@ void	process(t_env *envp)
 	while (1)
 	{
 		prompt(&input, envp);
-		if (!q_input(input))
+		if (!q_input(input, &envp))
 			continue ;
 		if (!parsing_execution(input, &envp))
 			continue ;

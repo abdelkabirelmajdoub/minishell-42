@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/14 11:03:16 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/14 14:29:05 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ typedef struct s_env
 	char			*value;
 	struct s_env	*next;
 	int				exit_status;
+	char			buffer[1024];
+	int				j;
+	int				has_single;
+	int				has_double;
+	int				is_str_quoted;
 }					t_env;
 
 typedef enum s_token_type
@@ -87,9 +92,10 @@ t_token			*token_creation(char *value, t_token_type type);
 t_token			*tokenize(char *input, t_env *env);
 t_cmd			*pars_token(t_token	*tok);
 t_cmd			*pars_int(void);
+char			**args_allocation(void);
 int				init_cmd(t_cmd **cmd, char ***args);
-int				handle_syn(char *input, t_token *tok);
-int				handle_syn_helper(t_token *cpy_tok);
+int				handle_syn(char *input, t_token *tok, t_env **env);
+int				handle_syn_helper(t_token *cpy_tok, t_env **env);
 int				handle_quoted(char *input, int *i, t_token **head);
 char			*get_env(char *key, t_env *env);
 char			*expand_variable(char *value, t_env *env);
@@ -100,6 +106,34 @@ void			handle_word(char *input, int *i, t_token **head, t_env *env);
 void			handle_operator(char *input, int *i, t_token **head);
 void			clean_empty_tokens(t_token **tokens);
 int				unclosed_quotes(const char *input);
+int				handle_exit_status(t_env *env, int *i);
+int				handle_variable(char *value, t_env *env, 
+					char *var_name, int *i);
+void			copy_exit_status(t_env *env, char *result, int *j, int *i);
+int				extract_var_name(char *value, char *var_name, int *i);
+void			copy_var_value(char *var_value, char *result, int *j);
+char			*allocate_result(char *value, t_env *env);
+void			process_expansion(char *value, t_env *env, char *result);
+void			remove_token(t_token **tokens, t_token *current, t_token *prev);
+void			expand_word_token(t_token *tok, t_env *env);
+void			remove_quotes_from_token(t_token *tok);
+void			handle_exit_status2(char *input, int *i, t_env *env);
+void			handle_variable_expansion(char *input, int *i, t_env *env);
+void			handle_dollar_sign(char *input, int *i, t_env *env);
+int				is_word_delimiter(char c);
+int				extract_quoted_content(char *input, int *i, char *tmp);
+void			handle_single_quote_content(char *tmp, int k, t_env *env);
+void			handle_double_quote_content(char *tmp, t_env *env);
+void			process_quotes(char *input, int *i, t_env *env);
+void			process_word_content(char *input, int *i, t_env *env);
+void			init_word_vars(t_env *env);
+void			create_word_token(t_token **head, t_env *env);
+void			pars_helper2(t_token **tok, t_cmd *cmd, int *i);
+void			process_input_char(char *input, int *i, 
+					t_token **head, t_env *env);
+void			handle_c_quoting(char *input, int *i, char *buffer, int *j);
+int				expand_variable_helper(char *value, t_env *env, 
+					char *var_name, int t_len);
 /*--------- BUILT-in cmds -------------*/
 int				ft_unset(char *var, t_env **my_env);
 int				ft_cd(char **args, t_env **env);
