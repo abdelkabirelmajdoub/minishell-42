@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 11:42:20 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/14 11:24:50 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,10 @@ void	update_oldpwd(t_env **env, char *oldpwd)
 		if (!ft_strcmp(tmp->key, "OLDPWD"))
 		{
 			free(tmp->value);
-			tmp->value = ft_strdup(oldpwd);
+			if (!get_env("PWD", *env))
+				tmp->value = ft_strdup("");
+			else
+				tmp->value = ft_strdup(oldpwd);
 			found = 1;
 			break ;
 		}
