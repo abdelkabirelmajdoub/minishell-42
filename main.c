@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:48:19 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/15 13:25:22 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/15 13:39:58 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	prompt(char **input, t_env *envp)
 	}
 	if (*input)
 		add_history(*input);
-	if (exit_code == 1)
+	if (g_exit_code == 1)
 	{
 		envp->exit_status = 1;
 		g_exit_code = 0;
