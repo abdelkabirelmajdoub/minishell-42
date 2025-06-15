@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/11 14:51:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/15 13:22:14 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 		x_pipe(exec.pipefd);
 		exec.pid = fork();
 		if (exec.pid < 0)
-			return (perror("fork error"));
+			return (free_args(exec.envp), perror("fork error"));
 		run_cmds(cmd, &exec, env);
 		cmd = cmd->next;
 	}
