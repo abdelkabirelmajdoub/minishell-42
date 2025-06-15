@@ -6,13 +6,13 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:48:19 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/15 12:48:09 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/15 13:25:22 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "include/minishell.h"
 
-int	exit_code;
+int	g_exit_code;
 
 void	prompt(char **input, t_env *envp)
 {
@@ -29,7 +29,7 @@ void	prompt(char **input, t_env *envp)
 	if (exit_code == 1)
 	{
 		envp->exit_status = 1;
-		exit_code = 0;
+		g_exit_code = 0;
 	}
 }
 

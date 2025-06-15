@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/15 12:38:55 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/15 13:25:02 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # include <signal.h>
 # include <termios.h>
 /*--------------------------- Structs----------------------*/
-extern int	exit_code;
+extern int	g_exit_code;
 typedef struct s_env
 {
 	char			*key;

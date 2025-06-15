@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:48:32 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/15 12:38:28 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/15 13:25:46 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	handle_signals(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		exit_code = 1;
+		g_exit_code = 1;
 	}
 	else if (sig == SIGQUIT)
 		return ;
@@ -35,7 +35,7 @@ void	set_terminal_echoctl(void)
 	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 }
 
-void	set_signals()
+void	set_signals(void)
 {
 	set_terminal_echoctl();
 	signal(SIGINT, handle_signals);
