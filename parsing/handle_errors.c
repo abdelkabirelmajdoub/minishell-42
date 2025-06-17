@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   handle_errors.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:20:52 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/14 12:37:46 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/06/17 14:41:38 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,10 +30,10 @@ int	handle_syn_helper(t_token *cpy_tok, t_env **env)
 		{
 			if (cpy_tok->next == NULL)
 				return ((*env)->exit_status = 258, 
-					ft_putstr_fd("syntax error\n", 2), 0);
+					ft_putstr_fd(SYNTHAX_PIPE, 2), 0);
 			if (cpy_tok->next->type == PIPE)
 				return ((*env)->exit_status = 258, 
-					ft_putstr_fd("syntax error\n", 2), 0);
+					ft_putstr_fd(SYNTHAX_PIPE, 2), 0);
 		}
 		cpy_tok = cpy_tok->next;
 	}
@@ -52,7 +52,7 @@ int	handle_syn(char *input, t_token *tok, t_env **env)
 	if (input[i] == '|')
 	{
 		(*env)->exit_status = 258;
-		return (ft_putstr_fd("syntax error near unexpected token `|'\n", 2), 0);
+		return (ft_putstr_fd(SYNTHAX_PIPE, 2), 0);
 	}
 	if (handle_syn_helper(cpy_tok, env) == 0)
 		return (0);
