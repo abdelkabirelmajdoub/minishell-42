@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/15 13:25:02 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/17 12:10:29 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 # include <fcntl.h>
 # include <signal.h>
 # include <termios.h>
+# include <limits.h>
 /*--------------------------- Structs----------------------*/
 extern int	g_exit_code;
 typedef struct s_env
