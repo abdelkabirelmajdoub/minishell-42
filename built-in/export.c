@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/07 11:05:42 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/15 10:21:12 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/18 10:42:13 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,10 @@ int	process_export_arg(t_env **env, char *arg)
 			data.key = ft_strndup(arg, (eq - arg) - 1);
 		else
 			data.key = ft_strndup(arg, eq - arg);
-		data.value = ft_strtrim(eq + 1, " ");
+		if (data.append)
+			data.value = ft_strdup(eq + 1);
+		else
+			data.value = ft_strtrim(eq + 1, " ");
 	}
 	else
 	{
