@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/17 14:41:08 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:13:10 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,8 @@
 # include <signal.h>
 # include <termios.h>
 # include <limits.h>
-# define SYNTHAX_PIPE "syntax error near unexpected token `|'\n"
+# define SYNTHAX_PIPE "minishell: syntax error near unexpected token `|'\n"
+# define SYNTHAX_RED "minishell: syntax error near unexpected token `newline'\n"
 /*--------------------------- Structs----------------------*/
 extern int	g_exit_code;
 typedef struct s_env

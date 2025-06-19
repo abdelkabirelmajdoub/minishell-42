@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/03 12:20:52 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/17 14:41:38 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/18 12:55:07 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ int	handle_syn_helper(t_token *cpy_tok, t_env **env)
 		{
 			if (cpy_tok->next == NULL || cpy_tok->next->type != WORD)
 			{
-				ft_putstr_fd("syntax error\n", 2);
+				ft_putstr_fd(SYNTHAX_RED, 2);
 				(*env)->exit_status = 258;
 				return (0);
 			}

@@ -6,16 +6,22 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 15:07:31 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/15 13:22:14 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/19 12:31:44 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-void	cmd_nfound(char **args, char *path)
+void	cmd_new(t_cmd *cmd, t_exe_pipe *exec, t_env **env)
 {
+	char	*path;
+
+	path = get_path(cmd->args[0], exec->envp);
+	if (is_builtin(cmd->args[0]))
+		exit(run_builtin(cmd, env));
+	execve(path, cmd->args, exec->envp);
 	ft_putstr_fd("minishell: ", 2);
-	ft_putstr_fd(args[0], 2);
+	ft_putstr_fd(cmd->args[0], 2);
 	ft_putstr_fd(": command not found\n", 2);
 	free(path);
 	exit(127);
@@ -23,8 +29,6 @@ void	cmd_nfound(char **args, char *path)
 
 void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 {
-	char	*path;
-
 	signal(SIGINT, SIG_DFL);
 	signal(SIGQUIT, SIG_DFL);
 	if (cmd->limiter)
@@ -39,18 +43,22 @@ void	child(t_cmd *cmd, t_env **env, t_exe_pipe *exec)
 		redirect_out(cmd);
 	close(exec->pipefd[0]);
 	close(exec->pipefd[1]);
+	if (exec->prev_fd != -1)
+		close(exec->prev_fd);
+	if (cmd->heredoc_fd > 0)
+		close(cmd->heredoc_fd);
 	if (!cmd->args || !cmd->args[0])
 		exit(0);
-	path = get_path(cmd->args[0], exec->envp);
-	if (is_builtin(cmd->args[0]))
-		exit(run_builtin(cmd, env));
-	else
-		execve(path, cmd->args, exec->envp);
-	cmd_nfound(cmd->args, path);
+	cmd_new(cmd, exec, env);
 }
 
 void	close_wait(t_env **env, t_exe_pipe *exec)
 {
+	if (exec->prev_fd != -1)
+	{
+		close(exec->prev_fd);
+		exec->prev_fd = -1;
+	}
 	close(exec->pipefd[0]);
 	close(exec->pipefd[1]);
 	free_args(exec->envp);
@@ -59,7 +67,9 @@ void	close_wait(t_env **env, t_exe_pipe *exec)
 	waitpid(exec->last_pid, &exec->status, 0);
 	while (wait(NULL) > 0)
 		;
-	if (WIFEXITED(exec->status))
+	if (exec->pid < 0)
+		(*env)->exit_status = 1;
+	else if (WIFEXITED(exec->status))
 		(*env)->exit_status = WEXITSTATUS(exec->status);
 	else if (WIFSIGNALED(exec->status))
 		(*env)->exit_status = 128 + WTERMSIG(exec->status);
@@ -69,14 +79,20 @@ void	run_cmds(t_cmd *cmd, t_exe_pipe *exec, t_env **env)
 {
 	if (!exec->pid)
 		child(cmd, env, exec);
-	if (exec->prev_fd != -1)
-		close(exec->prev_fd);
-	close(exec->pipefd[1]);
-	exec->prev_fd = exec->pipefd[0];
-	if (cmd == exec->last_cmd)
-		exec->last_pid = exec->pid;
-	if (cmd->heredoc_fd > 0)
-		close(cmd->heredoc_fd);
+	else
+	{
+		close(exec->pipefd[1]);
+		if (exec->prev_fd != -1)
+			close(exec->prev_fd);
+		if (cmd->next)
+			exec->prev_fd = exec->pipefd[0];
+		else
+			close(exec->pipefd[0]);
+		if (cmd == exec->last_cmd)
+			exec->last_pid = exec->pid;
+		if (cmd->heredoc_fd > 0)
+			close(cmd->heredoc_fd);
+	}
 }
 
 void	execute_pipe(t_cmd *cmd, t_env **env)
@@ -90,10 +106,15 @@ void	execute_pipe(t_cmd *cmd, t_env **env)
 		exec.last_cmd = exec.last_cmd->next;
 	while (cmd)
 	{
+		exec.pipefd[0] = -1;
+		exec.pipefd[1] = -1;
 		x_pipe(exec.pipefd);
 		exec.pid = fork();
 		if (exec.pid < 0)
-			return (free_args(exec.envp), perror("fork error"));
+		{
+			perror("fork");
+			break ;
+		}
 		run_cmds(cmd, &exec, env);
 		cmd = cmd->next;
 	}
