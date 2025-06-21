@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/11 16:10:33 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/21 15:35:16 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,11 @@ void	execute_one(t_cmd *cmd, t_env **env)
 	if (WIFEXITED(status))
 		(*env)->exit_status = WEXITSTATUS(status);
 	else if (WIFSIGNALED(status))
+	{
 		(*env)->exit_status = 128 + WTERMSIG(status);
+		if (WTERMSIG(status) == SIGQUIT)
+			ft_putstr_fd("Quit: 3\n", 2);
+	}
 }
 
 void	exe(t_cmd *cmd_list, t_env **env)

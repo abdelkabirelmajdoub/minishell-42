@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/14 11:24:50 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:36:51 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,11 @@
 
 int	run_cd(char *path)
 {
+	if (!path)
+	{
+		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+		return (1);
+	}
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("cd: ", 2);

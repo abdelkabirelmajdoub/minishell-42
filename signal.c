@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:48:32 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/15 13:25:46 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/21 14:22:27 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	handle_signals(int sig)
 		rl_on_new_line();
 		rl_replace_line("", 0);
 		rl_redisplay();
-		g_exit_code = 1;
+		g_exit_code = true;
 	}
 	else if (sig == SIGQUIT)
 		return ;
