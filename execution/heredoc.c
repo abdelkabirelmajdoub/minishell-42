@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/04 10:07:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/11 14:40:44 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/22 10:17:24 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,12 @@ void	run_heredoc(char *limiter, int w_end, t_env **env)
 	while (1)
 	{
 		line = readline("> ");
-		line = expand_variable(line, *env);
 		if (!line || !ft_strcmp(line, limiter))
 		{
 			free(line);
 			break ;
 		}
+		line = expand_variable(line, *env);
 		write(w_end, line, ft_strlen(line));
 		write(w_end, "\n", 1);
 		free(line);

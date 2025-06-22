@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 09:34:39 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/11 16:19:13 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/22 12:32:02 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,59 @@ char	*get_path(char *cmd, char **env)
 	return (cmd);
 }
 
-int	is_pipe(t_cmd *cmd_list)
+int	my_isspace(char c)
 {
-	return (cmd_list && cmd_list->next);
+	return (c == ' ' || (c >= 9 && c <= 13));
+}
+
+int	count_word(const char *str)
+{
+	int	i;
+	int	in_word;
+	int	count;
+
+	i = 0;
+	count = 0;
+	in_word = 0;
+	while (str[i])
+	{
+		if (!my_isspace(str[i]) && !in_word)
+		{
+			in_word = 1;
+			count++;
+		}
+		else if (my_isspace(str[i]))
+			in_word = 0;
+		i++;
+	}
+	return (count);
+}
+
+char	**advance_split(char *s)
+{
+	char	**args;
+	int		i;
+	int		start;
+	int		end;
+	int		j;
+
+	if (!s)
+		return (NULL);
+	args = malloc(sizeof(char *) * (count_word(s) + 1));
+	if (!args)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s[i])
+	{
+		while (s[i] && my_isspace(s[i]))
+			i++;
+		start = i;
+		while (s[i] && !my_isspace(s[i]))
+			i++;
+		end = i;
+		if (end > start)
+			args[j++] = ft_substr(s, start, end - start);
+	}
+	return (args[j] = NULL, args);
 }

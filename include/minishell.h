@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/21 14:23:36 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/22 12:53:43 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,11 +22,10 @@
 # include <signal.h>
 # include <termios.h>
 # include <limits.h>
-# include <stdbool.h>
 # define SYNTHAX_PIPE "minishell: syntax error near unexpected token `|'\n"
 # define SYNTHAX_RED "minishell: syntax error near unexpected token `newline'\n"
 /*--------------------------- Structs----------------------*/
-extern bool	g_exit_code;
+extern int	g_exit_code;
 typedef struct s_env
 {
 	char			*key;
@@ -38,6 +37,7 @@ typedef struct s_env
 	int				has_single;
 	int				has_double;
 	int				is_str_quoted;
+	int				hdoc_expand;
 }					t_env;
 
 typedef enum s_token_type
@@ -91,6 +91,7 @@ typedef struct s_export_data
 /*-------- lib-helper ------------*/
 int				ft_strcmp(const char *s1, const char *s2);
 char			*ft_strndup(const char *s, int size);
+char			**advance_split(char *s);
 /*-------- Parsing functions ------------*/
 t_token_type	tokenize_type(char *input, int *i);
 t_token			*token_creation(char *value, t_token_type type);
@@ -130,7 +131,8 @@ int				extract_quoted_content(char *input, int *i, char *tmp);
 void			handle_single_quote_content(char *tmp, int k, t_env *env);
 void			handle_double_quote_content(char *tmp, t_env *env);
 void			process_quotes(char *input, int *i, t_env *env);
-void			process_word_content(char *input, int *i, t_env *env);
+void			process_word_content(char *input, int *i, t_env *env, 
+					t_token **head);
 void			init_word_vars(t_env *env);
 void			create_word_token(t_token **head, t_env *env);
 void			pars_helper2(t_token **tok, t_cmd *cmd, int *i);
@@ -139,6 +141,8 @@ void			process_input_char(char *input, int *i,
 void			handle_c_quoting(char *input, int *i, char *buffer, int *j);
 int				expand_variable_helper(char *value, t_env *env, 
 					char *var_name, int t_len);
+t_token			*get_last_token(t_token **head);
+void			limiter_check(char *input, t_env **env);
 /*--------- BUILT-in cmds -------------*/
 int				ft_unset(char *var, t_env **my_env);
 int				ft_cd(char **args, t_env **env);

@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/21 15:35:16 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/22 12:27:48 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -103,7 +103,7 @@ void	exe(t_cmd *cmd_list, t_env **env)
 	if (prepare_heredocs(cmd_list, env))
 		return ;
 	set_signals();
-	if (is_pipe(cmd_list))
+	if (cmd_list && cmd_list->next)
 		execute_pipe(cmd_list, env);
 	else
 		execute_one(cmd_list, env);
