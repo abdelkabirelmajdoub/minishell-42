@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 13:43:02 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/14 13:43:41 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/06/22 11:58:16 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,13 +30,17 @@ void	process_quotes(char *input, int *i, t_env *env)
 		handle_double_quote_content(tmp, env);
 }
 
-void	process_word_content(char *input, int *i, t_env *env)
+void	process_word_content(char *input, int *i, t_env *env, t_token **head)
 {
+	t_token	*last_tok;
+
+	last_tok = get_last_token(head);
 	if (input[*i] == '$' && (input[*i + 1] == '\'' || input[*i + 1] == '"'))
 		handle_c_quoting(input, i, env->buffer, &env->j);
 	else if (input[*i] == '\'' || input[*i] == '"')
 		process_quotes(input, i, env);
-	else if (input[*i] == '$')
+	else if (input[*i] == '$' && last_tok 
+		&& last_tok->type != REDIR_HEREDOC)
 		handle_dollar_sign(input, i, env);
 	else
 		env->buffer[env->j++] = input[(*i)++];
@@ -69,6 +73,6 @@ void	handle_word(char *input, int *i, t_token **head, t_env *env)
 {
 	init_word_vars(env);
 	while (input[*i] && !is_word_delimiter(input[*i]))
-		process_word_content(input, i, env);
+		process_word_content(input, i, env, head);
 	create_word_token(head, env);
 }

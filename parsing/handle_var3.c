@@ -6,7 +6,7 @@
 /*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 13:06:51 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/14 13:09:37 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/06/22 12:02:10 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,13 +84,24 @@ void	expand_word_token(t_token *tok, t_env *env)
 
 void	expend_token(t_token *tokens, t_env *env)
 {
-	t_token	*cpy_tok;
+	t_token	*current;
+	t_token	*prev;
 
-	cpy_tok = tokens;
-	while (cpy_tok)
+	current = tokens;
+	prev = NULL;
+	while (current)
 	{
-		if (cpy_tok->type == WORD)
-			expand_word_token(cpy_tok, env);
-		cpy_tok = cpy_tok->next;
+		if (current->type == WORD)
+		{
+			if (prev && prev->type == REDIR_HEREDOC)
+			{
+				current = current->next;
+				continue ;
+			}
+			else
+				expand_word_token(current, env);
+		}
+		prev = current;
+		current = current->next;
 	}
 }

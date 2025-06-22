@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/11 13:48:19 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/21 15:45:01 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/22 13:05:35 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,7 @@ int	parsing_execution(char *input, t_env **envp)
 	t_token	*tokens;
 	t_cmd	*cmds;
 
+	limiter_check(input, envp);
 	tokens = tokenize(input, *envp);
 	handle_quotes(tokens);
 	expend_token(tokens, *envp);
