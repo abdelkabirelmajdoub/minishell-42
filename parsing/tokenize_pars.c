@@ -3,44 +3,33 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_pars.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
+/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/29 09:42:31 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/05/28 09:53:21 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/14 13:52:06 by yazlaigi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../include/minishell.h"
 
-char	**args_allocation(void)
+static void	handle_redirection(t_token **tok, t_cmd *cmd, int *i)
 {
-	char	**args;
-
-	args = malloc (sizeof(char *) * 100);
-	if (!args)
-		return (NULL);
-	return (args);
+	pars_helper2(tok, cmd, i);
+	*tok = (*tok)->next->next;
 }
 
-void	pars_helper2(t_token **tok, t_cmd *cmd, int *i)
+static void	handle_word_token(t_token **tok, char **args, int *argc)
 {
-	
-	if ((*tok)->type == REDIR_IN)
-		cmd->infile = ft_strdup((*tok)->next->value);
-	else if ((*tok)->type == REDIR_APPEND)
-	{
-		cmd->append = ft_strdup((*tok)->next->value);
-		cmd->out_file[(*i)++] = ft_strdup((*tok)->next->value);
-	}
-	else if ((*tok)->type == REDIR_OUT)
-		cmd->out_file[(*i)++] = ft_strdup((*tok)->next->value);
-	else if ((*tok)->type == REDIR_HEREDOC)
-		cmd->limiter = ft_strdup((*tok)->next->value);
+	if ((*tok)->value && (*tok)->value[0] == '\0')
+		args[(*argc)++] = ft_strdup("");
+	else if ((*tok)->value && ((*tok)->value[0] != '\0' 
+			|| (*tok)->quote_type != 0))
+		args[(*argc)++] = ft_strdup((*tok)->value);
 }
 
 void	pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	cmd->out_file = malloc(sizeof(char *) * 50);
@@ -50,22 +39,13 @@ void	pars_helper(t_token **tok, t_cmd *cmd, char **args, int *argc)
 	{
 		if (((*tok)->type == REDIR_IN || (*tok)->type == REDIR_OUT
 				|| (*tok)->type == REDIR_APPEND 
-				|| (*tok)->type == REDIR_HEREDOC)
-			&& (*tok)->next)
+				|| (*tok)->type == REDIR_HEREDOC) && (*tok)->next)
 		{
-			pars_helper2(tok, cmd, &i);
-			*tok = (*tok)->next->next;
+			handle_redirection(tok, cmd, &i);
 			continue ;
 		}
-		else if ((*tok)->type == WORD && (*tok)->value 
-				&& (*tok)->value[0] == '\0')
-			args[(*argc)++] = ft_strdup(""); //// here my change
-		else if ((*tok)->type == WORD && (*tok)->value 
-         && ((*tok)->value[0] != '\0' || (*tok)->quote_type != 0))
-		{
-		    args[(*argc)++] = ft_strdup((*tok)->value);
-		}
-
+		else if ((*tok)->type == WORD)
+			handle_word_token(tok, args, argc);
 		*tok = (*tok)->next;
 	}
 	cmd->out_file[i] = NULL;
