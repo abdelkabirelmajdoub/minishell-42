@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/01 10:18:34 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/14 11:03:34 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/23 10:47:27 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,22 @@ int	run_builtin(t_cmd *cmd, t_env **env)
 	else if (!ft_strcmp(cmd->args[0], "exit"))
 		return (ft_exit(cmd->args, env));
 	return (1);
+}
+
+void	update_pwd(t_env **env)
+{
+	t_env	*tmp;
+	char	cwd[1024];
+
+	tmp = *env;
+	while (tmp)
+	{
+		if (!ft_strcmp(tmp->key, "PWD"))
+		{
+			free(tmp->value);
+			getcwd(cwd, sizeof(cwd));
+			tmp->value = ft_strdup(cwd);
+		}
+		tmp = tmp->next;
+	}
 }

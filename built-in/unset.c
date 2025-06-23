@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/27 10:57:44 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/21 15:37:59 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:03:50 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	remove_var(t_env *env)
 {
 	if (!env)
 		return ;
+	free(env->key);
 	free(env->value);
 	free(env);
 }

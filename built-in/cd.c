@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/21 14:36:51 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/23 11:01:00 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,6 @@
 
 int	run_cd(char *path)
 {
-	if (!path)
-	{
-		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
-		return (1);
-	}
 	if (chdir(path) == -1)
 	{
 		ft_putstr_fd("cd: ", 2);
@@ -28,24 +23,6 @@ int	run_cd(char *path)
 		return (1);
 	}
 	return (0);
-}
-
-void	update_pwd(t_env **env)
-{
-	t_env	*tmp;
-	char	cwd[1024];
-
-	tmp = *env;
-	while (tmp)
-	{
-		if (!ft_strcmp(tmp->key, "PWD"))
-		{
-			free(tmp->value);
-			getcwd(cwd, sizeof(cwd));
-			tmp->value = ft_strdup(cwd);
-		}
-		tmp = tmp->next;
-	}
 }
 
 void	update_oldpwd(t_env **env, char *oldpwd)
@@ -81,6 +58,21 @@ void	updated_env(t_env **env, char *oldpwd)
 	update_pwd(env);
 }
 
+int	run_old(t_env **env)
+{
+	char	*old_path;
+
+	old_path = get_env("OLDPWD", *env);
+	if (!old_path)
+	{
+		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
+		return (1);
+	}
+	if (old_path)
+		ft_putendl_fd(old_path, 1);
+	return (run_cd(old_path));
+}
+
 int	ft_cd(char **args, t_env **env)
 {
 	int		flag;
@@ -93,7 +85,7 @@ int	ft_cd(char **args, t_env **env)
 		if (!args[1][0])
 			return (0);
 		else if (args[1][0] == '-')
-			flag = run_cd(get_env("OLDPWD", *env));
+			flag = run_old(env);
 		else
 			flag = run_cd(args[1]);
 	}

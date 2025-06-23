@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/06 10:40:06 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/22 13:03:46 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/23 10:48:44 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -146,6 +146,7 @@ void			limiter_check(char *input, t_env **env);
 /*--------- BUILT-in cmds -------------*/
 int				ft_unset(char *var, t_env **my_env);
 int				ft_cd(char **args, t_env **env);
+void			update_pwd(t_env **env);
 int				out_exist(t_cmd *cmd);
 int				ft_pwd(void);
 int				ft_exit(char **args, t_env **env);
