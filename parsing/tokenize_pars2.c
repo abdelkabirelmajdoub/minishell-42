@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   tokenize_pars2.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: yazlaigi <yazlaigi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/14 13:51:39 by yazlaigi          #+#    #+#             */
-/*   Updated: 2025/06/14 13:52:33 by yazlaigi         ###   ########.fr       */
+/*   Updated: 2025/06/23 17:51:34 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	pars_helper2(t_token **tok, t_cmd *cmd, int *i)
 		cmd->infile = ft_strdup((*tok)->next->value);
 	else if ((*tok)->type == REDIR_APPEND)
 	{
-		cmd->append = ft_strdup((*tok)->next->value);
+		cmd->append = "1";
 		cmd->out_file[(*i)++] = ft_strdup((*tok)->next->value);
 	}
 	else if ((*tok)->type == REDIR_OUT)

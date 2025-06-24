@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/22 12:27:48 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:14:11 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,17 @@ void	cmd_builtin(t_cmd *cmd, t_env **env, int *status)
 	if (cmd->limiter)
 		x_dup2(cmd->heredoc_fd, STDIN_FILENO);
 	else if (cmd->infile && !exist_infile(cmd->infile))
+	{
+		close(in_save);
+		close(out_save);
 		return ;
+	}
 	if (cmd->out_file && !out_exist(cmd))
+	{
+		close(in_save);
+		close(out_save);
 		return ;
+	}
 	*status = run_builtin(cmd, env);
 	(*env)->exit_status = *status;
 	x_dup2(in_save, STDIN_FILENO);

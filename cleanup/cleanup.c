@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/12 12:04:45 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/10 11:36:15 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/24 11:38:33 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ void	free_cmd(t_cmd *cmd)
 		tmp->limiter = NULL;
 		free_args(tmp->out_file);
 		tmp->out_file = NULL;
-		free(tmp->append);
-		tmp->append = NULL;
 		free(tmp->infile);
 		tmp->infile = NULL;
 		if (tmp->args)
