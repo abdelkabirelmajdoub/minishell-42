@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/25 09:19:30 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/25 09:29:04 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	child_proc(t_cmd *cmd, char **envp)
 	exit(127);
 }
 
-int	exist_infile(char *filename)
+int	exist_infile(char *filename, t_env **env)
 {
 	int	fd;
 
@@ -43,10 +43,11 @@ int	exist_infile(char *filename)
 	if (fd < 0)
 	{
 		perror("infile error");
+		(*env)->exit_status = 1;
 		return (0);
 	}
 	if (dup2(fd, STDIN_FILENO) == -1)
-		return (0);
+		return ((*env)->exit_status = 1, 0);
 	close(fd);
 	return (1);
 }
@@ -60,18 +61,16 @@ void	cmd_builtin(t_cmd *cmd, t_env **env, int *status)
 	out_save = dup(STDOUT_FILENO);
 	if (cmd->limiter)
 		x_dup2(cmd->heredoc_fd, STDIN_FILENO);
-	else if (cmd->infile && !exist_infile(cmd->infile))
+	else if (cmd->infile && !exist_infile(cmd->infile, env))
 	{
 		close(in_save);
 		close(out_save);
-		(*env)->exit_status = 1;
 		return ;
 	}
-	if (cmd->out_file && !out_exist(cmd))
+	if (cmd->out_file && !out_exist(cmd, env))
 	{
 		close(in_save);
 		close(out_save);
-		(*env)->exit_status = 1;
 		return ;
 	}
 	*status = run_builtin(cmd, env);

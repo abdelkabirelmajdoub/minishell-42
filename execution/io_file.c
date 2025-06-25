@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/13 09:54:10 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/24 11:08:44 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/25 09:28:03 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ void	redirect_out(t_cmd	*cmd)
 	}
 }
 
-int	out_exist(t_cmd *cmd)
+int	out_exist(t_cmd *cmd, t_env **env)
 {
 	int	i;
 	int	fd;
@@ -84,11 +84,12 @@ int	out_exist(t_cmd *cmd)
 		if (fd < 0)
 		{
 			perror("outfile error");
+			(*env)->exit_status = 1;
 			return (0);
 		}
 		if (cmd->out_file[i + 1] == NULL)
 			if (dup2(fd, STDOUT_FILENO) == -1)
-				return (0);
+				return ((*env)->exit_status = 1, 0);
 		close(fd);
 	}
 	return (1);
