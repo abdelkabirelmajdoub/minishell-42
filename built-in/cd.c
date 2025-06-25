@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/11 10:55:20 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/24 11:36:47 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/24 13:30:59 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	run_old(t_env **env)
 	char	*old_path;
 
 	old_path = get_env("OLDPWD", *env);
-	if (!old_path)
+	if (!old_path || !*old_path)
 	{
 		ft_putstr_fd("minishell: cd: OLDPWD not set\n", 2);
 		return (1);
@@ -81,7 +81,7 @@ int	ft_cd(char **args, t_env **env)
 	{
 		if (!args[1][0])
 			return (0);
-		else if (args[1][0] == '-')
+		else if (!ft_strcmp(args[1], "-"))
 			flag = run_old(env);
 		else
 			flag = run_cd(args[1]);

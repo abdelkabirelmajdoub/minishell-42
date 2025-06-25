@@ -6,7 +6,7 @@
 /*   By: ael-majd <ael-majd@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/30 08:35:03 by ael-majd          #+#    #+#             */
-/*   Updated: 2025/06/24 11:14:11 by ael-majd         ###   ########.fr       */
+/*   Updated: 2025/06/25 09:19:30 by ael-majd         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,12 +64,14 @@ void	cmd_builtin(t_cmd *cmd, t_env **env, int *status)
 	{
 		close(in_save);
 		close(out_save);
+		(*env)->exit_status = 1;
 		return ;
 	}
 	if (cmd->out_file && !out_exist(cmd))
 	{
 		close(in_save);
 		close(out_save);
+		(*env)->exit_status = 1;
 		return ;
 	}
 	*status = run_builtin(cmd, env);
