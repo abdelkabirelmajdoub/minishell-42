@@ -25,14 +25,21 @@ char	**args_allocation(void)
 void	pars_helper2(t_token **tok, t_cmd *cmd, int *i)
 {
 	if ((*tok)->type == REDIR_IN)
+	{
+		if (cmd->infile)
+			free(cmd->infile);
 		cmd->infile = ft_strdup((*tok)->next->value);
+	}
 	else if ((*tok)->type == REDIR_APPEND)
 	{
 		cmd->append = "1";
 		cmd->out_file[(*i)++] = ft_strdup((*tok)->next->value);
 	}
 	else if ((*tok)->type == REDIR_OUT)
+	{
+		cmd->append = NULL;
 		cmd->out_file[(*i)++] = ft_strdup((*tok)->next->value);
+	}
 	else if ((*tok)->type == REDIR_HEREDOC)
 	{
 		if (cmd->limiter)
